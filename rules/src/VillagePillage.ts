@@ -6,6 +6,7 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import {spendGold} from './moves/SpendGold'
+import Phase from './Phase'
 import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
 
 /**
@@ -41,6 +42,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
           bank: 1,
           relics: 0
         })),
+        phase: Phase.PLAN,
         deck: [],
         market: []
       })
