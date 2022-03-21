@@ -1,4 +1,4 @@
-import {SecretInformation, SequentialGame} from '@gamepark/rules-api'
+import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
 import GameState from './GameState'
 import GameView from './GameView'
 import {drawCard} from './moves/DrawCard'
@@ -15,7 +15,7 @@ import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
  * If the game contains information that some players know, but the other players does not, it must implement "SecretInformation" instead.
  * Later on, you can also implement "Competitive", "Undo", "TimeLimit" and "Eliminations" to add further features to the game.
  */
-export default class VillagePillage extends SequentialGame<GameState, Move>
+export default class VillagePillage extends SimultaneousGame<GameState, Move>
   implements SecretInformation<GameState, GameView, Move, MoveView> {
   /**
    * This constructor is called when the game "restarts" from a previously saved state.
@@ -46,13 +46,8 @@ export default class VillagePillage extends SequentialGame<GameState, Move>
     return false
   }
 
-  /**
-   * Retrieves the player which must act. It is used to secure the game and prevent players from acting outside their turns.
-   * Only required in a SequentialGame.
-   * @return The identifier of the player whose turn it is
-   */
-  getActivePlayer(): number | undefined {
-    return undefined // You must return undefined only when game is over, otherwise the game will be blocked.
+  isTurnToPlay(_playerId: number): boolean {
+    return false
   }
 
   /**
@@ -67,8 +62,8 @@ export default class VillagePillage extends SequentialGame<GameState, Move>
    */
   getLegalMoves(): Move[] {
     return [
-      {type: MoveType.SpendGold, playerId: this.getActivePlayer()!, quantity: 5},
-      {type: MoveType.DrawCard, playerId: this.getActivePlayer()!}
+      {type: MoveType.SpendGold, playerId: 1, quantity: 5},
+      {type: MoveType.DrawCard, playerId: 1}
     ]
   }
 
