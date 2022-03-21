@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import GameView from '@gamepark/village-pillage/GameView'
-import {getPlayerName} from '@gamepark/village-pillage/VillagePillageOptions'
 import {usePlayerId} from '@gamepark/react-client'
+import GameView from '@gamepark/village-pillage/GameView'
 import {useTranslation} from 'react-i18next'
 
 type Props = {
@@ -13,5 +12,5 @@ export default function HeaderText({loading}: Props) {
   const {t} = useTranslation()
   const playerId = usePlayerId()
   if (loading) return <>{t('Game loading...')}</>
-  return <>Loaded! Now what? Your player id is {getPlayerName(playerId, t)}</>
+  return <>Loaded! Now what? Your player id is {playerId}</>
 }

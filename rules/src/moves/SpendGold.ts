@@ -1,6 +1,5 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
-import PlayerColor from '../PlayerColor'
 import MoveType from './MoveType'
 
 /**
@@ -8,7 +7,7 @@ import MoveType from './MoveType'
  */
 type SpendGold = {
   type: MoveType.SpendGold
-  playerId: PlayerColor
+  playerId: number
   quantity: number
 }
 
@@ -21,5 +20,5 @@ export function spendGold(state: GameState | GameView, move: SpendGold) {
    * const player = state.players.find(player => player.id === move.playerId)
    * if (!player) return console.error(`Unexpected player id: ${move.playerId} inside ${state}`)
    * player.gold -= move.quantity
-  */
+   */
 }

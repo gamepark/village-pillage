@@ -1,12 +1,10 @@
 import {OptionsSpec} from '@gamepark/rules-api'
-import {TFunction} from 'i18next'
 import GameState from './GameState'
-import PlayerColor, {playerColors} from './PlayerColor'
 
 /**
  * This is the options for each players in the game.
  */
-type VillagePillagePlayerOptions = { id: PlayerColor }
+type VillagePillagePlayerOptions = {}
 
 /**
  * This is the type of object that the game receives when a new game is started.
@@ -30,24 +28,5 @@ export function isGameOptions(arg: GameState | VillagePillageOptions): arg is Vi
  * (forms for friendly games, or forms for matchmaking preferences, for instance).
  */
 export const VillagePillageOptionsSpec: OptionsSpec<VillagePillageOptions> = {
-  players: {
-    id: {
-      label: (t: TFunction) => t('Color'),
-      values: playerColors,
-      valueSpec: color => ({label: t => getPlayerName(color, t)})
-    }
-  }
-}
-
-export function getPlayerName(playerId: PlayerColor, t: TFunction) {
-  switch (playerId) {
-    case PlayerColor.Red:
-      return t('Red player')
-    case PlayerColor.Blue:
-      return t('Blue player')
-    case PlayerColor.Green:
-      return t('Green player')
-    case PlayerColor.Yellow:
-      return t('Yellow player')
-  }
+  players: {}
 }
