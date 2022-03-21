@@ -1,6 +1,7 @@
 export default interface PlayerState {
   hand: number[]
-  played: number[]
+  leftCard?: number
+  rightCard?: number
   stock: number
   bank: number
   relics: number

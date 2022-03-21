@@ -7,6 +7,7 @@ import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import {spendGold} from './moves/SpendGold'
 import Phase from './Phase'
+import PlayerState from './PlayerState'
 import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
 
 /**
@@ -37,7 +38,6 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       super({
         players: [...Array(arg.players)].map(_ => ({
           hand: [],
-          played: [],
           stock: 1,
           bank: 1,
           relics: 0
@@ -58,8 +58,17 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     return this.state.players.some(p => p.relics === 3)
   }
 
-  isTurnToPlay(_playerId: number): boolean {
-    return false
+  isTurnToPlay(playerId: number): boolean {
+    if (this.state.phase === Phase.PLAN) {
+      const player = this.getPlayer(playerId)
+      return player.leftCard !== undefined && player.rightCard !== undefined
+    } else {
+      return false // TODO resolve phase
+    }
+  }
+
+  getPlayer(playerId: number): PlayerState {
+    return this.state[playerId - 1]
   }
 
   /**
