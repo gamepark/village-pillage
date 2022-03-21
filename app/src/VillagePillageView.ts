@@ -2,7 +2,7 @@ import GameView from '@gamepark/village-pillage/GameView'
 import {drawCardInPlayerView, drawCardInView, isDrawCardView} from '@gamepark/village-pillage/moves/DrawCard'
 import MoveType from '@gamepark/village-pillage/moves/MoveType'
 import MoveView from '@gamepark/village-pillage/moves/MoveView'
-import {spendGold} from '@gamepark/village-pillage/moves/SpendGold'
+import {playCard} from '@gamepark/village-pillage/moves/PlayCard'
 import {Game} from '@gamepark/rules-api'
 
 /**
@@ -35,8 +35,8 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
    */
   play(move: MoveView): void {
     switch (move.type) {
-      case MoveType.SpendGold:
-        return spendGold(this.state, move)
+      case MoveType.PlayCard:
+        return playCard(this.state, move)
       case MoveType.DrawCard:
         if (isDrawCardView(move)) {
           return drawCardInPlayerView(this.state, move)

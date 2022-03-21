@@ -1,3 +1,4 @@
+import GameView from './GameView'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
 
@@ -12,3 +13,7 @@ type GameState = {
 }
 
 export default GameState
+
+export function getPlayerState(state: GameState | GameView, playerId: number) {
+  return state.players[playerId - 1]
+}

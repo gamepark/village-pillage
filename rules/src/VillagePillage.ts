@@ -1,13 +1,14 @@
 import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
-import GameState from './GameState'
+import GameState, {getPlayerState} from './GameState'
 import GameView from './GameView'
 import {drawCard} from './moves/DrawCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
-import {spendGold} from './moves/SpendGold'
+import {playCard, playCardMove} from './moves/PlayCard'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
+import Side from './Side'
 import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
 
 /**
@@ -68,7 +69,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   }
 
   getPlayer(playerId: number): PlayerState {
-    return this.state[playerId - 1]
+    return getPlayerState(this.state, playerId)
   }
 
   /**
@@ -81,11 +82,18 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * - isLegal(move: Move):boolean, for security; and
    * - A class that implements "Dummy" to provide a custom Dummy player.
    */
-  getLegalMoves(): Move[] {
-    return [
-      {type: MoveType.SpendGold, playerId: 1, quantity: 5},
-      {type: MoveType.DrawCard, playerId: 1}
-    ]
+  getLegalMoves(playerId: number): Move[] {
+    const moves: Move[] = []
+    const player = this.getPlayer(playerId)
+    if (this.state.phase === Phase.PLAN) {
+      if (player.leftCard === undefined) {
+        player.hand.forEach(card => moves.push(playCardMove(playerId, card, Side.LEFT)))
+      }
+      if (player.rightCard === undefined) {
+        player.hand.forEach(card => moves.push(playCardMove(playerId, card, Side.RIGHT)))
+      }
+    }
+    return moves
   }
 
   /**
@@ -95,8 +103,8 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    */
   play(move: Move): void {
     switch (move.type) {
-      case MoveType.SpendGold:
-        return spendGold(this.state, move)
+      case MoveType.PlayCard:
+        return playCard(this.state, move)
       case MoveType.DrawCard:
         return drawCard(this.state, move)
     }
