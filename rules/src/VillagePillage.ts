@@ -33,7 +33,17 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    */
   constructor(arg: GameState | VillagePillageOptions) {
     if (isGameOptions(arg)) {
-      super({players: [...Array(arg.players)].map(_ => ({})), round: 1, deck: []})
+      super({
+        players: [...Array(arg.players)].map(_ => ({
+          hand: [],
+          played: [],
+          stock: 1,
+          bank: 1,
+          relics: 0
+        })),
+        deck: [],
+        market: []
+      })
     } else {
       super(arg)
     }
