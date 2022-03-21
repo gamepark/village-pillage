@@ -55,7 +55,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return True when game is over
    */
   isOver(): boolean {
-    return false
+    return this.state.players.some(p => p.relics === 3)
   }
 
   isTurnToPlay(_playerId: number): boolean {
