@@ -1,9 +1,9 @@
+import {Game} from '@gamepark/rules-api'
 import GameView from '@gamepark/village-pillage/GameView'
-import {drawCardInPlayerView, drawCardInView, isDrawCardView} from '@gamepark/village-pillage/moves/DrawCard'
 import MoveType from '@gamepark/village-pillage/moves/MoveType'
 import MoveView from '@gamepark/village-pillage/moves/MoveView'
-import {playCard} from '@gamepark/village-pillage/moves/PlayCard'
-import {Game} from '@gamepark/rules-api'
+import {playCardInView} from '@gamepark/village-pillage/moves/PlayCard'
+import {revealCardsInView} from '@gamepark/village-pillage/moves/RevealCards'
 
 /**
  * This class is useful when the game has "IncompleteInformation" (or "SecretInformation").
@@ -36,13 +36,9 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
   play(move: MoveView): void {
     switch (move.type) {
       case MoveType.PlayCard:
-        return playCard(this.state, move)
-      case MoveType.DrawCard:
-        if (isDrawCardView(move)) {
-          return drawCardInPlayerView(this.state, move)
-        } else {
-          return drawCardInView(this.state, move)
-        }
+        return playCardInView(this.state, move)
+      case MoveType.RevealCards:
+        return revealCardsInView(this.state, move)
     }
   }
 

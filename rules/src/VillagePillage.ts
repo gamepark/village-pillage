@@ -1,13 +1,14 @@
 import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
 import GameState, {getPlayerState} from './GameState'
 import GameView from './GameView'
-import {drawCard} from './moves/DrawCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import {playCard, playCardMove} from './moves/PlayCard'
+import {revealCards, revealCardsMove} from './moves/RevealCards'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
+import PlayerView from './PlayerView'
 import Side from './Side'
 import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
 
@@ -105,8 +106,8 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     switch (move.type) {
       case MoveType.PlayCard:
         return playCard(this.state, move)
-      case MoveType.DrawCard:
-        return drawCard(this.state, move)
+      case MoveType.RevealCards:
+        return revealCards(this.state)
     }
   }
 
@@ -123,16 +124,11 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    *
    * @return The next automatic consequence that should be played in current game state.
    */
-  getAutomaticMove(): void | Move {
-    /**
-     * Example:
-     * for (const player of this.state.players) {
-     *   if (player.mustDraw) {
-     *     return {type: MoveType.DrawCard, playerId: player.color}
-     *   }
-     * }
-     */
-    return
+  getAutomaticMove(): Move[] {
+    if (this.state.phase === Phase.PLAN && this.state.players.every(player => player.leftCard && player.rightCard)) {
+      return [revealCardsMove]
+    }
+    return []
   }
 
   /**
@@ -151,7 +147,20 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   getPlayerView(playerId: number): GameView {
     console.log(playerId)
     // Here we could, for example, return a "playerView" with only the number of cards in hand for the other player only.
-    return {...this.state, deck: this.state.deck.length}
+    return {
+      ...this.state, deck: this.state.deck.length,
+      players: this.state.players.map((player, index) => index === playerId - 1 ? player : this.getOtherPlayerView(player))
+    }
+  }
+
+  getOtherPlayerView(player: PlayerState): PlayerView {
+    const {leftCard, rightCard, hand, ...visibleInfo} = player
+    const playerView: PlayerView = {...visibleInfo, hand: player.hand.length, leftCardPlayed: !!leftCard, rightCardPlayed: !!rightCard}
+    if (this.state.phase !== Phase.PLAN) {
+      playerView.leftCard = leftCard
+      playerView.rightCard = rightCard
+    }
+    return playerView
   }
 
   /**
@@ -163,6 +172,9 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return What a person should know about the move that was played
    */
   getMoveView(move: Move): MoveView {
+    if (move.type === MoveType.RevealCards) {
+      return {...move, players: this.state.players.map(p => ({leftCard: p.leftCard!, rightCard: p.rightCard!}))}
+    }
     return move
   }
 
@@ -175,11 +187,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @param playerId Identifier of the player seeing the move
    * @return What a person should know about the move that was played
    */
-  getPlayerMoveView(move: Move, playerId: number): MoveView {
-    console.log(playerId)
-    if (move.type === MoveType.DrawCard && move.playerId === playerId) {
-      return {...move, card: this.state.deck[0]}
-    }
-    return move
+  getPlayerMoveView(move: Move): MoveView {
+    return this.getMoveView(move)
   }
 }
