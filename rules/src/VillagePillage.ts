@@ -11,6 +11,8 @@ import PlayerState from './PlayerState'
 import PlayerView from './PlayerView'
 import Side from './Side'
 import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
+import {marketCards, startingCards} from './Card'
+import shuffle from 'lodash.shuffle'
 
 /**
  * Your Board Game rules must extend either "SequentialGame" or "SimultaneousGame".
@@ -37,16 +39,17 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    */
   constructor(arg: GameState | VillagePillageOptions) {
     if (isGameOptions(arg)) {
+      const deck = shuffle(marketCards)
       super({
         players: [...Array(arg.players)].map(_ => ({
-          hand: [],
+          hand: startingCards,
           stock: 1,
           bank: 1,
           relics: 0
         })),
         phase: Phase.PLAN,
-        deck: [],
-        market: []
+        deck,
+        market: deck.splice(0, 4)
       })
     } else {
       super(arg)

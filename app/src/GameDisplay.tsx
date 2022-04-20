@@ -37,9 +37,11 @@ const sampleCss = css`
   position: absolute;
   top: 50%;
   left: 50%;
+  max-width: 90%;
   transform: translate(-50%, -50%);
   font-size: 3rem;
   background-color: black;
   padding: 0.5em;
   border-radius: 1em;
+  word-break: break-word;
 `
