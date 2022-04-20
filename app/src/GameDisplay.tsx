@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/village-pillage/GameView'
-import {Letterbox, Picture} from '@gamepark/react-components'
-import Images from './images/Images'
+import {Letterbox} from '@gamepark/react-components'
+import CardDisplay from "./material/CardDisplay";
+import Card from "@gamepark/village-pillage/Card";
 
 type Props = {
   game: GameView
@@ -14,7 +15,7 @@ export default function GameDisplay({game}: Props) {
       <div css={sampleCss}>
         {JSON.stringify(game)}
       </div>
-      <Picture src={Images.sampleImage} css={sampleImageCss}/>
+      <CardDisplay card={Card.Farmer}/>
     </Letterbox>
   )
 }
@@ -41,12 +42,4 @@ const sampleCss = css`
   background-color: black;
   padding: 0.5em;
   border-radius: 1em;
-`
-
-const sampleImageCss = css`
-  position: absolute;
-  bottom: 5%;
-  left: calc(50% - 6.5em);
-  width: 13em;
-  height: 20em;
 `
