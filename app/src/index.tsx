@@ -9,7 +9,7 @@ import App from './App'
 import VillagePillageView from './VillagePillageView'
 import translations from './translations.json'
 
-setupTranslation(translations)
+setupTranslation(translations, {debug:false})
 
 const style = css`
   html {

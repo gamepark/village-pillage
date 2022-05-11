@@ -148,7 +148,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return what the player can see
    */
   getPlayerView(playerId: number): GameView {
-    console.log(playerId)
+    
     // Here we could, for example, return a "playerView" with only the number of cards in hand for the other player only.
     return {
       ...this.state, deck: this.state.deck.length,
