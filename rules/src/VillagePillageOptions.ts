@@ -12,6 +12,7 @@ type VillagePillagePlayerOptions = {}
  */
 export type VillagePillageOptions = {
   players: VillagePillagePlayerOptions[]
+  //expansion: boolean
 }
 
 /**
@@ -19,8 +20,8 @@ export type VillagePillageOptions = {
  * @param arg GameState or Game options
  * @return true if arg is a Game options
  */
-export function isGameOptions(arg: GameState | VillagePillageOptions): arg is VillagePillageOptions {
-  return typeof (arg as GameState).deck === 'undefined'
+export function isGameState(arg: GameState | VillagePillageOptions): arg is GameState {
+  return Array.isArray((arg as GameState).deck)
 }
 
 /**

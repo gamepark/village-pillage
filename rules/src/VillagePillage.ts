@@ -10,7 +10,7 @@ import Phase from './Phase'
 import PlayerState from './PlayerState'
 import PlayerView from './PlayerView'
 import Side from './Side'
-import {isGameOptions, VillagePillageOptions} from './VillagePillageOptions'
+import {isGameState, VillagePillageOptions} from './VillagePillageOptions'
 import {marketCards, startingCards} from './Card'
 import shuffle from 'lodash.shuffle'
 
@@ -38,7 +38,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @param arg The state of the game, or the options when starting a new game
    */
   constructor(arg: GameState | VillagePillageOptions) {
-    if (isGameOptions(arg)) {
+    if (!isGameState(arg)) {
       const deck = shuffle(marketCards)
       super({
         players: [...Array(arg.players)].map(_ => ({
@@ -174,8 +174,12 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @param move The move that has been played
    * @return What a person should know about the move that was played
    */
-  getMoveView(move: Move): MoveView {
-    if (move.type === MoveType.RevealCards) {
+  getMoveView(move: Move, playerId? : number): MoveView {
+    if (move.type === MoveType.PlayCard && move.playerId !== playerId) {
+      const {card, ...moveView} = move;
+      return moveView
+    }
+    else if (move.type === MoveType.RevealCards) {
       return {...move, players: this.state.players.map(p => ({leftCard: p.leftCard!, rightCard: p.rightCard!}))}
     }
     return move
@@ -190,7 +194,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @param playerId Identifier of the player seeing the move
    * @return What a person should know about the move that was played
    */
-  getPlayerMoveView(move: Move): MoveView {
-    return this.getMoveView(move)
+  getPlayerMoveView(move: Move , playerId : number): MoveView {
+    return this.getMoveView(move, playerId)
   }
 }
