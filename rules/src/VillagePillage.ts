@@ -138,8 +138,12 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * If you game has incomplete information, you must hide some of the game's state to the players and spectators.
    * @return What a person can see from the game state
    */
-  getView(): GameView {
-    return {...this.state, deck: this.state.deck.length}
+  getView(playerId? : number): GameView {
+    return {
+      ...this.state,
+      deck: this.state.deck.length,
+      players: this.state.players.map((player, index) => index + 1 === playerId ? player : this.getOtherPlayerView(player))
+    }
   }
 
   /**
@@ -148,12 +152,8 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return what the player can see
    */
   getPlayerView(playerId: number): GameView {
-    
+    return this.getView(playerId)
     // Here we could, for example, return a "playerView" with only the number of cards in hand for the other player only.
-    return {
-      ...this.state, deck: this.state.deck.length,
-      players: this.state.players.map((player, index) => index === playerId - 1 ? player : this.getOtherPlayerView(player))
-    }
   }
 
   getOtherPlayerView(player: PlayerState): PlayerView {
