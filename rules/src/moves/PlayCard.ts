@@ -37,7 +37,7 @@ function playerPlayCard(player: PlayerState, move: PlayCard) {
   }
 }
 
-export function playCardInView(state: GameState | GameView, move: PlayCard | PlayCardView) {
+export function playCardInView(state: GameView, move: PlayCard | PlayCardView) {
   const player = getPlayerState(state, move.playerId)
   if (isPlayerView(player)) {
     player.hand--
