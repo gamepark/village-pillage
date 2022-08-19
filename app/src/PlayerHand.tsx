@@ -2,17 +2,17 @@
 
 import { css } from "@emotion/react"
 import { Hand } from "@gamepark/react-components"
+import Card from "@gamepark/village-pillage/Card"
 import CardDisplay from "./material/CardDisplay"
 import { cardHeight, cardWidth, screenRatio } from "./styles"
 
 
 
 type Props={
-  hand: number[]
+  hand: Card[]
 }
 
 export default function PlayerHand({hand}: Props) {
-
 
   return(
     <Hand css={handCss} > 

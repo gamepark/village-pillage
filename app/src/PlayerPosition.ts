@@ -1,34 +1,22 @@
 import GameView from "@gamepark/village-pillage/GameView"
 
 enum PlayerPosition{
-Bottom, Top, BottomLeft, TopLeft, BottomRight, TopRight
+Bottom, Top, BottomLeft, TopLeft, BottomRight, TopRight, Right, Left
 
 }
 
 export default PlayerPosition
 
-export function getPlayerPosition(game:GameView, playerIndex:number, myPlayerIndex:number=0):PlayerPosition{
-    if (playerIndex === myPlayerIndex ){
-        return PlayerPosition.Bottom
-    }
+const playersPositions = [
+    [PlayerPosition.Bottom, PlayerPosition.Top],
+    [PlayerPosition.Bottom, PlayerPosition.TopLeft, PlayerPosition.TopRight],
+    [PlayerPosition.Bottom, PlayerPosition.Left, PlayerPosition.Top, PlayerPosition.Right],
+    [PlayerPosition.Bottom, PlayerPosition.BottomLeft, PlayerPosition.TopLeft, PlayerPosition.TopRight, PlayerPosition.BottomRight],
+    [PlayerPosition.Bottom, PlayerPosition.BottomLeft, PlayerPosition.TopLeft, PlayerPosition.Top, PlayerPosition.TopRight, PlayerPosition.BottomRight]
+]
 
-    switch(game.players.length){
-        case 3 : {
-            switch((playerIndex - myPlayerIndex + game.players.length) % game.players.length){
-                case 1 :{
-                    return PlayerPosition.TopLeft
-                }
-                default :{
-                    return PlayerPosition.TopRight
-                }
-            }
-           
-        }
-
-        // Cas n°2
-        default : {
-            return PlayerPosition.Top
-        }
-
-    }
+export function getPlayerPosition(game:GameView, playerIndex:number, myPlayerId? :number):PlayerPosition{
+    const myPlayerIndex = myPlayerId ? myPlayerId-1 : 0;
+    const playerRelativeIndex = (playerIndex - myPlayerIndex + game.players.length) % game.players.length;
+    return playersPositions[game.players.length-2][playerRelativeIndex]
 }

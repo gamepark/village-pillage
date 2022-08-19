@@ -17,7 +17,7 @@ export default function PlayerDisplay({player, position}: Props) {
 
   return(
     <>
-    {isPlayerView(player)? <OtherPlayerHand hand={player.hand}/> : <PlayerHand hand={player.hand}/>} 
+    {isPlayerView(player)? <OtherPlayerHand hand={player.hand} position={position}/> : <PlayerHand hand={player.hand}/>} 
     </>
   )
 }
