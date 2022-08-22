@@ -59,10 +59,17 @@ import veteran from './veteran.jpg'
 import veteranFr from './veteran-fr.jpg'
 import wall from './wall.jpg'
 import wallFr from './wall-fr.jpg'
+import crown from './couronne.jpg'
+import sceptre from './septre.jpg'
+import throne from './trone.jpg'
+import turnip from './navet.png'
+import chicken from './oeuf-poule.png'
+
 
 const Images = {
   cardBack, bank, bankDuel, bard, berserker, burglar, cathedral, cutpurse, doctor, dungeon, farmer, florist, innkeeper, labyrinth, mason, merchant, miner,
-  moat, monastery, outlaw, pickler, raider, ratCatcher, shepherd, smuggler, tollBridge, trapper, treasury, turncoat, veteran, wall
+  moat, monastery, outlaw, pickler, raider, ratCatcher, shepherd, smuggler, tollBridge, trapper, treasury, turncoat, veteran, wall,
+  crown, sceptre, throne, turnip, chicken
 }
 
 const query = new URLSearchParams(window.location.search)

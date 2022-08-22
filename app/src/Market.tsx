@@ -22,10 +22,12 @@ export default function Market({deck, market}: Props) {
 
 const cardPosition = (index : number) => {
   return css`
+    position: absolute;
     left:${65 + index * (cardWidth + 2 )}em;
     top:35em;`
 }
 const deckPosition = (index : number) => css`
-left:${45 + index * 0.1}em;
-top:${35 - index * 0.1}em;
+position: absolute;
+left:${45 + index * 0.13}em;
+top:${35 - index * 0.13}em;
 `

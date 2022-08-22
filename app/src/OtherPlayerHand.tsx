@@ -26,10 +26,10 @@ const cardSize = 0.6;
 
 const handCss = css`
 width: ${cardWidth*cardSize}em;
-height: ${cardHeight*cardSize}em;
-top: 8em;
-left: ${50 * screenRatio - cardWidth/2}em;
-`
+height: ${cardHeight*cardSize}em; `
+/* top: 8em;
+left: ${50 * screenRatio - cardWidth/2}em; */
+
 
 const cardCss = css`
 font-size: ${cardSize}em;
