@@ -44,7 +44,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         players: [...Array(arg.players)].map((_,index) => ({
           hand: startingCards,
           stock: index +1,
-          bank: 1,
+          bank: 5 - index,
           relics: 0
         })),
         phase: Phase.PLAN,

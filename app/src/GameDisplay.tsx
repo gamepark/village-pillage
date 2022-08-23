@@ -16,7 +16,7 @@ export default function GameDisplay({game}: Props) {
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <Market market={game.market} deck={game.deck}/>
-      {game.players.map((player, index) => <PlayerDisplay key={index} player={player} position={getPlayerPosition(game, index, playerId )} />)}
+      {game.players.map((player, index) => <PlayerDisplay key={index} duel={game.players.length === 2} player={player} position={getPlayerPosition(game, index, playerId )} />)}
     </Letterbox>
   )
 }

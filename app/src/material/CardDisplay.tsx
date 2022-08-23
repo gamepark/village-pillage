@@ -16,7 +16,6 @@ export default function CardDisplay({card, ...props}: Props) {
 }
 
 const style = css`
-  position: absolute;
   width: ${cardWidth}em;
   height: ${cardHeight}em;
   transform-style: preserve-3d;

@@ -6,7 +6,6 @@ import Turnip, { turnipWidth } from "./material/Turnip"
 import { screenRatio } from "./styles"
 
 
-
 type Props={
   stock: number
   position: PlayerPosition
