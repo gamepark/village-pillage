@@ -22,7 +22,7 @@ export default function OtherPlayerHand({hand, position}: Props) {
   )
 }
 
-const cardSize = 0.6;
+const cardSize = 0.45;
 
 const handCss = css`
 width: ${cardWidth*cardSize}em;
@@ -43,12 +43,12 @@ left: ${leftPosition[position]}em;
 const topPosition : Record<PlayerPosition,number> = {
   [PlayerPosition.Bottom] : 75,
   [PlayerPosition.Top] : 8,
-  [PlayerPosition.BottomLeft] : 65,
-  [PlayerPosition.BottomRight] : 65,
-  [PlayerPosition.TopLeft] : 18,
-  [PlayerPosition.TopRight] : 18,
-  [PlayerPosition.Right] : 45,
-  [PlayerPosition.Left] : 45
+  [PlayerPosition.BottomLeft] : 80,
+  [PlayerPosition.BottomRight] : 80,
+  [PlayerPosition.TopLeft] : 13,
+  [PlayerPosition.TopRight] : 13,
+  [PlayerPosition.Right] : 55,
+  [PlayerPosition.Left] : 55
 }
 const leftPosition : Record<PlayerPosition,number> = {
   [PlayerPosition.Bottom] : 50 * screenRatio - cardWidth*cardSize/2,

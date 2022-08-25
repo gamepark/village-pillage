@@ -15,8 +15,8 @@ type Props={
 export default function PlayerHand({hand}: Props) {
 
   return(
-    <Hand css={handCss} > 
-      {hand.map(card => <CardDisplay key={card} card={card}/>)}
+    <Hand css={handCss} maxAngle={18} > 
+      {hand.map(card => <CardDisplay key={card} css={cardCss} card={card}/>)}
     </Hand>
   )
 }
@@ -26,4 +26,10 @@ width: ${cardWidth}em;
 height: ${cardHeight}em;
 bottom:1em;
 left: ${50 * screenRatio - cardWidth/2}em;
+z-index: 1;
+`
+const cardCss = css`
+&:before, &:after {
+  box-shadow: 0.1em 0.1em 0.5em black, 0.1em 0.1em 0.5em black, 0.1em 0.1em 0.5em black;
+}
 `
