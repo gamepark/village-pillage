@@ -27,8 +27,8 @@ const bankSize = 1
 const bankCss = css`font-size: ${bankSize}em`
 
 const bankPositionCss = (position : PlayerPosition) => {
-        const topBankPosition = topPosition[position] +1.5
-        const leftBankPosition = leftPosition[position] +28
+        const topBankPosition = topPosition[position]
+        const leftBankPosition = leftPosition[position]
   return css`
   position: absolute;
   top:  ${topBankPosition}em;
@@ -41,13 +41,13 @@ const leftSecondColumn = 9.9
 const topOffset = 2.8
 const turnipBankPositionCss = (position : PlayerPosition, index : number) => css`
 position: absolute;
-top: ${topPosition[position] +14.85 - topOffset*index}em;
-left: ${leftPosition[position] +28 + (index %2 === 1 ? leftFirstColumn : leftSecondColumn) }em;
+top: ${topPosition[position] +13.35 - topOffset*index}em;
+left: ${leftPosition[position] + (index %2 === 1 ? leftFirstColumn : leftSecondColumn) }em;
 `
 
 // Absolute Player position
 const topPosition : Record<PlayerPosition,number> = {
-    [PlayerPosition.Bottom] : 75,
+    [PlayerPosition.Bottom] : 60,
     [PlayerPosition.Top] : 8,
     [PlayerPosition.BottomLeft] : 65,
     [PlayerPosition.BottomRight] : 65,
@@ -58,7 +58,7 @@ const topPosition : Record<PlayerPosition,number> = {
   }
   const leftPosition : Record<PlayerPosition,number> = {
     [PlayerPosition.Bottom] : 50 * screenRatio,
-    [PlayerPosition.Top] : 50 * screenRatio,
+    [PlayerPosition.Top] : 55 * screenRatio,
     [PlayerPosition.BottomLeft] : 10* screenRatio,
     [PlayerPosition.BottomRight] : 90* screenRatio,
     [PlayerPosition.TopLeft] : 10* screenRatio,

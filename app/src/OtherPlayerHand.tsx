@@ -16,7 +16,7 @@ type Props={
 export default function OtherPlayerHand({hand, position}: Props) {
 
   return(
-    <Hand css={[handCss,positionCss(position)]} > 
+    <Hand css={[handCss,positionCss(position)]} maxAngle={10} > 
       {[...Array(hand)].map((_,index) => <CardDisplay key={index} css={cardCss}/>)}
     </Hand>
   )
@@ -52,7 +52,7 @@ const topPosition : Record<PlayerPosition,number> = {
 }
 const leftPosition : Record<PlayerPosition,number> = {
   [PlayerPosition.Bottom] : 50 * screenRatio - cardWidth*cardSize/2,
-  [PlayerPosition.Top] : 50 * screenRatio - cardWidth*cardSize/2,
+  [PlayerPosition.Top] : 45 * screenRatio - cardWidth*cardSize/2,
   [PlayerPosition.BottomLeft] : 10* screenRatio - cardWidth*cardSize/2,
   [PlayerPosition.BottomRight] : 90* screenRatio - cardWidth*cardSize/2,
   [PlayerPosition.TopLeft] : 10* screenRatio - cardWidth*cardSize/2,
