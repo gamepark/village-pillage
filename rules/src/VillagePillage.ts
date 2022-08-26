@@ -66,7 +66,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   isTurnToPlay(playerId: number): boolean {
     if (this.state.phase === Phase.PLAN) {
       const player = this.getPlayer(playerId)
-      return player.leftCard !== undefined && player.rightCard !== undefined
+      return player.leftCard == undefined || player.rightCard == undefined
     } else {
       return false // TODO resolve phase
     }

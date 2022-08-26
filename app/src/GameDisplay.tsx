@@ -18,6 +18,7 @@ type Props = {
 export default function GameDisplay({game}: Props) {
   const playerId = usePlayerId<number>()
   const player = playerId !== undefined ?  game.players[playerId-1] : undefined 
+  console.log(game)
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <PlayersBorders players={game.players.length}/>

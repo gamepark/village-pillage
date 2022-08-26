@@ -21,7 +21,12 @@ export default function PlayerDisplay({player, position, duel}: Props) {
     <>
       <PlayerStockTurnips stock={player.stock} position={position}/>
       <PlayerBankDisplay duel={duel} inBank={player.bank} position={position}/>
-      {player.rightCard && <CardDisplay card = {player.rightCard}/>}
+      {(player.rightCard || (isPlayerView(player) && player.rightCardPlayed)) && 
+              <CardDisplay card = {player.rightCard}/>
+      }
+      {(player.leftCard || (isPlayerView(player) && player.leftCardPlayed)) && 
+              <CardDisplay card = {player.leftCard}/>
+      }
       {isPlayerView(player)? <OtherPlayerHand hand={player.hand} position={position}/> : <PlayerHand hand={player.hand}/>}
     </>
   )
