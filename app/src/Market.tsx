@@ -22,20 +22,20 @@ export default function Market({deck, market}: Props) {
 const marketBorders = css`
 position: absolute;
 width: 88em;
-height: 27em;
+height: 26em;
 left: 44em;
-top: 33em;
+top: 29.5em;
 border: 1px solid white;
 `
 
 const cardPosition = (index : number) => {
   return css`
     position: absolute;
-    left:${65 + index * (cardWidth + 2 )}em;
-    top:35em;`
+    left:${64.4 + index * (cardWidth + 2 )}em;
+    top:31em;`
 }
 const deckPosition = (index : number) => css`
 position: absolute;
 left:${45 + index * 0.13}em;
-top:${35 - index * 0.13}em;
+top:${31.4 - index * 0.13}em;
 `

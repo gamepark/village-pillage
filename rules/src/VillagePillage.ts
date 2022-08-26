@@ -42,8 +42,8 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       const deck = shuffle(marketCards)
       super({
         players: [...Array(arg.players)].map((_,index) => ({
-          hand: [...startingCards,...startingCards],
-          stock: index +1,
+          hand: startingCards,
+          stock: 1,
           bank: 5 - index,
           relics: 0
         })),

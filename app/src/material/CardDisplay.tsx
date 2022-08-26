@@ -21,7 +21,7 @@ const style = css`
   transform-style: preserve-3d;
   transform: translateZ(0);
   -webkit-font-smoothing: subpixel-antialiased;
-  transition: transform 1s ease-in-out;
+  transition: transform 0.15s ease-in-out;
   &:before, &:after {
     position: absolute;
     content: '';

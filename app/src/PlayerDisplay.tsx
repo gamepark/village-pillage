@@ -7,6 +7,7 @@ import PlayerHand from './PlayerHand'
 import PlayerStockTurnips from './PlayerStockTurnips'
 import PlayerPosition from './PlayerPosition'
 import PlayerBankDisplay from './PlayerBankDisplay'
+import CardDisplay from './material/CardDisplay'
 
 type Props={
     player: PlayerState | PlayerView
@@ -18,9 +19,10 @@ type Props={
 export default function PlayerDisplay({player, position, duel}: Props) {
   return(
     <>
-      {isPlayerView(player)? <OtherPlayerHand hand={player.hand} position={position}/> : <PlayerHand hand={player.hand}/>}
       <PlayerStockTurnips stock={player.stock} position={position}/>
       <PlayerBankDisplay duel={duel} inBank={player.bank} position={position}/>
+      {player.rightCard && <CardDisplay card = {player.rightCard}/>}
+      {isPlayerView(player)? <OtherPlayerHand hand={player.hand} position={position}/> : <PlayerHand hand={player.hand}/>}
     </>
   )
 }
