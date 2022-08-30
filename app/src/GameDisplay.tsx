@@ -25,7 +25,7 @@ export default function GameDisplay({game}: Props) {
       <Market market={game.market} deck={game.deck}/>
       {player && game.phase===Phase.PLAN && !player.leftCard &&<CardDropArea side={Side.LEFT}/>}
       {player && game.phase===Phase.PLAN && !player.rightCard && <CardDropArea side={Side.RIGHT}/>}
-      {game.players.map((player, index) => <PlayerDisplay key={index} duel={game.players.length === 2} player={player} position={getPlayerPosition(game, index, playerId )} />)}
+      {game.players.map((player, index) => <PlayerDisplay key={index} players={game.players.length} player={player} position={getPlayerPosition(game, index, playerId )} />)}
     </Letterbox>
   )
 }

@@ -6,7 +6,7 @@ import { playCardMove } from '@gamepark/village-pillage/moves/PlayCard'
 import Side from '@gamepark/village-pillage/Side'
 import {useDrop} from 'react-dnd'
 import {useTranslation} from 'react-i18next'
-import {cardHeight, cardWidth} from './styles'
+import {cardHeight, cardWidth, screenRatio} from './styles'
 
 type Props = {
     side : Side
@@ -24,18 +24,19 @@ export default function CardDropArea({side} : Props) {
     drop: (item: {card : Card}) => playCardMove(playerId, item.card, side)
   })
   return (
-    <div ref={ref} css={[style, !dragging && hidden, over && highlight]}>
+    <div ref={ref} css={[style(side), !dragging && hidden, over && highlight]}>
       <span>{t('drop.card.here')}</span>
     </div>
   )
 }
 
-const style = css`
+const style = (side : Side) => {
+  return css`
   position: absolute;
   width: ${cardWidth}em;
   height: ${cardHeight}em;
-  top: 65em;
-  left: 45em;
+  top: ${side ? 60 : 60}em;
+  left: ${side ? 85*screenRatio : 15}em;
   border-radius: 2em;
   background-color: rgba(0, 128, 0, 0.4);
   display: flex;
@@ -45,7 +46,7 @@ const style = css`
   span {
     font-size: 5em;
   }
-`
+`}
 
 const hidden = css`
   display: none;
