@@ -25,10 +25,10 @@ export default function PlayerDisplay({player, position, players}: Props) {
       <PlayerStockTurnips stock={player.stock} position={position}/>
       <PlayerBankDisplay duel={players===2} inBank={player.bank} position={position}/>
       {(player.rightCard || (isPlayerView(player) && player.rightCardPlayed)) && 
-              <CardDisplay card = {player.rightCard} css={[playedCardCss,playedRightCardPositionCss(position, players)]}/>
+              <CardDisplay card={player.rightCard} css={[playedCardCss(player),playedRightCardPositionCss(position, players, !player.rightCard)]}/>
       }
       {(player.leftCard || (isPlayerView(player) && player.leftCardPlayed)) && 
-              <CardDisplay card = {player.leftCard} css={[playedCardCss,playedLeftCardPositionCss(position, players)]}/>
+              <CardDisplay card={player.leftCard} css={[playedCardCss(player),playedLeftCardPositionCss(position, players, !player.leftCard)]}/>
       }
       {isPlayerView(player)? <OtherPlayerHand hand={player.hand} position={position}/> : <PlayerHand hand={player.hand}/>}
     </>
@@ -36,37 +36,41 @@ export default function PlayerDisplay({player, position, players}: Props) {
 }
 
 // PlayedCard dimension
-const cardSize = 1
-const playedCardCss = css`font-size: ${cardSize}em`
+const playedCardCss = (player : PlayerState | PlayerView) => {
+  let cardSize = 1
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  isPlayerView(player) ? cardSize = 0.85 : 1
+  return css`font-size: ${cardSize}em`
+}
 
 /// Phase 5 : Affichage les cartes gauche et droite pour chaque joueur dans la vue du joueur actif.
-const playedRightCardPositionCss = (playerPosition : PlayerPosition, players : number) => css`
+const playedRightCardPositionCss = (playerPosition : PlayerPosition, players : number, hidden : boolean) => css`
   position: absolute;
   top: ${rightCardY[playerPosition](players)}em;
   left: ${rightCardX[playerPosition](players)}em;
-  transform: rotate(${playedCardRotate(playerPosition,players,Side.RIGHT)}deg);
+  transform: rotateY(${hidden ? -180 : 0}deg) rotate(${playedCardRotate(playerPosition,players,Side.RIGHT)}deg);
 `
-const playedLeftCardPositionCss = (playerPosition : PlayerPosition, players : number) => css`
+const playedLeftCardPositionCss = (playerPosition : PlayerPosition, players : number, hidden : boolean) => css`
   position: absolute;
   top: ${leftCardY[playerPosition](players)}em;
   left: ${leftCardX[playerPosition](players)}em;
-  transform: rotate(${playedCardRotate(playerPosition,players,Side.LEFT)}deg);
+  transform: rotateY(${hidden ? -180 : 0}deg) rotate(${playedCardRotate(playerPosition,players,Side.LEFT)}deg);
 `
 
  const rightCardX : Record<PlayerPosition,(players:number) => number> = {
   [PlayerPosition.Bottom] : players => {
       switch (players) {
-        case 2: return 75*screenRatio
-        case 3: return 75*screenRatio
+        case 2: return 75.5*screenRatio
+        case 3: return 75.5*screenRatio
         case 4: return 70*screenRatio
-        default: return 60*screenRatio
+        default: return 65.5*screenRatio
       }
   },
-  [PlayerPosition.Top] : players => players===2 ? 25*screenRatio : (players===4 ? 30*screenRatio : 40*screenRatio),  // players === 6
-  [PlayerPosition.TopLeft] : players => players===3 ? 25*screenRatio : (players===5 ? 30*screenRatio : 40*screenRatio), // players === 6
-  [PlayerPosition.TopRight] : players => players===3 ? 25*screenRatio : (players===5 ? 30*screenRatio : 40*screenRatio), // players === 6
-  [PlayerPosition.BottomRight] : players => players===5 ? 30*screenRatio : 40*screenRatio, // players === 6
-  [PlayerPosition.BottomLeft] : players => players===5 ? 30*screenRatio : 40*screenRatio, // players === 6,
+  [PlayerPosition.Top] : players => players===2 ? 18.5*screenRatio : (players===4 ? 30*screenRatio : 29.6*screenRatio),  // players === 6
+  [PlayerPosition.TopLeft] : players => players===3 ? 18.5*screenRatio : (players===5 ? 14*screenRatio : 14*screenRatio), // players === 6
+  [PlayerPosition.TopRight] : players => players===6 ? 87.8*screenRatio : 61.5*screenRatio, // players === 3 ou 5
+  [PlayerPosition.BottomRight] : players => players===5 ? 95*screenRatio : 95*screenRatio, // players === 6
+  [PlayerPosition.BottomLeft] : players => players===5 ? 20.2*screenRatio : 20.2*screenRatio, // players === 6,
   [PlayerPosition.Left] : () => 25*screenRatio, // only for 4 players
   [PlayerPosition.Right] : () => 25*screenRatio, // only for 4 players
 }
@@ -74,17 +78,18 @@ const playedLeftCardPositionCss = (playerPosition : PlayerPosition, players : nu
 const rightCardY : Record<PlayerPosition,(players:number) => number> = {
   [PlayerPosition.Bottom] : players => {
       switch (players) {
-        case 6: return 75
-        case 5: return 75
+        case 6: return 56 //62.15
+        case 5: return 56
         case 4: return 70
-        default: return 75
+        case 3: return 45
+        default: return 45
       }
   },
-  [PlayerPosition.Top] : () => 9,
-  [PlayerPosition.TopLeft] : players => players===3 ? 15 : (players===5 ? 20 : 25), // players === 6
-  [PlayerPosition.TopRight] : () => 9,
-  [PlayerPosition.BottomRight] : () => 45,
-  [PlayerPosition.BottomLeft] : () => 55,
+  [PlayerPosition.Top] : () => 26,
+  [PlayerPosition.TopLeft] : players => players===3 ? 26 : 30.5, // players === 5 ou 6
+  [PlayerPosition.TopRight] : () => 10,
+  [PlayerPosition.BottomRight] : () => 47.1,
+  [PlayerPosition.BottomLeft] : () => 70,
   [PlayerPosition.Left] : () => 25, // only for 4 players
   [PlayerPosition.Right] : () => 25 // only for 4 players
 }
@@ -92,17 +97,17 @@ const rightCardY : Record<PlayerPosition,(players:number) => number> = {
 const leftCardX : Record<PlayerPosition,(players:number) => number> = {
   [PlayerPosition.Bottom] : players => {
       switch (players) {
-        case 2: return 25*screenRatio
-        case 3: return 25*screenRatio
+        case 2: return 15*screenRatio
+        case 3: return 15*screenRatio
         case 4: return 30*screenRatio
-        default: return 40*screenRatio
+        default: return 25.2*screenRatio
       }
   },
-  [PlayerPosition.Top] : players => players===2 ? 75*screenRatio : (players===4 ? 70*screenRatio : 60*screenRatio),  // players === 6
-  [PlayerPosition.TopLeft] : players => players===3 ? 75*screenRatio : (players===5 ? 70*screenRatio : 60*screenRatio), // players === 6
-  [PlayerPosition.TopRight] : players => players===3 ? 75*screenRatio : (players===5 ? 70*screenRatio : 60*screenRatio), // players === 6
-  [PlayerPosition.BottomRight] : players => players===5 ? 70*screenRatio : 60*screenRatio, // players === 6
-  [PlayerPosition.BottomLeft] : players => players===5 ? 70*screenRatio : 60*screenRatio, // players === 6,
+  [PlayerPosition.Top] : players => players===2 ? 89.5*screenRatio : (players===4 ? 70*screenRatio : 78.5*screenRatio),  // players === 6
+  [PlayerPosition.TopLeft] : players => players===6 ? 20.2*screenRatio : 52*screenRatio, // players === 3 ou 5
+  [PlayerPosition.TopRight] : players => players===3 ? 89.5*screenRatio : 95*screenRatio, // players === 5 ou 6
+  [PlayerPosition.BottomRight] : players => players===5 ? 87.8*screenRatio : 87.8*screenRatio, // players === 6
+  [PlayerPosition.BottomLeft] : players => players===5 ? 14*screenRatio : 14*screenRatio, // players === 6,
   [PlayerPosition.Left] : () => 75*screenRatio, // only for 4 players
   [PlayerPosition.Right] : () => 75*screenRatio, // only for 4 players
 }
@@ -110,17 +115,18 @@ const leftCardX : Record<PlayerPosition,(players:number) => number> = {
 const leftCardY : Record<PlayerPosition,(players:number) => number> = {
   [PlayerPosition.Bottom] : players => {
       switch (players) {
-        case 6: return 75
-        case 5: return 75
+        case 6: return 56 //62.15
+        case 5: return 56
         case 4: return 70
-        default: return 75
+        case 3: return 45
+        default: return 45
       }
   },
-  [PlayerPosition.Top] : () => 9,
-  [PlayerPosition.TopLeft] : () => 9,
-  [PlayerPosition.TopRight] : players => players===3 ? 15 : (players===5 ? 20 : 25), // players === 6
-  [PlayerPosition.BottomRight] : () => 55,
-  [PlayerPosition.BottomLeft] : () => 45,
+  [PlayerPosition.Top] : () => 26,
+  [PlayerPosition.TopLeft] : () => 10,
+  [PlayerPosition.TopRight] : players => players===3 ? 26 : 30.5, // players === 5 ou 6
+  [PlayerPosition.BottomRight] : () => 70,
+  [PlayerPosition.BottomLeft] : () => 47.6,
   [PlayerPosition.Left] : () => 25, // only for 4 players
   [PlayerPosition.Right] : () => 25 // only for 4 players
 }

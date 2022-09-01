@@ -19,11 +19,11 @@ export default PlayCard
 
 export type PlayCardView = Omit<PlayCard, 'card'>
 
-export function playCardMove(playerId: number, card: number, side: Side) {
+export function playCardMove(playerId: number, card: number, side: Side) : PlayCard {
   return {type: MoveType.PlayCard, playerId, card, side}
 }
 
-export function playCard(state: GameState, move: PlayCard) {
+export function playCard(state: GameState, move: PlayCard) : void {
   const player = getPlayerState(state, move.playerId)
   playerPlayCard(player, move)
 }

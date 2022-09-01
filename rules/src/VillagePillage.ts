@@ -108,9 +108,11 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   play(move: Move): void {
     switch (move.type) {
       case MoveType.PlayCard:
-        return playCard(this.state, move)
+        playCard(this.state, move)
+        break
       case MoveType.RevealCards:
-        return revealCards(this.state)
+        revealCards(this.state)
+        break
     }
   }
 
@@ -127,7 +129,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    *
    * @return The next automatic consequence that should be played in current game state.
    */
-  getAutomaticMove(): Move[] {
+  getAutomaticMoves(): Move[] {
     if (this.state.phase === Phase.PLAN && this.state.players.every(player => player.leftCard && player.rightCard)) {
       return [revealCardsMove]
     }

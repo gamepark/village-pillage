@@ -61,10 +61,10 @@ left: ${leftPosition[position] + (index %2 === 1 ? leftFirstColumn : leftSecondC
 const topPosition : Record<PlayerPosition,number> = {
     [PlayerPosition.Bottom] : 56.5,
     [PlayerPosition.Top] : 7.1,
-    [PlayerPosition.BottomLeft] : 53,
-    [PlayerPosition.BottomRight] : 53,
-    [PlayerPosition.TopLeft] : 28.5,
-    [PlayerPosition.TopRight] : 28.5,
+    [PlayerPosition.BottomLeft] : 43.5,
+    [PlayerPosition.BottomRight] : 43.5,
+    [PlayerPosition.TopLeft] : 20,
+    [PlayerPosition.TopRight] : 20,
     [PlayerPosition.Right] : 35,
     [PlayerPosition.Left] : 35
   }

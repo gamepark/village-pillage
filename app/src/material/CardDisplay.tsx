@@ -19,7 +19,6 @@ const style = css`
   width: ${cardWidth}em;
   height: ${cardHeight}em;
   transform-style: preserve-3d;
-  transform: translateZ(0);
   -webkit-font-smoothing: subpixel-antialiased;
   transition: transform 0.15s ease-in-out;
   &:before, &:after {
