@@ -22,8 +22,8 @@ type Props={
 export default function PlayerDisplay({player, position, players}: Props) {
   return(
     <>
-      <PlayerStockTurnips stock={player.stock} position={position}/>
       <PlayerBankDisplay duel={players===2} inBank={player.bank} position={position}/>
+      <PlayerStockTurnips stock={player.stock} position={position}/>
       {(player.rightCard || (isPlayerView(player) && player.rightCardPlayed)) && 
               <CardDisplay card={player.rightCard} css={[playedCardCss(player),playedRightCardPositionCss(position, players, !player.rightCard)]}/>
       }

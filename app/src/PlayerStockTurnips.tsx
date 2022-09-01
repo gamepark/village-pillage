@@ -26,7 +26,7 @@ top: ${topPosition[position]}em;
 left: ${leftPosition[position] + index * (turnipWidth + 0.5)}em;
 `
 const topPosition : Record<PlayerPosition,number> = {
-    [PlayerPosition.Bottom] : 75,
+    [PlayerPosition.Bottom] : 65,
     [PlayerPosition.Top] : 8,
     [PlayerPosition.BottomLeft] : 65,
     [PlayerPosition.BottomRight] : 65,
@@ -36,7 +36,7 @@ const topPosition : Record<PlayerPosition,number> = {
     [PlayerPosition.Left] : 45
   }
   const leftPosition : Record<PlayerPosition,number> = {
-    [PlayerPosition.Bottom] : 50 * screenRatio,
+    [PlayerPosition.Bottom] : 60 * screenRatio,
     [PlayerPosition.Top] : 50 * screenRatio,
     [PlayerPosition.BottomLeft] : 10* screenRatio,
     [PlayerPosition.BottomRight] : 90* screenRatio,

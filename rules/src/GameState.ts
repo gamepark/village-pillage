@@ -1,3 +1,4 @@
+import CardColor from './CardColor'
 import GameView from './GameView'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
@@ -9,6 +10,7 @@ import PlayerView from './PlayerView'
 type GameState = {
   players: PlayerState[]
   phase: Phase
+  resolveStep?: CardColor
   deck: number[]
   market: number[]
 }

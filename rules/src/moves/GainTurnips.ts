@@ -1,4 +1,5 @@
 import GameState, {getPlayerState} from '../GameState'
+import GameView from '../GameView'
 import MoveType from './MoveType'
 
 /**
@@ -16,7 +17,7 @@ export function gainTurnipsMove(playerId: number, quantity: number) : GainTurnip
   return {type: MoveType.GainTurnips, playerId, quantity}
 }
 
-export function gainTurnips(state: GameState, move: GainTurnips) {
+export function gainTurnips(state: GameState | GameView, move: GainTurnips) {
   const player = getPlayerState(state, move.playerId)
   player.stock += move.quantity
 }

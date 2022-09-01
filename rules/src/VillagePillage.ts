@@ -1,18 +1,20 @@
-import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
-import GameState, {getPlayerState} from './GameState'
+import { SecretInformation, SimultaneousGame } from '@gamepark/rules-api'
+import shuffle from 'lodash.shuffle'
+import Card, { marketCards, startingCards } from './Card'
+import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
+import { changeResolveStep, changeResolveStepMove } from './moves/ChangeResolveStep'
+import { gainTurnips, gainTurnipsMove } from './moves/GainTurnips'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
-import {playCard, playCardMove} from './moves/PlayCard'
-import {revealCards, revealCardsMove} from './moves/RevealCards'
+import { playCard, playCardMove } from './moves/PlayCard'
+import { revealCards, revealCardsMove } from './moves/RevealCards'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
 import PlayerView from './PlayerView'
 import Side from './Side'
-import {isGameState, VillagePillageOptions} from './VillagePillageOptions'
-import {marketCards, startingCards} from './Card'
-import shuffle from 'lodash.shuffle'
+import { isGameState, VillagePillageOptions } from './VillagePillageOptions'
 
 /**
  * Your Board Game rules must extend either "SequentialGame" or "SimultaneousGame".
@@ -113,6 +115,12 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       case MoveType.RevealCards:
         revealCards(this.state)
         break
+      case MoveType.GainTurnips:
+        gainTurnips(this.state, move)
+        break
+      case MoveType.ChangeResolveStep:
+        changeResolveStep(this.state)
+        break
     }
   }
 
@@ -132,6 +140,20 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   getAutomaticMoves(): Move[] {
     if (this.state.phase === Phase.PLAN && this.state.players.every(player => player.leftCard && player.rightCard)) {
       return [revealCardsMove]
+    }
+    if (this.state.phase === Phase.RESOLVE && this.state.resolveStep==undefined) {
+      const moves : Move[] = []
+      for (var playerIndex = 0 ; playerIndex < this.state.players.length; playerIndex++) {
+        const player = this.state.players[playerIndex]
+        if (player.leftCard === Card.Farmer) {
+          moves.push(gainTurnipsMove(playerIndex+1, 3))  // playerId = (playerIndex + 1) TOUJOURS !
+        }
+        if (player.rightCard === Card.Farmer) {
+          moves.push(gainTurnipsMove(playerIndex+1, 3))  // playerId = (playerIndex + 1) TOUJOURS !
+        }
+      }
+      moves.push(changeResolveStepMove)
+      return moves      //[gainTurnipsMove(this.state.players)]
     }
     return []
   }

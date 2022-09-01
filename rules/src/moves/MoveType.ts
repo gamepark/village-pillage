@@ -3,7 +3,7 @@
  * Even though it is not strictly required to use a type like that, it helps a lot in practice!
  */
 enum MoveType {
-  PlayCard, RevealCards
+  PlayCard, RevealCards, GainTurnips, ChangeResolveStep
 }
 
 export default MoveType

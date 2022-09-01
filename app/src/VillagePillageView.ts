@@ -1,5 +1,7 @@
 import {Game} from '@gamepark/rules-api'
 import GameView from '@gamepark/village-pillage/GameView'
+import { changeResolveStep } from '@gamepark/village-pillage/moves/ChangeResolveStep'
+import { gainTurnips } from '@gamepark/village-pillage/moves/GainTurnips'
 import MoveType from '@gamepark/village-pillage/moves/MoveType'
 import MoveView from '@gamepark/village-pillage/moves/MoveView'
 import {playCardInView} from '@gamepark/village-pillage/moves/PlayCard'
@@ -36,9 +38,17 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
   play(move: MoveView): void {
     switch (move.type) {
       case MoveType.PlayCard:
-        return playCardInView(this.state, move)
+        playCardInView(this.state, move)
+        break
       case MoveType.RevealCards:
-        return revealCardsInView(this.state, move)
+        revealCardsInView(this.state, move)
+        break
+      case MoveType.GainTurnips:
+        gainTurnips(this.state, move)
+        break
+      case MoveType.ChangeResolveStep:
+        changeResolveStep(this.state)
+        break
     }
   }
 
