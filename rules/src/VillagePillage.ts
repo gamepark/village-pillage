@@ -1,10 +1,11 @@
 import { SecretInformation, SimultaneousGame } from '@gamepark/rules-api'
 import shuffle from 'lodash.shuffle'
-import Card, { marketCards, startingCards } from './Card'
+import { marketCards, startingCards } from './Card'
+import { getCardsAutomaticMoves } from './CardColor'
 import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
-import { changeResolveStep, changeResolveStepMove } from './moves/ChangeResolveStep'
-import { gainTurnips, gainTurnipsMove } from './moves/GainTurnips'
+import { changeResolveStep, changeResolveStepMove, getNextResolveStep } from './moves/ChangeResolveStep'
+import { gainTurnips } from './moves/GainTurnips'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
@@ -141,19 +142,11 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     if (this.state.phase === Phase.PLAN && this.state.players.every(player => player.leftCard && player.rightCard)) {
       return [revealCardsMove]
     }
-    if (this.state.phase === Phase.RESOLVE && this.state.resolveStep==undefined) {
-      const moves : Move[] = []
-      for (var playerIndex = 0 ; playerIndex < this.state.players.length; playerIndex++) {
-        const player = this.state.players[playerIndex]
-        if (player.leftCard === Card.Farmer) {
-          moves.push(gainTurnipsMove(playerIndex+1, 3))  // playerId = (playerIndex + 1) TOUJOURS !
-        }
-        if (player.rightCard === Card.Farmer) {
-          moves.push(gainTurnipsMove(playerIndex+1, 3))  // playerId = (playerIndex + 1) TOUJOURS !
-        }
-      }
+    if (this.state.phase === Phase.RESOLVE) {
+      const nextStep = getNextResolveStep(this.state.resolveStep)
+      const moves = getCardsAutomaticMoves(this.state.players, nextStep)
       moves.push(changeResolveStepMove)
-      return moves      //[gainTurnipsMove(this.state.players)]
+      return moves
     }
     return []
   }

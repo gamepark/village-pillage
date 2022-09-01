@@ -15,5 +15,9 @@ export default ChangeResolveStep
 export const changeResolveStepMove : ChangeResolveStep = {type: MoveType.ChangeResolveStep}
 
 export function changeResolveStep(state: GameState | GameView) {
-  state.resolveStep = state.resolveStep === undefined ? CardColor.Green : state.resolveStep + 1
+  state.resolveStep = getNextResolveStep(state.resolveStep)
+}
+
+export function getNextResolveStep(resolveStep?: CardColor) {
+  return resolveStep===undefined ? CardColor.Green : resolveStep +1
 }
