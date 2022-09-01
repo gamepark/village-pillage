@@ -3,7 +3,7 @@ import GameView from '../GameView'
 import MoveType from './MoveType'
 
 /**
- * An example of a simple move: one player returns a quantity of gold to the bank
+ * An example of a simple move: one player take a quantity of turnips to his stock
  */
 type GainTurnips = {
   type: MoveType.GainTurnips
