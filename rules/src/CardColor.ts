@@ -1,5 +1,5 @@
 import Card from "./Card";
-import { bankTurnipsMove } from "./moves/BankTurnips";
+import { bankTurnipsMove, maxBankable } from "./moves/BankTurnips";
 import { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
 import { stealTurnipsMove } from "./moves/StealTurnips";
@@ -42,11 +42,13 @@ function getBlueCardsAutomaticMoves(players: PlayerState[]) {
     const player = players[playerIndex]
     if (player.leftCard === Card.Wall) {
       moves.push(gainTurnipsMove(playerIndex+1, 1))
-      moves.push(bankTurnipsMove(playerIndex+1, 1))
+      const bank = Math.min(1,maxBankable(player,players.length))
+      if (bank > 0) moves.push(bankTurnipsMove(playerIndex+1, bank))
     }
     if (player.rightCard === Card.Wall) {
       moves.push(gainTurnipsMove(playerIndex+1, 1))
-      moves.push(bankTurnipsMove(playerIndex+1, 1))
+      const bank = Math.min(1,maxBankable(player,players.length))
+      if (bank > 0) moves.push(bankTurnipsMove(playerIndex+1, bank))
     }
   }
   return moves

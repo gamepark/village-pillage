@@ -22,11 +22,11 @@ export function stealTurnipsMove(playerId: number, quantity: number, side: Side)
 export function stealTurnips(state: GameState | GameView, move: StealTurnips) {
   const player = getPlayerState(state, move.playerId)
 
-  const leftOpponentId = move.playerId +1 % state.players.length
+  const leftOpponentId = (move.playerId % state.players.length) +1
   move.playerId = leftOpponentId
   const leftOpponent = getPlayerState(state, move.playerId)
 
-  const rightOpponentId = ((move.playerId -2) % state.players.length) + 1
+  const rightOpponentId = ((move.playerId -2 + state.players.length) % state.players.length) + 1
   move.playerId = rightOpponentId
   const rightOpponent = getPlayerState(state, move.playerId)
 
@@ -36,6 +36,6 @@ export function stealTurnips(state: GameState | GameView, move: StealTurnips) {
   }
   if(move.side === Side.LEFT) {
       (leftOpponent.stock < move.quantity) ? (leftOpponent.stock = 0, player.stock += leftOpponent.stock) 
-      : (leftOpponent.stock -= move.quantity, player.stock += move.quantity)
+                                           : (leftOpponent.stock -= move.quantity, player.stock += move.quantity)
   }
 }

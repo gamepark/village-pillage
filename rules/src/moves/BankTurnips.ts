@@ -1,5 +1,6 @@
 import GameState, {getPlayerState} from '../GameState'
 import GameView from '../GameView'
+import PlayerState from '../PlayerState'
 import MoveType from './MoveType'
 
 /**
@@ -17,12 +18,13 @@ export function bankTurnipsMove(playerId: number, quantity: number) : BankTurnip
   return {type: MoveType.BankTurnips, playerId, quantity}
 }
 
+export function maxBankable(player: PlayerState, players: number) : number {
+  const bankSize = players===2 ? 4 : 5
+  return bankSize - player.bank
+}
+
 export function bankTurnips(state: GameState | GameView, move: BankTurnips) {
   const player = getPlayerState(state, move.playerId)
-  const turnipsSum = player.bank + move.quantity
-  if (state.players.length === 2) {
-    turnipsSum > 4 ? (player.bank = 4, player.stock = 4-player.bank) : (player.bank += move.quantity, player.stock -= move.quantity)
-  } else {
-    turnipsSum > 5 ? (player.bank = 5, player.stock = 5-player.bank) : (player.bank += move.quantity, player.stock -= move.quantity)
-  }
+  player.bank += move.quantity
+  player.stock -= move.quantity
 }
