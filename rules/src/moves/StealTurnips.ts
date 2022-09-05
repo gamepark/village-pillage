@@ -1,6 +1,5 @@
-import GameState, {getPlayerState} from '../GameState'
+import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
-import Side from '../Side'
 import MoveType from './MoveType'
 
 /**
@@ -10,32 +9,18 @@ type StealTurnips = {
   type: MoveType.StealTurnips
   playerId: number
   quantity: number
-  side : Side
+  victimId: number
 }
 
 export default StealTurnips
 
-export function stealTurnipsMove(playerId: number, quantity: number, side: Side) : StealTurnips {
-  return {type: MoveType.StealTurnips, playerId, quantity, side}
+export function stealTurnipsMove(playerId: number, quantity: number, victimId: number) : StealTurnips {
+  return {type: MoveType.StealTurnips, playerId, quantity, victimId}
 }
 
 export function stealTurnips(state: GameState | GameView, move: StealTurnips) {
   const player = getPlayerState(state, move.playerId)
-
-  const leftOpponentId = (move.playerId % state.players.length) +1
-  move.playerId = leftOpponentId
-  const leftOpponent = getPlayerState(state, move.playerId)
-
-  const rightOpponentId = ((move.playerId -2 + state.players.length) % state.players.length) + 1
-  move.playerId = rightOpponentId
-  const rightOpponent = getPlayerState(state, move.playerId)
-
-  if(move.side === Side.RIGHT) {
-      (rightOpponent.stock < move.quantity) ? (rightOpponent.stock = 0, player.stock += rightOpponent.stock) 
-                                            : (rightOpponent.stock -= move.quantity, player.stock += move.quantity)
-  }
-  if(move.side === Side.LEFT) {
-      (leftOpponent.stock < move.quantity) ? (leftOpponent.stock = 0, player.stock += leftOpponent.stock) 
-                                           : (leftOpponent.stock -= move.quantity, player.stock += move.quantity)
-  }
+  const victim = getPlayerState(state, move.victimId)
+  player.stock += move.quantity
+  victim.stock -= move.quantity
 }

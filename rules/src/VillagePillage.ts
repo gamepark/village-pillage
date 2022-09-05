@@ -1,7 +1,7 @@
 import { SecretInformation, SimultaneousGame } from '@gamepark/rules-api'
 import shuffle from 'lodash.shuffle'
 import { marketCards, startingCards } from './Card'
-import { getCardsAutomaticMoves } from './CardColor'
+import { getCardsResolveAutomaticMoves } from './CardColor'
 import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
 import { changeResolveStep, changeResolveStepMove, getNextResolveStep } from './moves/ChangeResolveStep'
@@ -146,7 +146,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     }
     if (this.state.phase === Phase.RESOLVE) {
       const nextStep = getNextResolveStep(this.state.resolveStep)
-      const moves = nextStep ? getCardsAutomaticMoves(this.state, nextStep) : []
+      const moves = nextStep ? getCardsResolveAutomaticMoves(this.state, nextStep) : []
       moves.push(changeResolveStepMove)
       return moves
     }
