@@ -1,6 +1,7 @@
 import Card from "./Card";
 import EffectType from "./EffectType";
 import GameState from "./GameState";
+import BankTurnips, { bankTurnipsMove } from "./moves/BankTurnips";
 import { flipChickenMove } from "./moves/FlipChicken";
 import GainTurnips, { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
@@ -89,7 +90,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
     //   else return 0
     // }
 
-function getStealMoves(players: PlayerState[], _cardColor: CardColor) {
+function getStealMoves(players: PlayerState[], _cardColor: CardColor) : Move[] {
   const moves: Move[] = []
   for (let victimIndex= 0; victimIndex < players.length; victimIndex++) {
     const victim = players[victimIndex]
@@ -164,19 +165,30 @@ function getStealMoves(players: PlayerState[], _cardColor: CardColor) {
       }
     }
 
-function getBankMoves(_players: PlayerState[], _cardColor: CardColor) {
-  return []
+function getBankMoves(players: PlayerState[], cardColor: CardColor) : BankTurnips[] {
+  return players.flatMap((player, index) => getPlayerBankMoves(player, cardColor, side => getOpponentCardColor(players, index, side)))
 }
+  function getPlayerBankMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor): BankTurnips[] {
+    const moves: BankTurnips[] = []
+    for (const side of [Side.LEFT, Side.RIGHT]) {
+      const card = side===Side.LEFT ? player.leftCard : player.rightCard
+      if (card && getCardColor(card) === cardColor) {
+        const gain = getCardBank(card, () => getOpposingCardColorBySide(side))
+        if (gain > 0) moves.push(bankTurnipsMove(player.id, gain))
+      }
+    }
+    return moves
+  }
 
-  function getCardBank(card: Card, opposingCardColor: CardColor) : number {
+  function getCardBank(card: Card, getOpposingCardColor: () => CardColor) : number {
     switch (card) {
-      case Card.Cathedral: return opposingCardColor === CardColor.Red ? 1 : 0
-      case Card.Dungeon: return opposingCardColor === (CardColor.Red | CardColor.Blue) ? 1 : 2
+      case Card.Cathedral: return getOpposingCardColor() === CardColor.Red ? 1 : 0
+      case Card.Dungeon: return getOpposingCardColor() === (CardColor.Red | CardColor.Blue) ? 1 : 2
       case Card.Pickler:
-      case Card.Labyrinth: return opposingCardColor === CardColor.Red ? 0 : 2
-      case Card.Mason: return opposingCardColor === CardColor.Blue ? 2 : 0
-      case Card.Moat: return opposingCardColor === (CardColor.Blue | CardColor.Yellow) ? 2 : 0
-      case Card.TollBridge: return opposingCardColor === (CardColor.Green | CardColor.Blue) ? 2 : 0
+      case Card.Labyrinth: return getOpposingCardColor() === CardColor.Red ? 0 : 2
+      case Card.Mason: return getOpposingCardColor() === CardColor.Blue ? 2 : 0
+      case Card.Moat: return getOpposingCardColor() === (CardColor.Blue | CardColor.Yellow) ? 2 : 0
+      case Card.TollBridge: return getOpposingCardColor() === (CardColor.Green | CardColor.Blue) ? 2 : 0
       case Card.Treasury: return 4
       case Card.Wall: return 1
       default: return 0
