@@ -45,6 +45,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       const deck = shuffle(marketCards)
       super({
         players: [...Array(arg.players)].map((_,index) => ({
+          id: index + 1,
           hand: startingCards,
           stock: 1,
           bank: 5 - index,
@@ -116,6 +117,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       case MoveType.RevealCards:
         revealCards(this.state)
         break
+
       case MoveType.GainTurnips:
         gainTurnips(this.state, move)
         break
@@ -144,7 +146,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     }
     if (this.state.phase === Phase.RESOLVE) {
       const nextStep = getNextResolveStep(this.state.resolveStep)
-      const moves = getCardsAutomaticMoves(this.state.players, nextStep)
+      const moves = nextStep ? getCardsAutomaticMoves(this.state, nextStep) : []
       moves.push(changeResolveStepMove)
       return moves
     }

@@ -1,6 +1,9 @@
 import CardColor from '../CardColor'
+import EffectType from '../EffectType'
 import GameState from '../GameState'
 import GameView from '../GameView'
+import Phase from '../Phase'
+import ResolveStep from '../ResolveStep'
 import MoveType from './MoveType'
 
 /**
@@ -16,8 +19,18 @@ export const changeResolveStepMove : ChangeResolveStep = {type: MoveType.ChangeR
 
 export function changeResolveStep(state: GameState | GameView) {
   state.resolveStep = getNextResolveStep(state.resolveStep)
+  if (!state.resolveStep) {state.phase = Phase.REFRESH}
 }
 
-export function getNextResolveStep(resolveStep?: CardColor) {
-  return resolveStep===undefined ? CardColor.Green : resolveStep +1
+export function getNextResolveStep(resolveStep?: ResolveStep) : ResolveStep | undefined {
+  if (resolveStep===undefined) {
+    return {cardColor: CardColor.Green, effectType: EffectType.Gain}
+  } else if(resolveStep.effectType !== EffectType.Buy) {
+    return {cardColor: resolveStep.cardColor, effectType: resolveStep.effectType +1}
+  } else if(resolveStep.cardColor !== CardColor.Yellow) {
+    return {cardColor: resolveStep.cardColor +1, effectType: EffectType.Gain}
+  } else {
+    return undefined
+  }
+
 }
