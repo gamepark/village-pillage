@@ -52,7 +52,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
     for (const side of [Side.LEFT, Side.RIGHT]) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        const gain = getCardGain(card, () => getOpposingCardColorBySide(side)) // + getCardOpponentGain(getOpponentCard(players,player.id,side), getCardColor(card))
+        const gain = getCardGain(card, () => getOpposingCardColorBySide(side))// + getCardOpponentGain(getOpponentCard(players,player.id,side), getCardColor(card))
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
     }
@@ -65,11 +65,9 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
         case Card.Florist: return 5
         case Card.Innkeeper: return getOpposingCardColor() === CardColor.Yellow ? 5 : 4
         case Card.Mason:
-        case Card.Pickler:
-        case Card.Shepherd: return 4
+        case Card.Pickler: return 4 
         case Card.Miner: return getOpposingCardColor() === CardColor.Blue ? 5 : 4
         case Card.RatCatcher: return getOpposingCardColor() === CardColor.Green ? 6 : 4
-
         case Card.Wall:
         case Card.Treasury:
         case Card.Labyrinth: return getOpposingCardColor() === CardColor.Red ? 0 : 1
@@ -82,6 +80,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
         case Card.Trapper: return getOpposingCardColor() === (CardColor.Green | CardColor.Yellow) ? 1 : 0
         case Card.Bard: return 1         // si pas d'achat relique possible
         case Card.Doctor: return 2       // si pas d'achat relique possible
+        case Card.Shepherd: return 4          // Attention : A faire à l'entretien !
         default: return 0
       }
     }
@@ -165,13 +164,24 @@ function getStealMoves(players: PlayerState[], _cardColor: CardColor) {
       }
     }
 
-
-
-
-
 function getBankMoves(_players: PlayerState[], _cardColor: CardColor) {
   return []
 }
+
+  function getCardBank(card: Card, opposingCardColor: CardColor) : number {
+    switch (card) {
+      case Card.Cathedral: return opposingCardColor === CardColor.Red ? 1 : 0
+      case Card.Dungeon: return opposingCardColor === (CardColor.Red | CardColor.Blue) ? 1 : 2
+      case Card.Pickler:
+      case Card.Labyrinth: return opposingCardColor === CardColor.Red ? 0 : 2
+      case Card.Mason: return opposingCardColor === CardColor.Blue ? 2 : 0
+      case Card.Moat: return opposingCardColor === (CardColor.Blue | CardColor.Yellow) ? 2 : 0
+      case Card.TollBridge: return opposingCardColor === (CardColor.Green | CardColor.Blue) ? 2 : 0
+      case Card.Treasury: return 4
+      case Card.Wall: return 1
+      default: return 0
+    }
+  }
 
 function getBuyMoves(_players: PlayerState[], _cardColor: CardColor) {
   return []
