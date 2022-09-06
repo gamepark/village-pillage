@@ -8,7 +8,7 @@ import Move from "./moves/Move";
 import { stealTurnipsMove } from "./moves/StealTurnips";
 import PlayerState from "./PlayerState";
 import ResolveStep from "./ResolveStep";
-import Side from "./Side";
+import Side, { sides } from "./Side";
 
 enum CardColor {
   Green = 1, Blue, Red, Yellow
@@ -46,49 +46,55 @@ export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : R
 
 
 function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnips[] {
-  return players.flatMap((player, index) => getPlayerGainMoves(player, cardColor, side => getOpponentCardColor(players, index, side)))
+  return players.flatMap((player, index) => getPlayerGainMoves(player, cardColor, side => getOpponentCard(players, index, side)))
 }
-  function getPlayerGainMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor): GainTurnips[] {
+  function getPlayerGainMoves(player: PlayerState, cardColor: CardColor, getOpposingCardBySide : (side: Side) => Card): GainTurnips[] {
     const moves: GainTurnips[] = []
-    for (const side of [Side.LEFT, Side.RIGHT]) {
+    for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
-      if (card && getCardColor(card) === cardColor) {
-        const gain = getCardGain(card, () => getOpposingCardColorBySide(side))// + getCardOpponentGain(getOpponentCard(players,player.id,side), getCardColor(card))
+      const opposingCard = getOpposingCardBySide(side)
+
+      if (card && getCardColor(card) === cardColor) {                       // carte joueur
+        const gain = getCardGain(card, getCardColor(opposingCard))
+        if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
+      }
+      if (card && getCardColor(opposingCard) === cardColor) {               // carte adversaire
+        const gain = getCardOpponentGain(opposingCard, getCardColor(card))
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
     }
     return moves
   }
 
-    function getCardGain(card: Card, getOpposingCardColor: () => CardColor) : number {
+    function getCardGain(card: Card, opposingCardColor: CardColor) : number {
       switch (card) {
         case Card.Farmer: return 3
         case Card.Florist: return 5
-        case Card.Innkeeper: return getOpposingCardColor() === CardColor.Yellow ? 5 : 4
+        case Card.Innkeeper: return opposingCardColor === CardColor.Yellow ? 5 : 4
         case Card.Mason:
         case Card.Pickler: return 4 
-        case Card.Miner: return getOpposingCardColor() === CardColor.Blue ? 5 : 4
-        case Card.RatCatcher: return getOpposingCardColor() === CardColor.Green ? 6 : 4
+        case Card.Miner: return opposingCardColor === CardColor.Blue ? 5 : 4
+        case Card.RatCatcher: return opposingCardColor === CardColor.Green ? 6 : 4
         case Card.Wall:
         case Card.Treasury:
-        case Card.Labyrinth: return getOpposingCardColor() === CardColor.Red ? 0 : 1
+        case Card.Labyrinth: return opposingCardColor === CardColor.Red ? 0 : 1
         case Card.Dungeon: return 1
         case Card.Monastery: return 2
 
-        case Card.Moat: return getOpposingCardColor() === CardColor.Red ? 2 : 0   // attention contre Green, l'adversaire gagne 1
-        case Card.Cathedral: return getOpposingCardColor() === CardColor.Red ? 0 : -1 // achat d'une carte obligatoire si possible (stock > 0)
+        case Card.Moat: return opposingCardColor === CardColor.Red ? 2 : 0   // attention contre Green, l'adversaire gagne 1
+        case Card.Cathedral: return opposingCardColor === CardColor.Red ? 0 : -1 // achat d'une carte obligatoire si possible (stock > 0)
         case Card.Merchant: return -1    // si pas d'achat relique possible, achat d'une carte obligatoire si possible (stock > 0)
-        case Card.Trapper: return getOpposingCardColor() === (CardColor.Green | CardColor.Yellow) ? 1 : 0
+        case Card.Trapper: return opposingCardColor === (CardColor.Green | CardColor.Yellow) ? 1 : 0
         case Card.Bard: return 1         // si pas d'achat relique possible
         case Card.Doctor: return 2       // si pas d'achat relique possible
         case Card.Shepherd: return 4          // Attention : A faire à l'entretien !
         default: return 0
       }
     }
-    // function getCardOpponentGain(card: Card, opposingCard: CardColor) {
-    //   if(card === Card.Moat) return opposingCard === CardColor.Green ? 1 : 0
-    //   else return 0
-    // }
+    function getCardOpponentGain(card: Card, opposingCard: CardColor) {
+      if(card === Card.Moat) return opposingCard === CardColor.Green ? 1 : 0
+      else return 0
+    }
 
 function getStealMoves(players: PlayerState[], _cardColor: CardColor) : Move[] {
   const moves: Move[] = []
@@ -170,7 +176,7 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor) : BankTurnip
 }
   function getPlayerBankMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor): BankTurnips[] {
     const moves: BankTurnips[] = []
-    for (const side of [Side.LEFT, Side.RIGHT]) {
+    for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
         const gain = getCardBank(card, () => getOpposingCardColorBySide(side))

@@ -3,3 +3,5 @@ enum Side {
 }
 
 export default Side
+
+export const sides = [Side.LEFT, Side.RIGHT]
