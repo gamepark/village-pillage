@@ -4,7 +4,7 @@
  */
 enum MoveType {
   PlayCard, RevealCards, GainTurnips, ChangeResolveStep, BankTurnips,
-  StealTurnips, FlipChicken
+  StealTurnips, FlipChicken, SpendStockTurnips, SpendBankTurnips, TakeRelic
 }
 
 export default MoveType
