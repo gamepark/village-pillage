@@ -4,6 +4,7 @@ import { marketCards, startingCards } from './Card'
 import { getCardsResolveAutomaticMoves } from './CardColor'
 import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
+import { bankTurnips } from './moves/BankTurnips'
 import { changeResolveStep, changeResolveStepMove, getNextResolveStep } from './moves/ChangeResolveStep'
 import { gainTurnips } from './moves/GainTurnips'
 import Move from './moves/Move'
@@ -11,6 +12,8 @@ import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import { playCard, playCardMove } from './moves/PlayCard'
 import { revealCards, revealCardsMove } from './moves/RevealCards'
+import { spendBankTurnips } from './moves/SpendBankTurnips'
+import { stealTurnips } from './moves/StealTurnips'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
 import PlayerView from './PlayerView'
@@ -48,7 +51,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
           id: index + 1,
           hand: startingCards,
           stock: 1,
-          bank: 5 - index,
+          bank: 1,
           relics: 0
         })),
         phase: Phase.PLAN,
@@ -123,6 +126,15 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         break
       case MoveType.ChangeResolveStep:
         changeResolveStep(this.state)
+        break
+      case MoveType.StealTurnips:
+        stealTurnips(this.state, move)
+        break
+      case MoveType.BankTurnips:
+        bankTurnips(this.state, move)
+        break
+      case MoveType.SpendBankTurnips:
+        spendBankTurnips(this.state,move)
         break
     }
   }

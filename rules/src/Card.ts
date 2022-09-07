@@ -1,4 +1,4 @@
-import {isEnumValue} from "@gamepark/rules-api";
+import { isEnumValue } from "@gamepark/rules-api";
 
 enum Card {
   Farmer = 100, Florist, Innkeeper, Mason, Miner, Pickler, RatCatcher, Shepherd = 110,

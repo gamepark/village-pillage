@@ -24,9 +24,9 @@ export function changeResolveStep(state: GameState | GameView) {
 
 export function getNextResolveStep(resolveStep?: ResolveStep) : ResolveStep | undefined {
   if (resolveStep===undefined) {
-    return {cardColor: CardColor.Green, effectType: EffectType.Gain}
-  } else if(resolveStep.effectType !== EffectType.Buy) {
-    return {cardColor: resolveStep.cardColor, effectType: resolveStep.effectType +1}
+    return {cardColor: CardColor.Green, effectType: EffectType.Gain}                        // Init à Green et Gain
+  } else if(resolveStep.effectType !== EffectType.Buy) {                                    // EffectType suivant avant de..
+    return {cardColor: resolveStep.cardColor, effectType: resolveStep.effectType +1}        // ..CardColor suivante
   } else if(resolveStep.cardColor !== CardColor.Yellow) {
     return {cardColor: resolveStep.cardColor +1, effectType: EffectType.Gain}
   } else {

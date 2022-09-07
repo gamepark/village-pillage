@@ -1,11 +1,14 @@
 import {Game} from '@gamepark/rules-api'
 import GameView from '@gamepark/village-pillage/GameView'
+import { bankTurnips } from '@gamepark/village-pillage/moves/BankTurnips'
 import { changeResolveStep } from '@gamepark/village-pillage/moves/ChangeResolveStep'
 import { gainTurnips } from '@gamepark/village-pillage/moves/GainTurnips'
 import MoveType from '@gamepark/village-pillage/moves/MoveType'
 import MoveView from '@gamepark/village-pillage/moves/MoveView'
 import {playCardInView} from '@gamepark/village-pillage/moves/PlayCard'
 import {revealCardsInView} from '@gamepark/village-pillage/moves/RevealCards'
+import { spendBankTurnips } from '@gamepark/village-pillage/moves/SpendBankTurnips'
+import { stealTurnips } from '@gamepark/village-pillage/moves/StealTurnips'
 
 /**
  * This class is useful when the game has "IncompleteInformation" (or "SecretInformation").
@@ -48,6 +51,15 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
         break
       case MoveType.ChangeResolveStep:
         changeResolveStep(this.state)
+        break
+      case MoveType.StealTurnips:
+        stealTurnips(this.state, move)
+        break
+      case MoveType.BankTurnips:
+        bankTurnips(this.state, move)
+        break
+      case MoveType.SpendBankTurnips:
+        spendBankTurnips(this.state,move)
         break
     }
   }
