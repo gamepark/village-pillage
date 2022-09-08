@@ -6,6 +6,7 @@ import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
 import { bankTurnips } from './moves/BankTurnips'
 import { changeResolveStep, changeResolveStepMove, getNextResolveStep } from './moves/ChangeResolveStep'
+import { chooseCard } from './moves/ChooseCard'
 import { gainTurnips } from './moves/GainTurnips'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
@@ -135,6 +136,9 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         break
       case MoveType.SpendBankTurnips:
         spendBankTurnips(this.state,move)
+        break
+      case MoveType.ChooseCard:
+        chooseCard(this.state,move)
         break
     }
   }

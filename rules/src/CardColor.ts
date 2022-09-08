@@ -182,20 +182,21 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
   function getPlayerBankMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor , bankSize: number): BankTurnips[] {
     if (player.bank >= bankSize || player.stock == 0) return []
     const moves: BankTurnips[] = []
-    let toBank = 0
+    let bankable = Math.min(bankSize - player.bank, player.stock)
     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        toBank += getCardBank(card, () => getOpposingCardColorBySide(side))
+        const cardBank = getCardBank(card, () => getOpposingCardColorBySide(side))
+        const toBank = Math.min(cardBank, bankable)
+        if (toBank > 0) {
+          moves.push(bankTurnipsMove(player.id, toBank))
+          if(bankable === toBank) break       // on ne fait même pas le calcul et on ne passe pas à la carte suivante
+          bankable -= toBank
+        }
       }
     }
-    if (toBank > 0) moves.push(bankTurnipsMove(player.id, Math.min(toBank, bankSize - player.bank, player.stock))) // Je n'arrive pas à utiliser maxBankable() car 'state' en dehors du scope...
     return moves
   }
-    // TODO : 1. Vérifier le stock bankable du joueur   _/
-    //        2. Vérifier place dispo en bank           _/
-    //        3. Ne jamais déclencher un move à 0       _/
-    //        4. Prendre en compte les 2 côtés en même temps  _/
 
   function getCardBank(card: Card, getOpposingCardColor: () => CardColor) : number {              // En passant cette fonction anonyme en paramètre, on ne contrôle pas la carte opposée pour TOUS les cas. On le fait que si nécessaire !
     switch (card) {
@@ -226,7 +227,7 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
   return players.flatMap((player) => getPlayerBuyMoves(player, cardColor))
 }
   /**     ALGO   de GET_BUY_MOVES() *
-   *  1. Vérifier si au moins un des joueurs n'a pas jouer 2 YellowCard (renseigner une variable)
+   *  1. Vérifier si au moins un des joueurs a jouer 2 YellowCard (renseigner une variable)
    *      -> Si Oui, on sort des AutomaticMoves pour que le joueur choisisse la carte à déclencher
    *      -> Si Non, on continue
    *  2. Vérifier si le joueur getCardCanBuyRelic et peut acheter une relique fct(stock + bank , relics)

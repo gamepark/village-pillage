@@ -1,3 +1,4 @@
+import Card from '../Card'
 import GameState, {getPlayerState} from '../GameState'
 import GameView from '../GameView'
 import PlayerState from '../PlayerState'
@@ -11,7 +12,7 @@ import MoveType from './MoveType'
 type PlayCard = {
   type: MoveType.PlayCard
   playerId: number
-  card: number
+  card: Card
   side: Side
 }
 
@@ -19,7 +20,7 @@ export default PlayCard
 
 export type PlayCardView = Omit<PlayCard, 'card'>
 
-export function playCardMove(playerId: number, card: number, side: Side) : PlayCard {
+export function playCardMove(playerId: number, card: Card, side: Side) : PlayCard {
   return {type: MoveType.PlayCard, playerId, card, side}
 }
 

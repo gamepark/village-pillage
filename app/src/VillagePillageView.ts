@@ -2,6 +2,7 @@ import {Game} from '@gamepark/rules-api'
 import GameView from '@gamepark/village-pillage/GameView'
 import { bankTurnips } from '@gamepark/village-pillage/moves/BankTurnips'
 import { changeResolveStep } from '@gamepark/village-pillage/moves/ChangeResolveStep'
+import { chooseCard } from '@gamepark/village-pillage/moves/ChooseCard'
 import { gainTurnips } from '@gamepark/village-pillage/moves/GainTurnips'
 import MoveType from '@gamepark/village-pillage/moves/MoveType'
 import MoveView from '@gamepark/village-pillage/moves/MoveView'
@@ -60,6 +61,9 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
         break
       case MoveType.SpendBankTurnips:
         spendBankTurnips(this.state,move)
+        break
+      case MoveType.ChooseCard:
+        chooseCard(this.state,move)
         break
     }
   }
