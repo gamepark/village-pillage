@@ -40,7 +40,7 @@ export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : R
   switch (resolveStep.effectType) {
     case EffectType.Gain : return getGainMoves(state.players, resolveStep.cardColor)
     case EffectType.Steal : return getStealMoves(state.players, resolveStep.cardColor)
-    case EffectType.Bank : return getBankMoves(state.players, resolveStep.cardColor)
+    case EffectType.Bank : return getBankMoves(state.players, resolveStep.cardColor, state.players.length === 2 ? 4 : 5)
     case EffectType.Buy : return getBuyMoves(state.players, resolveStep.cardColor)
   }
 }
@@ -142,7 +142,8 @@ function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
 }
 
   function getStealValue(robberCard : Card, victimCard : Card) {
-    return getCardSteal(robberCard, getCardColor(victimCard)) + getCardOpponentSteal(victimCard, getCardColor(robberCard))
+    return getCardSteal(robberCard, getCardColor(victimCard))
+           + getCardOpponentSteal(victimCard, getCardColor(robberCard))
   }
     function getCardSteal(card: Card, opposingCardColor: CardColor) {                                           // On contrôle la carte opposée dans TOUS les cas.
       switch(card) {
@@ -175,22 +176,27 @@ function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
       }
     }
 
-function getBankMoves(players: PlayerState[], cardColor: CardColor) : BankTurnips[] {
-  return players.flatMap((player, index) => getPlayerBankMoves(player, cardColor, side => getOpponentCardColor(players, index, side)))
+function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: number) : BankTurnips[] {
+  return players.flatMap((player, index) => getPlayerBankMoves(player, cardColor, side => getOpponentCardColor(players, index, side), bankSize))
 }
-  function getPlayerBankMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor): BankTurnips[] {
+  function getPlayerBankMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor , bankSize: number): BankTurnips[] {
     const moves: BankTurnips[] = []
+    let toBank = 0
     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        const gain = getCardBank(card, () => getOpposingCardColorBySide(side))
-        if (gain > 0) moves.push(bankTurnipsMove(player.id, gain))
+        toBank += getCardBank(card, () => getOpposingCardColorBySide(side))
       }
     }
+    if (toBank > 0 && player.bank !== bankSize) moves.push(bankTurnipsMove(player.id, Math.min(toBank, bankSize - player.bank))) // Je n'arrive pas à utiliser maxBankable() car 'state' en dehors du scope...
     return moves
   }
+    // TODO : 1. Vérifier le stock bankable du joueur   _/
+    //        2. Vérifier place dispo en bank           _/
+    //        3. Ne jamais déclencher un move à 0       _/
+    //        4. Prendre en compte les 2 côtés en même temps  _/
 
-  function getCardBank(card: Card, getOpposingCardColor: () => CardColor) : number {              // On ne contrôle pas la carte opposée pour TOUS les cas. Que si c'est nécessaire !
+  function getCardBank(card: Card, getOpposingCardColor: () => CardColor) : number {              // En passant cette fonction anonyme en paramètre, on ne contrôle pas la carte opposée pour TOUS les cas. On le fait que si nécessaire !
     switch (card) {
       case Card.Cathedral: return getOpposingCardColor() === CardColor.Red ? 1 : 0
       case Card.Dungeon: return getOpposingCardColor() === (CardColor.Red | CardColor.Blue) ? 1 : 2
@@ -221,6 +227,7 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
   // Achat de relique
   function getPlayerBuyMoves(_player: PlayerState, _cardColor: CardColor) {
     const moves: Move[] = []
+
 /*     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
