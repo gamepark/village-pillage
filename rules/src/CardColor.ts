@@ -1,7 +1,7 @@
 import Card from "./Card";
 import EffectType from "./EffectType";
 import GameState from "./GameState";
-import BankTurnips, { bankTurnipsMove } from "./moves/BankTurnips";
+import BankTurnips, { bankTurnipsMove, getBankSize } from "./moves/BankTurnips";
 import { flipChickenMove } from "./moves/FlipChicken";
 import GainTurnips, { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
@@ -40,7 +40,7 @@ export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : R
   switch (resolveStep.effectType) {
     case EffectType.Gain : return getGainMoves(state.players, resolveStep.cardColor)
     case EffectType.Steal : return getStealMoves(state.players, resolveStep.cardColor)
-    case EffectType.Bank : return getBankMoves(state.players, resolveStep.cardColor, state.players.length === 2 ? 4 : 5)
+    case EffectType.Bank : return getBankMoves(state.players, resolveStep.cardColor, getBankSize(state))
     case EffectType.Buy : return getBuyMoves(state.players, resolveStep.cardColor)
   }
 }
@@ -180,6 +180,7 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
   return players.flatMap((player, index) => getPlayerBankMoves(player, cardColor, side => getOpponentCardColor(players, index, side), bankSize))
 }
   function getPlayerBankMoves(player: PlayerState, cardColor: CardColor, getOpposingCardColorBySide : (side: Side) => CardColor , bankSize: number): BankTurnips[] {
+    if (player.bank >= bankSize || player.stock == 0) return []
     const moves: BankTurnips[] = []
     let toBank = 0
     for (const side of sides) {
@@ -188,7 +189,7 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
         toBank += getCardBank(card, () => getOpposingCardColorBySide(side))
       }
     }
-    if (toBank > 0 && player.bank !== bankSize) moves.push(bankTurnipsMove(player.id, Math.min(toBank, bankSize - player.bank))) // Je n'arrive pas à utiliser maxBankable() car 'state' en dehors du scope...
+    if (toBank > 0) moves.push(bankTurnipsMove(player.id, Math.min(toBank, bankSize - player.bank, player.stock))) // Je n'arrive pas à utiliser maxBankable() car 'state' en dehors du scope...
     return moves
   }
     // TODO : 1. Vérifier le stock bankable du joueur   _/
@@ -224,7 +225,18 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
 function getBuyMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
   return players.flatMap((player) => getPlayerBuyMoves(player, cardColor))
 }
+  /**     ALGO   de GET_BUY_MOVES() *
+   *  1. Vérifier si au moins un des joueurs n'a pas jouer 2 YellowCard (renseigner une variable)
+   *      -> Si Oui, on sort des AutomaticMoves pour que le joueur choisisse la carte à déclencher
+   *      -> Si Non, on continue
+   *  2. Vérifier si le joueur getCardCanBuyRelic et peut acheter une relique fct(stock + bank , relics)
+   *      -> Si Oui, le joueur SpendTurnips (construit avec gainturnip() et spendBankTurnip()) et TakeARelic et on attend tous les autres joueurs
+   *      -> Si Non, on attend tous les autres joueurs. Puis passer au second effet de la carte.
+   *  3. Déclencher les effets des deuxième YellowCard et refaire le 2. avec celle-ci.
+   **/ 
+
   // Achat de relique
+  
   function getPlayerBuyMoves(_player: PlayerState, _cardColor: CardColor) {
     const moves: Move[] = []
 
