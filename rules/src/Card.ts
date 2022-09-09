@@ -20,4 +20,4 @@ export default Card
 export const cards = Object.values(Card).filter(isEnumValue)
 export const marketCardsExpansion = cards.filter(card => card % 100 !== 0)
 export const marketCards = marketCardsExpansion.filter(card => card % 100 !== 10)
-export const startingCards = [Card.Farmer, Card.Wall, Card.Raider, Card.Merchant, Card.Dungeon]
+export const startingCards = [Card.Farmer, Card.Wall, Card.Raider, Card.Merchant, Card.Doctor]

@@ -1,5 +1,5 @@
 enum Phase {
-  PLAN, RESOLVE, REFRESH
+  PLAN=1, RESOLVE, REFRESH
 }
 
 export default Phase

@@ -72,11 +72,14 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   }
 
   isTurnToPlay(playerId: number): boolean {
-    if (this.state.phase === Phase.PLAN) {
-      const player = this.getPlayer(playerId)
-      return player.leftCard == undefined || player.rightCard == undefined
-    } else {
-      return false // TODO resolve phase
+    switch (this.state.phase) {
+      case Phase.PLAN: 
+        const player = this.getPlayer(playerId)
+        return player.leftCard == undefined || player.rightCard == undefined
+      case Phase.RESOLVE:
+        return canChooseCard(this.state, playerId)
+      case Phase.REFRESH:
+        return false
     }
   }
 
@@ -171,7 +174,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     if (this.state.phase === Phase.RESOLVE) {
       const nextStep = getNextResolveStep(this.state.resolveStep)
       const moves = nextStep ? getCardsResolveAutomaticMoves(this.state, nextStep) : []
-      moves.push(changeResolveStepMove)
+      if(!this.state.players.some(player => canChooseCard(this.state,player.id))) moves.push(changeResolveStepMove)
       return moves
     }
     return []
