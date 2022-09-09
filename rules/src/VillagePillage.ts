@@ -6,7 +6,7 @@ import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
 import { bankTurnips } from './moves/BankTurnips'
 import { changeResolveStep, changeResolveStepMove, getNextResolveStep } from './moves/ChangeResolveStep'
-import { chooseCard } from './moves/ChooseCard'
+import { canChooseCard, chooseCard, chooseCardMove } from './moves/ChooseCard'
 import { gainTurnips } from './moves/GainTurnips'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
@@ -97,13 +97,21 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   getLegalMoves(playerId: number): Move[] {
     const moves: Move[] = []
     const player = this.getPlayer(playerId)
-    if (this.state.phase === Phase.PLAN) {
-      if (player.leftCard === undefined) {
-        player.hand.forEach(card => moves.push(playCardMove(playerId, card, Side.LEFT)))
-      }
-      if (player.rightCard === undefined) {
-        player.hand.forEach(card => moves.push(playCardMove(playerId, card, Side.RIGHT)))
-      }
+    switch (this.state.phase) {
+      case Phase.PLAN: 
+        if (player.leftCard === undefined) {
+          player.hand.forEach(card => moves.push(playCardMove(playerId, card, Side.LEFT)))
+        }
+        if (player.rightCard === undefined) {
+         player.hand.forEach(card => moves.push(playCardMove(playerId, card, Side.RIGHT)))
+        }
+        break
+      case Phase.RESOLVE:
+        if (canChooseCard(this.state,playerId)) {   // Phase.Resolve
+          moves.push(chooseCardMove(playerId, player.leftCard!))
+          moves.push(chooseCardMove(playerId, player.rightCard!))
+        }
+        break
     }
     return moves
   }

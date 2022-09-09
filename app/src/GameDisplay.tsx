@@ -4,7 +4,7 @@ import { usePlay, usePlayerId } from '@gamepark/react-client';
 import { Letterbox } from '@gamepark/react-components';
 import Card from '@gamepark/village-pillage/Card';
 import GameView from '@gamepark/village-pillage/GameView';
-import { chooseCardMove } from '@gamepark/village-pillage/moves/ChooseCard';
+import { canChooseCard, chooseCardMove } from '@gamepark/village-pillage/moves/ChooseCard';
 import Phase from '@gamepark/village-pillage/Phase';
 import Side from '@gamepark/village-pillage/Side';
 import CardDropArea from './CardDropArea';
@@ -23,8 +23,7 @@ export default function GameDisplay({game}: Props) {
   const play = usePlay()
   const onClickPlayerCard = (card : Card , ownerId : number) => {
     if(ownerId !== playerId) return
-    // TODO : Ne pas jouer le coup si c'est pas le moment (dans game)
-    play(chooseCardMove(playerId, card))
+    if(canChooseCard(game,ownerId)) play(chooseCardMove(ownerId, card))
   }
 
   console.log(game)
