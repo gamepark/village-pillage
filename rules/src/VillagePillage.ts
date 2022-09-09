@@ -53,7 +53,8 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
           hand: startingCards,
           stock: 1,
           bank: 1,
-          relics: 0
+          relics: 0,
+          pendingActions: []
         })),
         phase: Phase.PLAN,
         deck,
@@ -72,12 +73,12 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
   }
 
   isTurnToPlay(playerId: number): boolean {
+    const player = this.getPlayer(playerId)
     switch (this.state.phase) {
       case Phase.PLAN: 
-        const player = this.getPlayer(playerId)
         return player.leftCard == undefined || player.rightCard == undefined
       case Phase.RESOLVE:
-        return canChooseCard(this.state, playerId)
+        return player.pendingActions.some(action => !action.wait)
       case Phase.REFRESH:
         return false
     }
@@ -174,7 +175,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     if (this.state.phase === Phase.RESOLVE) {
       const nextStep = getNextResolveStep(this.state.resolveStep)
       const moves = nextStep ? getCardsResolveAutomaticMoves(this.state, nextStep) : []
-      if(!this.state.players.some(player => canChooseCard(this.state,player.id))) moves.push(changeResolveStepMove)
+      if(!this.state.players.some(player => player.pendingActions.length > 0 )) moves.push(changeResolveStepMove)
       return moves
     }
     return []

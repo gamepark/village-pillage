@@ -239,7 +239,10 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
   // Achat de relique
   
   function getPlayerBuyMoves(_player: PlayerState, _cardColor: CardColor) {
+    // TODO
+    // 
     const moves: Move[] = []
+
 
 /*     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
