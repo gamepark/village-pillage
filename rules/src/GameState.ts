@@ -1,4 +1,5 @@
 import GameView from './GameView'
+import Move from './moves/Move'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
 import PlayerView from './PlayerView'
@@ -11,6 +12,7 @@ type GameState = {
   players: PlayerState[]
   phase: Phase
   resolveStep?: ResolveStep
+  nextMoves: Move[]
   deck: number[]
   market: number[]
 }

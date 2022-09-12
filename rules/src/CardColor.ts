@@ -6,6 +6,7 @@ import { flipChickenMove } from "./moves/FlipChicken";
 import GainTurnips, { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
 import { stealTurnipsMove } from "./moves/StealTurnips";
+import { buyRelic, getRelicsPrice } from "./moves/TakeRelic";
 import Phase from "./Phase";
 import PlayerState from "./PlayerState";
 import ResolveStep from "./ResolveStep";
@@ -41,7 +42,7 @@ export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : R
     case EffectType.Gain : return getGainMoves(state.players, resolveStep.cardColor)
     case EffectType.Steal : return getStealMoves(state.players, resolveStep.cardColor)
     case EffectType.Bank : return getBankMoves(state.players, resolveStep.cardColor, getBankSize(state))
-    case EffectType.Buy : return getBuyMoves(state.players, resolveStep.cardColor)
+    case EffectType.Buy : return getBuyMoves(state.players, resolveStep.cardColor, getRelicsPrice(state))
   }
 }
 
@@ -223,8 +224,8 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
     }
   }
 
-function getBuyMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
-  return players.flatMap((player) => getPlayerBuyMoves(player, cardColor))
+function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: number[]) : Move[] {
+  return players.flatMap((player) => getPlayerBuyMoves(player, cardColor, relicsPrice))
 }
   /**     ALGO   de GET_BUY_MOVES() *
    *  1. Vérifier si au moins un des joueurs a jouer 2 YellowCard (renseigner une variable)
@@ -232,61 +233,26 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
    *      -> Si Non, on continue
    *  2. Vérifier si le joueur getCardCanBuyRelic et peut acheter une relique fct(stock + bank , relics)
    *      -> Si Oui, le joueur SpendTurnips (construit avec gainturnip() et spendBankTurnip()) et TakeARelic et on attend tous les autres joueurs
-   *      -> Si Non, on attend tous les autres joueurs. Puis passer au second effet de la carte.
+   *      -> Si Non, on attend tous les autres joueurs. Puis passer au second effet de la carte (généralement on s'arrête)
    *  3. Déclencher les effets des deuxième YellowCard et refaire le 2. avec celle-ci.
    **/ 
 
   // Achat de relique
   
-  function getPlayerBuyMoves(_player: PlayerState, _cardColor: CardColor) {
+  function getPlayerBuyMoves(player: PlayerState, cardColor: CardColor, relicsPrice: number[]) {
     // TODO
-    // 
+    // Postulat : On considère que toutes les cartes qui ont un achat de relique l'ont en première action.
+    if (player.rightCard && getCardColor(player.rightCard) === CardColor.Yellow 
+        && player.leftCard && getCardColor(player.leftCard) === CardColor.Yellow) return [] // on doit choisir une carte avec ChooseCard
     const moves: Move[] = []
-
-
-/*     for (const side of sides) {
+    for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        const canBuy = getCardCanBuyRelic(card)
-        const cost = getRelicPrice(state, player.relics) + canBuy[1]
-        if (canBuy && (!cost > player.bank)) {
-          moves.push(spendBankTurnipsMove(player.id, cost))
-          // moves.push(takeARelicMove(player.id, relics))
-        }
+        buyRelic(player, card, relicsPrice)
       }
-    } */
+    }
     return moves
   }
-
-/*   function getCardCanBuyRelic(card : Card) : [boolean, number] {
-    switch(card) {
-      case Card.Smuggler: return [true, -2]
-      case Card.Doctor:
-      case Card.Bard:
-      case Card.Merchant: return [true, 0]
-      default: return [false, 0]
-    }
-  }
-  function getRelicPrice(state : GameState, relics : number) : number {
-    if (state.bankCard === Bank.DuelClassic) {
-      switch(relics) {
-        case 0 : return 6
-        case 1 : return 7
-        case 2 : return 8
-      }
-    } else if (state.bankCard === Bank.Classic) {
-      switch(relics) {
-        case 0 : return 8
-        case 1 : return 9
-        case 2 : return 10 
-      }
-    } else return 0
-  } */
-
-
-
-
-
 
 
 

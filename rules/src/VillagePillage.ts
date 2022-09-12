@@ -14,7 +14,9 @@ import MoveView from './moves/MoveView'
 import { playCard, playCardMove } from './moves/PlayCard'
 import { revealCards, revealCardsMove } from './moves/RevealCards'
 import { spendBankTurnips } from './moves/SpendBankTurnips'
+import { spendStockTurnips } from './moves/SpendStockTurnips'
 import { stealTurnips } from './moves/StealTurnips'
+import { takeRelic } from './moves/TakeRelic'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
 import PlayerView from './PlayerView'
@@ -51,12 +53,13 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         players: [...Array(arg.players)].map((_,index) => ({
           id: index + 1,
           hand: startingCards,
-          stock: 1,
-          bank: 1,
+          stock: 5,
+          bank: 3,
           relics: 0,
           pendingActions: []
         })),
         phase: Phase.PLAN,
+        nextMoves: [],
         deck,
         market: deck.splice(0, 4)
       })
@@ -126,6 +129,9 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @param move The move that should be applied to current state.
    */
   play(move: Move): void {
+    if (this.state.nextMoves.length && this.state.nextMoves[0].type === move.type) {
+      this.state.nextMoves.shift()
+    }
     switch (move.type) {
       case MoveType.PlayCard:
         playCard(this.state, move)
@@ -146,11 +152,17 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       case MoveType.BankTurnips:
         bankTurnips(this.state, move)
         break
+      case MoveType.SpendStockTurnips:
+        spendStockTurnips(this.state, move)
+        break
       case MoveType.SpendBankTurnips:
-        spendBankTurnips(this.state,move)
+        spendBankTurnips(this.state, move)
         break
       case MoveType.ChooseCard:
-        chooseCard(this.state,move)
+        chooseCard(this.state, move)
+        break
+      case MoveType.TakeRelic:
+        takeRelic(this.state, move)
         break
     }
   }
@@ -169,6 +181,9 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return The next automatic consequence that should be played in current game state.
    */
   getAutomaticMoves(): Move[] {
+    if (this.state.nextMoves.length) {
+      return this.state.nextMoves
+    }
     if (this.state.phase === Phase.PLAN && this.state.players.every(player => player.leftCard && player.rightCard)) {
       return [revealCardsMove]
     }

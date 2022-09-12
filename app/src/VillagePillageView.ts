@@ -9,7 +9,9 @@ import MoveView from '@gamepark/village-pillage/moves/MoveView'
 import {playCardInView} from '@gamepark/village-pillage/moves/PlayCard'
 import {revealCardsInView} from '@gamepark/village-pillage/moves/RevealCards'
 import { spendBankTurnips } from '@gamepark/village-pillage/moves/SpendBankTurnips'
+import { spendStockTurnips } from '@gamepark/village-pillage/moves/SpendStockTurnips'
 import { stealTurnips } from '@gamepark/village-pillage/moves/StealTurnips'
+import { takeRelic } from '@gamepark/village-pillage/moves/TakeRelic'
 
 /**
  * This class is useful when the game has "IncompleteInformation" (or "SecretInformation").
@@ -59,11 +61,17 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
       case MoveType.BankTurnips:
         bankTurnips(this.state, move)
         break
+      case MoveType.SpendStockTurnips:
+        spendStockTurnips(this.state, move)
+        break
       case MoveType.SpendBankTurnips:
-        spendBankTurnips(this.state,move)
+        spendBankTurnips(this.state, move)
         break
       case MoveType.ChooseCard:
         chooseCard(this.state,move)
+        break
+      case MoveType.TakeRelic:
+        takeRelic(this.state, move)
         break
     }
   }
