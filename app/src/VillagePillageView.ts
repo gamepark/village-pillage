@@ -42,6 +42,9 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
    * @param move The move that must be applied in the browser of the player or the spectator
    */
   play(move: MoveView): void {
+    if (this.state.nextMoves.length && this.state.nextMoves[0].type === move.type) {
+      this.state.nextMoves.shift()
+    }
     switch (move.type) {
       case MoveType.PlayCard:
         playCardInView(this.state, move)

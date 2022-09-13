@@ -2,6 +2,7 @@ import Card from '../Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
 import PlayerState from '../PlayerState'
+import PlayerView from '../PlayerView'
 import Move from './Move'
 import MoveType from './MoveType'
 import { spendBankTurnipsMove } from './SpendBankTurnips'
@@ -21,11 +22,11 @@ export function takeRelicMove(playerId: number) : TakeRelic {
   return {type: MoveType.TakeRelic, playerId}
 }
 
-export function getRelicsPrice(game: GameState) : number[] {
+export function getRelicsPrice(game: GameState | GameView) : number[] {
   return game.players.length === 2 ? [6,7,8] : [8,9,10]
 }
 
-export function getBuyRelicMoves(player: PlayerState, card: Card, relicsPrice: number[]) : Move[] {
+export function getBuyRelicMoves(player: PlayerState | PlayerView, card: Card, relicsPrice: number[]) : Move[] {
   const moves : Move[] = []
   if (cardCanBuyRelic(card)) {
     const cost = relicsPrice[player.relics] + getCardOffsetRelicPrice(card)

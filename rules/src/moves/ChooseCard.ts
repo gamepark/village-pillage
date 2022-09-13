@@ -2,6 +2,7 @@ import Card from '../Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
 import MoveType from './MoveType'
+import { getBuyRelicMoves, getRelicsPrice } from './TakeRelic'
 
 
 type ChooseCard = {
@@ -19,15 +20,18 @@ export function chooseCardMove(playerId: number, card: Card) : ChooseCard {
 
 export function chooseCard(state: GameState | GameView, move: ChooseCard) : void {
   const player = getPlayerState(state, move.playerId)
-  console.log(player)
-  // buyRelic(player,)
-  // TODO : state.nextMoves.push(...Moves)
-  // TODO : enlever la pendingAction : la nettoyer
-
-  // Se servir des pendingAction pour dire qu'il faudra jouer la seconde carte
+  state.nextMoves.push(...getBuyRelicMoves(player, move.card, getRelicsPrice(state)))
+  const actionIndex = player.pendingActions.findIndex(action => !action.wait && action.type === MoveType.ChooseCard)
+  if (actionIndex != -1) {
+    const action = player.pendingActions[actionIndex]
+    player.pendingActions.splice(actionIndex, 1)    // enlève la pendingAction : la nettoyer
+    if (!action.card) {
+      player.pendingActions.push({type: MoveType.ChooseCard, card: player.leftCard === move.card ? player.rightCard : player.leftCard}) // Se servir des pendingActions pour dire qu'il faudra jouer la seconde carte
+    }
+  }
 }
 
 export function canChooseCard(state: GameState | GameView, playerId: number) : boolean {
   const player = getPlayerState(state,playerId)
-  return player.pendingActions.some(action => action.type === MoveType.ChooseCard && !action.wait)
+  return player.pendingActions.some(action => action.type === MoveType.ChooseCard && !action.wait && !action.card)
 }

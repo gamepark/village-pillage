@@ -53,8 +53,8 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         players: [...Array(arg.players)].map((_,index) => ({
           id: index + 1,
           hand: startingCards,
-          stock: 5,
-          bank: 3,
+          stock: 1,
+          bank: 1,
           relics: 0,
           pendingActions: []
         })),
@@ -188,9 +188,15 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       return [revealCardsMove]
     }
     if (this.state.phase === Phase.RESOLVE) {
+      for (const player of this.state.players) {
+        const chooseCardAction = player.pendingActions.find(action => !action.wait && action.type === MoveType.ChooseCard && action.card)
+        if (chooseCardAction) {
+          return [chooseCardMove(player.id, chooseCardAction.card!)]
+        }
+      }
       const nextStep = getNextResolveStep(this.state.resolveStep)
       const moves = nextStep ? getCardsResolveAutomaticMoves(this.state, nextStep) : []
-      if(!this.state.players.some(player => player.pendingActions.length > 0 )) moves.push(changeResolveStepMove)
+      if (!this.state.players.some(player => player.pendingActions.length > 0 )) moves.push(changeResolveStepMove)
       return moves
     }
     return []
