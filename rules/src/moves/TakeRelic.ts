@@ -25,9 +25,9 @@ export function getRelicsPrice(game: GameState) : number[] {
   return game.players.length === 2 ? [6,7,8] : [8,9,10]
 }
 
-export function buyRelic(player: PlayerState, card: Card, relicsPrice: number[]) : Move[] {
+export function getBuyRelicMoves(player: PlayerState, card: Card, relicsPrice: number[]) : Move[] {
   const moves : Move[] = []
-  if (getCardCanBuyRelic(card)[0]) {
+  if (cardCanBuyRelic(card)) {
     const cost = relicsPrice[player.relics] + getCardOffsetRelicPrice(card)
     if ((cost <= (player.bank + player.stock))) {
       const stockCost = Math.min(cost,player.stock)
@@ -45,7 +45,7 @@ export function takeRelic(state: GameState | GameView, move: TakeRelic) {
   console.log("Joueur "+player.id+" relics : " +player.relics)
 }
 
-export function getCardCanBuyRelic(card: Card) : boolean {
+export function cardCanBuyRelic(card: Card) : boolean {
   switch(card) {
     case Card.Smuggler:
     case Card.Doctor:

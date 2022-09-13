@@ -6,7 +6,7 @@ import { flipChickenMove } from "./moves/FlipChicken";
 import GainTurnips, { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
 import { stealTurnipsMove } from "./moves/StealTurnips";
-import { buyRelic, getRelicsPrice } from "./moves/TakeRelic";
+import { getBuyRelicMoves, getRelicsPrice } from "./moves/TakeRelic";
 import Phase from "./Phase";
 import PlayerState from "./PlayerState";
 import ResolveStep from "./ResolveStep";
@@ -248,7 +248,7 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: 
     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        buyRelic(player, card, relicsPrice)
+        moves.push(...getBuyRelicMoves(player, card, relicsPrice))
       }
     }
     return moves
