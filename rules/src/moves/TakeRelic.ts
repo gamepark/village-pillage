@@ -84,8 +84,5 @@ function getAlternativeMoves(player: PlayerState | PlayerView, card: Card) {
     case Card.Merchant:
       moves.push(addPendingActionMove(player.id, {type: MoveType.TakeMarketCard , card, wait: true}))
   }
-
-
-
   return moves
 }

@@ -19,6 +19,7 @@ import { revealCards, revealCardsMove } from './moves/RevealCards'
 import { spendBankTurnips } from './moves/SpendBankTurnips'
 import { spendStockTurnips } from './moves/SpendStockTurnips'
 import { stealTurnips } from './moves/StealTurnips'
+import { canTakeMarketCard, takeMarketCard, takeMarketCardMove } from './moves/TakeMarketCard'
 import { takeRelic } from './moves/TakeRelic'
 import Phase from './Phase'
 import PlayerState from './PlayerState'
@@ -121,10 +122,14 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
           moves.push(chooseCardMove(playerId, player.leftCard!))
           moves.push(chooseCardMove(playerId, player.rightCard!))
         }
-/*         else if (canTakeMarketCard(player)) {
-          // TODO : moves.push(TakeMarketCardMove) sur toutes les cartes du marché.
-          //       
-        } */
+        else if (canTakeMarketCard(this.state, playerId)) {
+          for (const marketCard of marketCards) {
+            moves.push(takeMarketCardMove(playerId, marketCard))
+            // TODO : moves.push(takeMarketCardMove) sur toutes les cartes du marché.
+            //  
+          }
+     
+        }
 
 
         break
@@ -178,6 +183,9 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         break
       case MoveType.GivePriorityToBuyCard:
         givePriorityToBuyCard(this.state, move)
+        break
+      case MoveType.TakeMarketCard:
+        takeMarketCard(this.state, move)
         break
     }
   }

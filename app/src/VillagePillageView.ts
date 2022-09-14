@@ -13,6 +13,7 @@ import {revealCardsInView} from '@gamepark/village-pillage/moves/RevealCards'
 import { spendBankTurnips } from '@gamepark/village-pillage/moves/SpendBankTurnips'
 import { spendStockTurnips } from '@gamepark/village-pillage/moves/SpendStockTurnips'
 import { stealTurnips } from '@gamepark/village-pillage/moves/StealTurnips'
+import { takeMarketCard } from '@gamepark/village-pillage/moves/TakeMarketCard'
 import { takeRelic } from '@gamepark/village-pillage/moves/TakeRelic'
 
 /**
@@ -83,6 +84,9 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
         break
       case MoveType.GivePriorityToBuyCard:
         givePriorityToBuyCard(this.state, move)
+        break
+      case MoveType.TakeMarketCard:
+        takeMarketCard(this.state, move)
         break
     }
   }

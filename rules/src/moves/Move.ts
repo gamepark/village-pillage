@@ -10,12 +10,13 @@ import RevealCards from './RevealCards'
 import SpendBankTurnips from './SpendBankTurnips'
 import SpendStockTurnips from './SpendStockTurnips'
 import StealTurnips from './StealTurnips'
+import TakeMarketCard from './TakeMarketCard'
 import TakeRelic from './TakeRelic'
 
 /**
  * A "Move" is the combination of all the types of moves that exists in you game
  */
 type Move = PlayCard | RevealCards | GainTurnips | ChangeResolveStep | BankTurnips | StealTurnips | FlipChicken | SpendStockTurnips | SpendBankTurnips |
-            ChooseCard | TakeRelic | AddPendingAction | GivePriorityToBuyCard
+            ChooseCard | TakeRelic | AddPendingAction | GivePriorityToBuyCard | TakeMarketCard
 
 export default Move
