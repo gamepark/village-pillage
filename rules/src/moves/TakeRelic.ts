@@ -3,6 +3,9 @@ import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
 import PlayerState from '../PlayerState'
 import PlayerView from '../PlayerView'
+import { addPendingActionMove } from './AddPendingAction'
+import { bankTurnipsMove } from './BankTurnips'
+import { gainTurnipsMove } from './GainTurnips'
 import Move from './Move'
 import MoveType from './MoveType'
 import { spendBankTurnipsMove } from './SpendBankTurnips'
@@ -26,7 +29,7 @@ export function getRelicsPrice(game: GameState | GameView) : number[] {
   return game.players.length === 2 ? [6,7,8] : [8,9,10]
 }
 
-export function getBuyRelicMoves(player: PlayerState | PlayerView, card: Card, relicsPrice: number[]) : Move[] {
+export function getCardBuyMoves(player: PlayerState | PlayerView, card: Card, relicsPrice: number[]) : Move[] {
   const moves : Move[] = []
   if (cardCanBuyRelic(card)) {
     const cost = relicsPrice[player.relics] + getCardOffsetRelicPrice(card)
@@ -36,6 +39,8 @@ export function getBuyRelicMoves(player: PlayerState | PlayerView, card: Card, r
       const bankCost = cost - stockCost
       if (bankCost > 0) moves.push(spendBankTurnipsMove(player.id, bankCost))
       moves.push(takeRelicMove(player.id))
+    } else {
+      moves.push(...getAlternativeMoves(player, card))
     }
   } return moves
 }
@@ -60,4 +65,27 @@ export function getCardOffsetRelicPrice(card: Card) : number {
     case Card.Smuggler: return -2
     default: return 0
   }
+}
+
+function getAlternativeMoves(player: PlayerState | PlayerView, card: Card) {
+  const moves: Move[] = []
+  switch(card) {
+    case Card.Smuggler: 
+      if (player.bank > 0) moves.push(bankTurnipsMove(player.id, -player.bank))
+      break
+    case Card.Doctor:
+      moves.push(gainTurnipsMove(player.id, 2))
+      // TODO exhaust opponent card
+      break
+    case Card.Bard:
+      moves.push(gainTurnipsMove(player.id, 1))
+      // TODO Draw first card
+      break
+    case Card.Merchant:
+      moves.push(addPendingActionMove(player.id, {type: MoveType.TakeMarketCard , card, wait: true}))
+  }
+
+
+
+  return moves
 }

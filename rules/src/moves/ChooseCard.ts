@@ -2,7 +2,7 @@ import Card from '../Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
 import MoveType from './MoveType'
-import { getBuyRelicMoves, getRelicsPrice } from './TakeRelic'
+import { getCardBuyMoves, getRelicsPrice } from './TakeRelic'
 
 
 type ChooseCard = {
@@ -20,7 +20,7 @@ export function chooseCardMove(playerId: number, card: Card) : ChooseCard {
 
 export function chooseCard(state: GameState | GameView, move: ChooseCard) : void {
   const player = getPlayerState(state, move.playerId)
-  state.nextMoves.push(...getBuyRelicMoves(player, move.card, getRelicsPrice(state)))
+  state.nextMoves.push(...getCardBuyMoves(player, move.card, getRelicsPrice(state)))
   const actionIndex = player.pendingActions.findIndex(action => !action.wait && action.type === MoveType.ChooseCard)
   if (actionIndex != -1) {
     const action = player.pendingActions[actionIndex]

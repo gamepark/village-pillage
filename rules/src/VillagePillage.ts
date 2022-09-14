@@ -4,10 +4,13 @@ import { marketCards, startingCards } from './Card'
 import { getCardsResolveAutomaticMoves } from './CardColor'
 import GameState, { getPlayerState } from './GameState'
 import GameView from './GameView'
+import { addPendingAction } from './moves/AddPendingAction'
 import { bankTurnips } from './moves/BankTurnips'
 import { changeResolveStep, changeResolveStepMove, getNextResolveStep } from './moves/ChangeResolveStep'
 import { canChooseCard, chooseCard, chooseCardMove } from './moves/ChooseCard'
+import { flipChickenMove } from './moves/FlipChicken'
 import { gainTurnips } from './moves/GainTurnips'
+import { givePriorityToBuyCard, givePriorityToBuyCardMove } from './moves/GivePriorityToBuyCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
@@ -118,6 +121,12 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
           moves.push(chooseCardMove(playerId, player.leftCard!))
           moves.push(chooseCardMove(playerId, player.rightCard!))
         }
+/*         else if (canTakeMarketCard(player)) {
+          // TODO : moves.push(TakeMarketCardMove) sur toutes les cartes du marché.
+          //       
+        } */
+
+
         break
     }
     return moves
@@ -164,6 +173,12 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       case MoveType.TakeRelic:
         takeRelic(this.state, move)
         break
+      case MoveType.AddPendingAction:
+        addPendingAction(this.state, move)
+        break
+      case MoveType.GivePriorityToBuyCard:
+        givePriorityToBuyCard(this.state, move)
+        break
     }
   }
 
@@ -196,7 +211,23 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
       }
       const nextStep = getNextResolveStep(this.state.resolveStep)
       const moves = nextStep ? getCardsResolveAutomaticMoves(this.state, nextStep) : []
-      if (!this.state.players.some(player => player.pendingActions.length > 0 )) moves.push(changeResolveStepMove)
+      if (!this.state.players.some(player => player.pendingActions.length > 0 )) {
+        moves.push(changeResolveStepMove)
+      } else if (this.state.players.every(player => player.pendingActions.every(action => action.type === MoveType.TakeMarketCard && action.wait))) {
+        const buyingCardPlayers = this.state.players.filter(player => player.pendingActions.some(action => action.type === MoveType.TakeMarketCard))
+        const lessTurnipsPlayers = buyingCardPlayers.reduce<PlayerState[]>((players, player) => {
+          if (players.length === 0 || player.stock + player.bank < players[0].stock + players[0].bank) return [player]
+          if (player.stock + player.bank === players[0].stock + players[0].bank) {
+            players.push(player)
+          }
+          return players
+        },[])
+        const player = lessTurnipsPlayers.length === 1 ? lessTurnipsPlayers[0] : lessTurnipsPlayers[Math.floor(Math.random()*lessTurnipsPlayers.length)]
+        if (lessTurnipsPlayers.length > 1) {
+          moves.push(flipChickenMove(player.id))
+        }
+        moves.push(givePriorityToBuyCardMove(player.id))
+      }
       return moves
     }
     return []

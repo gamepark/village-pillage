@@ -1,9 +1,11 @@
 import {Game} from '@gamepark/rules-api'
 import GameView from '@gamepark/village-pillage/GameView'
+import { addPendingAction } from '@gamepark/village-pillage/moves/AddPendingAction'
 import { bankTurnips } from '@gamepark/village-pillage/moves/BankTurnips'
 import { changeResolveStep } from '@gamepark/village-pillage/moves/ChangeResolveStep'
 import { chooseCard } from '@gamepark/village-pillage/moves/ChooseCard'
 import { gainTurnips } from '@gamepark/village-pillage/moves/GainTurnips'
+import { givePriorityToBuyCard } from '@gamepark/village-pillage/moves/GivePriorityToBuyCard'
 import MoveType from '@gamepark/village-pillage/moves/MoveType'
 import MoveView from '@gamepark/village-pillage/moves/MoveView'
 import {playCardInView} from '@gamepark/village-pillage/moves/PlayCard'
@@ -75,6 +77,12 @@ export default class VillagePillageView implements Game<GameView, MoveView> {
         break
       case MoveType.TakeRelic:
         takeRelic(this.state, move)
+        break
+      case MoveType.AddPendingAction:
+        addPendingAction(this.state, move)
+        break
+      case MoveType.GivePriorityToBuyCard:
+        givePriorityToBuyCard(this.state, move)
         break
     }
   }

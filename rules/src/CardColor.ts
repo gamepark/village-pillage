@@ -6,7 +6,7 @@ import { flipChickenMove } from "./moves/FlipChicken";
 import GainTurnips, { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
 import { stealTurnipsMove } from "./moves/StealTurnips";
-import { getBuyRelicMoves, getRelicsPrice } from "./moves/TakeRelic";
+import { getCardBuyMoves, getRelicsPrice } from "./moves/TakeRelic";
 import Phase from "./Phase";
 import PlayerState from "./PlayerState";
 import ResolveStep from "./ResolveStep";
@@ -240,7 +240,6 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: 
   // Achat de relique
   
   function getPlayerBuyMoves(player: PlayerState, cardColor: CardColor, relicsPrice: number[]) {
-    // TODO
     // Postulat : On considère que toutes les cartes qui ont un achat de relique l'ont en première action.
     if (player.rightCard && getCardColor(player.rightCard) === CardColor.Yellow 
         && player.leftCard && getCardColor(player.leftCard) === CardColor.Yellow) return [] // on doit choisir une carte avec ChooseCard
@@ -248,7 +247,7 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: 
     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        moves.push(...getBuyRelicMoves(player, card, relicsPrice))
+        moves.push(...getCardBuyMoves(player, card, relicsPrice))
       }
     }
     return moves

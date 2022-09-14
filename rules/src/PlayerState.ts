@@ -1,5 +1,5 @@
 import Card from "./Card"
-import MoveType from "./moves/MoveType"
+import PendingAction from "./PendingAction"
 
 export default interface PlayerState {
   id: number
@@ -9,5 +9,5 @@ export default interface PlayerState {
   stock: number
   bank: number
   relics: number
-  pendingActions: {type: MoveType, card?: Card, wait?: boolean}[]
+  pendingActions: PendingAction[]
 }
