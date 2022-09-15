@@ -125,8 +125,6 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
         else if (canTakeMarketCard(this.state, playerId)) {
           for (const marketCard of marketCards) {
             moves.push(takeMarketCardMove(playerId, marketCard))
-            // TODO : moves.push(takeMarketCardMove) sur toutes les cartes du marché.
-            //  
           }
      
         }

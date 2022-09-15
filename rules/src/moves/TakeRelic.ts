@@ -1,15 +1,14 @@
 import Card from '../Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
-import PlayerState from '../PlayerState'
+import PlayerState, { getFuturePlayerTurnips, getSpendTurnipsMoves } from '../PlayerState'
 import PlayerView from '../PlayerView'
 import { addPendingActionMove } from './AddPendingAction'
 import { bankTurnipsMove } from './BankTurnips'
 import { gainTurnipsMove } from './GainTurnips'
 import Move from './Move'
 import MoveType from './MoveType'
-import { spendBankTurnipsMove } from './SpendBankTurnips'
-import { spendStockTurnipsMove } from './SpendStockTurnips'
+import { getPriceToBuyCard } from './TakeMarketCard'
 
 /**
  * An example of a simple move: one player take ONE relic to his bankCard
@@ -34,10 +33,7 @@ export function getCardBuyMoves(player: PlayerState | PlayerView, card: Card, re
   if (cardCanBuyRelic(card)) {
     const cost = relicsPrice[player.relics] + getCardOffsetRelicPrice(card)
     if ((cost <= (player.bank + player.stock))) {
-      const stockCost = Math.min(cost,player.stock)
-      if (stockCost > 0) moves.push(spendStockTurnipsMove(player.id, stockCost))
-      const bankCost = cost - stockCost
-      if (bankCost > 0) moves.push(spendBankTurnipsMove(player.id, bankCost))
+      moves.push(...getSpendTurnipsMoves(player,cost))
       moves.push(takeRelicMove(player.id))
     } else {
       moves.push(...getAlternativeMoves(player, card))
@@ -82,7 +78,10 @@ function getAlternativeMoves(player: PlayerState | PlayerView, card: Card) {
       // TODO Draw first card
       break
     case Card.Merchant:
-      moves.push(addPendingActionMove(player.id, {type: MoveType.TakeMarketCard , card, wait: true}))
+      if (getFuturePlayerTurnips(player) >= getPriceToBuyCard(card)) {
+        moves.push(addPendingActionMove(player.id, {type: MoveType.TakeMarketCard , card, wait: true}))
+      }
   }
   return moves
 }
+
