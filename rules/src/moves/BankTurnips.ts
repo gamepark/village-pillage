@@ -17,7 +17,7 @@ export function bankTurnipsMove(playerId: number, quantity: number) : BankTurnip
   return {type: MoveType.BankTurnips, playerId, quantity}
 }
 
-export function getBankSize(game: GameState) : number {
+export function getBankSize(game: GameState | GameView) : number {
   return game.players.length === 2 ? 4 : 5
 }
 
