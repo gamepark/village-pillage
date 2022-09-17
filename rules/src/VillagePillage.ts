@@ -244,7 +244,10 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return What a person can see from the game state
    */
   getView(): GameView {
-    return {...this.state, deck: this.state.deck.length}
+    return {
+      ...this.state, deck: this.state.deck.length,
+      players: this.state.players.map(player => this.getOtherPlayerView(player))
+    }
   }
 
   /**
@@ -257,7 +260,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     // Here we could, for example, return a "playerView" with only the number of cards in hand for the other player only.
     return {
       ...this.state, deck: this.state.deck.length,
-      players: this.state.players.map((player, index) => index === playerId - 1 ? player : this.getOtherPlayerView(player))
+      players: this.state.players.map(player => player.id === playerId ? player : this.getOtherPlayerView(player))
     }
   }
 

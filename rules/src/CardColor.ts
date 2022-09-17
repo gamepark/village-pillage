@@ -1,4 +1,5 @@
 import Card from "./Card";
+import getCardRules from "./cards/getCardRules";
 import EffectType from "./EffectType";
 import GameState from "./GameState";
 import BankTurnips, { bankTurnipsMove, getBankSize } from "./moves/BankTurnips";
@@ -7,12 +8,12 @@ import GainTurnips, { gainTurnipsMove } from "./moves/GainTurnips";
 import Move from "./moves/Move";
 import { stealTurnipsMove } from "./moves/StealTurnips";
 import { getCardBuyMoves, getRelicsPrice } from "./moves/TakeRelic";
-import Phase from "./Phase";
+import { getOpponentCard, getOpponentCardColor } from "./Neighbor";
 import PlayerState from "./PlayerState";
 import ResolveStep from "./ResolveStep";
 import Side, { sides } from "./Side";
 
-enum CardColor {
+export enum CardColor {
   Green = 1, Blue, Red, Yellow
 }
 
@@ -22,20 +23,6 @@ export default CardColor
 export function getCardColor(card : Card) : CardColor {
   return Math.floor(card/100)
 }
-function getOpponentCard(players: PlayerState[], activePlayerIndex: number, side: Side): Card {
-  if(side===Side.LEFT) {
-    const leftOpponent = players[(activePlayerIndex+1) % players.length]
-    return leftOpponent.rightCard!
-  } else {
-    const rightOpponent = players[(activePlayerIndex-1 + players.length) % players.length]
-    return rightOpponent.leftCard!
-  }
-}
-function getOpponentCardColor(players: PlayerState[], index: number, side: Side): CardColor {
-  return getCardColor (getOpponentCard(players,index,side))
-}
-
-
 // Fonction Principale
 export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : ResolveStep) : Move[] {
   switch (resolveStep.effectType) {
@@ -57,7 +44,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
       const opposingCard = getOpposingCardBySide(side)
 
       if (card && getCardColor(card) === cardColor) {                       // carte joueur
-        const gain = getCardGain(card, getCardColor(opposingCard))
+        const gain = getCardRules(card).getGain(getCardColor(opposingCard)) 
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
       if (card && getCardColor(opposingCard) === cardColor) {               // carte adversaire
@@ -68,7 +55,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
     return moves
   }
 
-    function getCardGain(card: Card, opposingCardColor: CardColor, phase = Phase.RESOLVE) : number {                   // On contrôle la carte opposée dans TOUS les cas (notamment pour MOAT)
+/*     function getCardGain(card: Card, opposingCardColor: CardColor, phase = Phase.RESOLVE) : number {                   // On contrôle la carte opposée dans TOUS les cas (notamment pour MOAT)
       if(phase===Phase.RESOLVE) {
         switch (card) {
           case Card.Farmer: return 3
@@ -86,14 +73,12 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
 
           case Card.Moat: return opposingCardColor === CardColor.Red ? 2 : 0
           case Card.Trapper: return (opposingCardColor === CardColor.Green || opposingCardColor === CardColor.Yellow) ? 1 : 0
-          // case Card.Bard: return 1         // si pas d'achat relique possible  -> TODO EffectType.Buy
-          // case Card.Doctor: return 2       // si pas d'achat relique possible  -> TODO EffectType.Buy
           default: return 0
         }
       } else {
         return (phase===Phase.REFRESH && card === Card.Shepherd) ? 4 : 0
       }
-    }
+    } */
     function getCardOpponentGain(card: Card, opposingCard: CardColor) {
       if(card === Card.Moat) return opposingCard === CardColor.Green ? 1 : 0
       else return 0
