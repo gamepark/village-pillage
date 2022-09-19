@@ -34,6 +34,7 @@ import { isGameState, VillagePillageOptions } from './VillagePillageOptions'
  * If the game contains information that some players know, but the other players does not, it must implement "SecretInformation" instead.
  * Later on, you can also implement "Competitive", "Undo", "TimeLimit" and "Eliminations" to add further features to the game.
  */
+
 export default class VillagePillage extends SimultaneousGame<GameState, Move>
   implements SecretInformation<GameState, GameView, Move, MoveView> {
   /**
@@ -244,10 +245,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
    * @return What a person can see from the game state
    */
   getView(): GameView {
-    return {
-      ...this.state, deck: this.state.deck.length,
-      players: this.state.players.map(player => this.getOtherPlayerView(player))
-    }
+    return {...this.state, deck: this.state.deck.length}
   }
 
   /**
@@ -260,7 +258,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     // Here we could, for example, return a "playerView" with only the number of cards in hand for the other player only.
     return {
       ...this.state, deck: this.state.deck.length,
-      players: this.state.players.map(player => player.id === playerId ? player : this.getOtherPlayerView(player))
+      players: this.state.players.map((player, index) => index === playerId - 1 ? player : this.getOtherPlayerView(player))
     }
   }
 
