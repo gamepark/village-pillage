@@ -44,7 +44,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
       const opposingCard = getOpposingCardBySide(side)
 
       if (card && getCardColor(card) === cardColor) {                       // carte joueur
-        const gain = getCardRules(card).getGain(getCardColor(opposingCard)) 
+        const gain = getCardRules(card).getGain(getCardColor(opposingCard))
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
       if (card && getCardColor(opposingCard) === cardColor) {               // carte adversaire

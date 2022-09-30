@@ -209,7 +209,7 @@ export default class VillagePillage extends SimultaneousGame<GameState, Move>
     if (this.state.phase === Phase.PLAN && this.state.players.every(player => player.leftCard && player.rightCard)) {
       return [revealCardsMove]
     }
-    if (this.state.phase === Phase.RESOLVE) {
+    if (this.state.phase === Phase.RESOLVE || this.state.phase === Phase.REFRESH) {
       for (const player of this.state.players) {
         const chooseCardAction = player.pendingActions.find(action => !action.wait && action.type === MoveType.ChooseCard && action.card)
         if (chooseCardAction) {
