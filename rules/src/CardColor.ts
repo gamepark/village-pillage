@@ -48,7 +48,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
       if (card && getCardColor(opposingCard) === cardColor) {               // carte adversaire
-        const gain = getCardOpponentGain(opposingCard, getCardColor(card))
+        const gain = getCardRules(opposingCard).getOpponentGain(getCardColor(card))
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
     }
@@ -78,11 +78,11 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
       } else {
         return (phase===Phase.REFRESH && card === Card.Shepherd) ? 4 : 0
       }
-    } */
+    } 
     function getCardOpponentGain(card: Card, opposingCard: CardColor) {
       if(card === Card.Moat) return opposingCard === CardColor.Green ? 1 : 0
       else return 0
-    }
+    } */
 
 function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
   const moves: Move[] = []
