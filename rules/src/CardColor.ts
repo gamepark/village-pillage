@@ -33,7 +33,7 @@ export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : R
   }
 }
 
-
+//  Fonctions Secondaires
 function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnips[] {
   return players.flatMap((player, index) => getPlayerGainMoves(player, cardColor, side => getOpponentCard(players, index, side)))
 }
@@ -43,11 +43,11 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       const opposingCard = getOpposingCardBySide(side)
 
-      if (card && getCardColor(card) === cardColor) {                       // carte joueur
+      if (card && getCardColor(card) === cardColor) {                       // carte joueur donnant un gain
         const gain = getCardRules(card).getGain(getCardColor(opposingCard))
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
-      if (card && getCardColor(opposingCard) === cardColor) {               // carte adversaire
+      if (card && getCardColor(opposingCard) === cardColor) {               // carte adversaire donnant un gain
         const gain = getCardRules(opposingCard).getOpponentGain(getCardColor(card))
         if (gain > 0) moves.push(gainTurnipsMove(player.id, gain))
       }
@@ -84,7 +84,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardColor) : GainTurnip
       else return 0
     } */
 
-function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
+function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {     // Dans cette fonction on regarde les ColorCard des adversaires
   const moves: Move[] = []
   for (let victimIndex= 0; victimIndex < players.length; victimIndex++) {
     const victim = players[victimIndex]
@@ -94,9 +94,12 @@ function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
         const rightPlayerIndex = (victimIndex - 1 + players.length) % players.length;
         const leftOpponentCard = getOpponentCard(players, victimIndex, Side.LEFT)
         const rightOpponentCard = getOpponentCard(players, victimIndex, Side.RIGHT)
-        let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getStealValue(leftOpponentCard, victim.leftCard!) : 0
-        let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getStealValue(rightOpponentCard, victim.rightCard!) : 0
-
+        // let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getStealValue(leftOpponentCard, victim.leftCard!) : 0
+        // let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getStealValue(rightOpponentCard, victim.rightCard!) : 0
+        let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getCardRules(leftOpponentCard).getSteal(getCardColor(victim.leftCard!))
+                                                                       + getCardRules(victim.leftCard!).getStealToOpponent(getCardColor(leftOpponentCard))   : 0
+        let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getCardRules(rightOpponentCard).getSteal(getCardColor(victim.rightCard!))
+                                                                         + getCardRules(victim.rightCard!).getStealToOpponent(getCardColor(rightOpponentCard)) : 0
     if (leftSteal > 0 && rightSteal > 0 && leftSteal+rightSteal > victim.stock) {     // si les 2 joueurs adverses volent une somme sup au stock!
       if (victim.stock % 2 == 1) {
         if (leftSteal > rightSteal) {
@@ -127,7 +130,7 @@ function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
   return moves
 }
 
-  function getStealValue(robberCard : Card, victimCard : Card) {
+/*  function getStealValue(robberCard : Card, victimCard : Card) {
     return getCardSteal(robberCard, getCardColor(victimCard))
            + getCardOpponentSteal(victimCard, getCardColor(robberCard))
   }
@@ -160,7 +163,7 @@ function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] {
         case Card.Florist: return opposingCardColor === CardColor.Red ? 2 : 0
         default: return 0
       }
-    }
+    } */
 
 function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: number) : BankTurnips[] {
   return players.flatMap((player, index) => getPlayerBankMoves(player, cardColor, side => getOpponentCardColor(players, index, side), bankSize))

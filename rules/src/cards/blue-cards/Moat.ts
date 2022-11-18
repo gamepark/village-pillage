@@ -8,4 +8,10 @@ export default class Moat extends CardRules{
     getOpponentGain(opposingCardColor: CardColor): number {
         return opposingCardColor === CardColor.Green ? 1 :0
     }
+    getSteal(opposingCardColor: CardColor): number {
+        return opposingCardColor === CardColor.Red ? 3 : 0
+    }
+    getBank(opposingCardColor: CardColor): number {
+        return opposingCardColor === (CardColor.Blue | CardColor.Yellow) ? 2 : 0
+    }
 }
