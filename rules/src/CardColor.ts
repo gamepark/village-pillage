@@ -245,7 +245,8 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: 
 
 
 
-/* function wallMoves(state : GameState, playerId : number) : Move[] {
+/* SI ON AVAIT EU L'IDEE DE FAIRE UNE FONCTION PAR CARTE... Mauvaise idée, mieux vaut leur donner des attributs. 
+  function wallMoves(state : GameState, playerId : number) : Move[] {
   const moves : Move[] = []
   moves.push(gainTurnipsMove(playerId, 1))
 
@@ -256,12 +257,8 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: 
   return moves
 } */
 
-
-
-
-
-
-/* function getRedCardsAutomaticMoves(players: PlayerState[]) {
+/* FONCTION PAR COULEUR DE CARTE...  
+  function getRedCardsAutomaticMoves(players: PlayerState[]) {
   const moves : Move[] = []
   for (var playerIndex = 0 ; playerIndex < players.length; playerIndex++) {
     const player = players[playerIndex]
@@ -276,7 +273,8 @@ function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: 
 } */
 
 
-/*   const moves : Move[] = []
+/* PREMIERE APPROCHE POUR GENERER LES AUTOMATICMOVES
+  const moves : Move[] = []
   for (var playerIndex = 0 ; playerIndex < state.players.length; playerIndex++) {
     const player = state.players[playerIndex]
     if(player.leftCard && getCardColor(player.leftCard)===resolveStep.cardColor) {

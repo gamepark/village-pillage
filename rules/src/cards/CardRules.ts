@@ -1,5 +1,8 @@
 import CardColor from "../CardColor";
+import Move from "../moves/Move";
 import Phase from "../Phase";
+import PlayerState from "../PlayerState";
+import PlayerView from "../PlayerView";
 
 export default abstract class CardRules {
     gain = 0
@@ -8,6 +11,10 @@ export default abstract class CardRules {
     stealValue = 0
     stealValueFromOpponentCard = 0
     bank = 0
+    canBuyRelic = false
+    priceToBuyCard = Infinity
+    offsetRelicPrice = 0
+    moves = []
 
     getGain(_opposingCardColor: CardColor) : number {
         if (Phase.RESOLVE) return this.gain
@@ -29,5 +36,10 @@ export default abstract class CardRules {
     getBank(_opposingCardColor: CardColor) : number {
         if (Phase.RESOLVE) return this.bank
         else return 0
+    }
+
+    getAlternativeMoves(_player: PlayerState | PlayerView) : Move[] {
+        if (Phase.RESOLVE) return this.moves
+        else return []
     }
 }

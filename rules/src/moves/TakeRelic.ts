@@ -1,14 +1,11 @@
 import Card from '../Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
-import PlayerState, { getFuturePlayerTurnips, getSpendTurnipsMoves } from '../PlayerState'
+import PlayerState, { getSpendTurnipsMoves } from '../PlayerState'
 import PlayerView from '../PlayerView'
-import { addPendingActionMove } from './AddPendingAction'
-import { bankTurnipsMove } from './BankTurnips'
-import { gainTurnipsMove } from './GainTurnips'
+import getCardRules from '../cards/getCardRules'
 import Move from './Move'
 import MoveType from './MoveType'
-import { getPriceToBuyCard } from './TakeMarketCard'
 
 /**
  * An example of a simple move: one player take ONE relic to his bankCard
@@ -30,13 +27,15 @@ export function getRelicsPrice(game: GameState | GameView) : number[] {
 
 export function getCardBuyMoves(player: PlayerState | PlayerView, card: Card, relicsPrice: number[]) : Move[] {
   const moves : Move[] = []
-  if (cardCanBuyRelic(card)) {
-    const cost = relicsPrice[player.relics] + getCardOffsetRelicPrice(card)
+  // if (cardCanBuyRelic(card))
+  if (getCardRules(card).canBuyRelic === true) {
+    const cost = relicsPrice[player.relics] + getCardRules(card).offsetRelicPrice // ..ics] + getCardOffsetRelicPrice(card)
     if ((cost <= (player.bank + player.stock))) {
       moves.push(...getSpendTurnipsMoves(player,cost))
       moves.push(takeRelicMove(player.id))
     } else {
-      moves.push(...getAlternativeMoves(player, card))
+      // moves.push(...getAlternativeMoves(player, card))
+      moves.push(...getCardRules(card).getAlternativeMoves(player))
     }
   } return moves
 }
@@ -44,9 +43,10 @@ export function getCardBuyMoves(player: PlayerState | PlayerView, card: Card, re
 export function takeRelic(state: GameState | GameView, move: TakeRelic) {
   const player = getPlayerState(state, move.playerId)
   player.relics += 1
-  console.log("Joueur "+player.id+" relics : " +player.relics)
+  console.log("Joueur "+player.id+" relics : " +player.relics) // TEST à enlever
 }
 
+/* FONCTIONS UTILISEES AVANT D'ETRE DELEGUE POUR CHAQUE CARTE INDIVIDUELLEMENT
 export function cardCanBuyRelic(card: Card) : boolean {
   switch(card) {
     case Card.Smuggler:
@@ -55,14 +55,15 @@ export function cardCanBuyRelic(card: Card) : boolean {
     case Card.Merchant: return true
     default: return false
   }
-}
+} 
 export function getCardOffsetRelicPrice(card: Card) : number {
   switch(card) {
     case Card.Smuggler: return -2
     default: return 0
   }
-}
+} */
 
+/* UNE FONCTION QUE L'ON A A NOUVEAU DELEGUEE AUX CARTES 
 function getAlternativeMoves(player: PlayerState | PlayerView, card: Card) {
   const moves: Move[] = []
   switch(card) {
@@ -78,10 +79,10 @@ function getAlternativeMoves(player: PlayerState | PlayerView, card: Card) {
       // TODO Draw first card
       break
     case Card.Merchant:
-      if (getFuturePlayerTurnips(player) >= getPriceToBuyCard(card)) {
+      if (getFuturePlayerTurnips(player) >= getCardRules(card).priceToBuyCard) {
         moves.push(addPendingActionMove(player.id, {type: MoveType.TakeMarketCard , card, wait: true}))
       }
   }
   return moves
-}
+} */
 

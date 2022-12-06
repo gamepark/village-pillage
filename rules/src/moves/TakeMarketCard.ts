@@ -1,4 +1,5 @@
 import Card from '../Card'
+import getCardRules from '../cards/getCardRules'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
 import { getSpendTurnipsMoves } from '../PlayerState'
@@ -29,7 +30,7 @@ export function takeMarketCard(state: GameState | GameView, move: TakeMarketCard
   const actionIndex = player.pendingActions.findIndex(action => action.type === MoveType.TakeMarketCard && !action.wait)
   const action = player.pendingActions[actionIndex]
   player.pendingActions.splice(actionIndex, 1)
-  state.nextMoves.push(...getSpendTurnipsMoves(player, getPriceToBuyCard(action.card!)))
+  state.nextMoves.push(...getSpendTurnipsMoves(player, getCardRules(action.card!).priceToBuyCard))
   // TODO : Draw first card from Deck to emptyMarketPlace
 }
 
@@ -38,7 +39,7 @@ export function canTakeMarketCard(state: GameState | GameView, playerId: number)
   return player.pendingActions.some(action => action.type === MoveType.TakeMarketCard && !action.wait && !action.card)
 }
 
-export function getPriceToBuyCard(card : Card) {
+/* export function getPriceToBuyCard(card : Card) {
   switch(card) {
     case Card.Merchant: 
     case Card.Cathedral: return 1
@@ -46,4 +47,4 @@ export function getPriceToBuyCard(card : Card) {
     case Card.Outlaw: return 0
     default: return Infinity
   }
-}
+} */

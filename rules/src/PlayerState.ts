@@ -27,8 +27,8 @@ export function getFuturePlayerTurnips(player: PlayerState | PlayerView) {
 export function getSpendTurnipsMoves(player: PlayerState | PlayerView, turnips: number) {
   const moves : Move[] = []
   const stockCost = Math.min(turnips,player.stock)
-  if (stockCost > 0) moves.push(spendStockTurnipsMove(player.id, stockCost))
-  const bankCost = turnips - stockCost
+  if (stockCost > 0) moves.push(spendStockTurnipsMove(player.id, stockCost)) // On paye du stock le prix ou ce que l'on peut
+  const bankCost = turnips - stockCost    // Ce qu'il reste à payer de sa banque perso
   if (bankCost > 0) moves.push(spendBankTurnipsMove(player.id, bankCost))
   return moves
 }
