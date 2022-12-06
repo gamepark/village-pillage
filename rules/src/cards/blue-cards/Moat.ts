@@ -12,6 +12,6 @@ export default class Moat extends CardRules{
         return opposingCardColor === CardColor.Red ? 3 : 0
     }
     getBank(opposingCardColor: CardColor): number {
-        return opposingCardColor === (CardColor.Blue | CardColor.Yellow) ? 2 : 0
+        return (opposingCardColor === CardColor.Blue || opposingCardColor === CardColor.Yellow) ? 2 : 0
     }
 }

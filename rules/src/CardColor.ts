@@ -90,16 +90,17 @@ function getStealMoves(players: PlayerState[], cardColor: CardColor) : Move[] { 
     const victim = players[victimIndex]
     if (!victim.stock && !victim.bank) continue
 
-        const leftPlayerIndex = (victimIndex + 1) % players.length;
-        const rightPlayerIndex = (victimIndex - 1 + players.length) % players.length;
-        const leftOpponentCard = getOpponentCard(players, victimIndex, Side.LEFT)
-        const rightOpponentCard = getOpponentCard(players, victimIndex, Side.RIGHT)
-        // let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getStealValue(leftOpponentCard, victim.leftCard!) : 0
-        // let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getStealValue(rightOpponentCard, victim.rightCard!) : 0
-        let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getCardRules(leftOpponentCard).getSteal(getCardColor(victim.leftCard!))
-                                                                       + getCardRules(victim.leftCard!).getStealToOpponent(getCardColor(leftOpponentCard))   : 0
-        let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getCardRules(rightOpponentCard).getSteal(getCardColor(victim.rightCard!))
-                                                                         + getCardRules(victim.rightCard!).getStealToOpponent(getCardColor(rightOpponentCard)) : 0
+    const leftPlayerIndex = (victimIndex + 1) % players.length;
+    const rightPlayerIndex = (victimIndex - 1 + players.length) % players.length;
+    const leftOpponentCard = getOpponentCard(players, victimIndex, Side.LEFT)
+    const rightOpponentCard = getOpponentCard(players, victimIndex, Side.RIGHT)
+    // let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getStealValue(leftOpponentCard, victim.leftCard!) : 0
+    // let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getStealValue(rightOpponentCard, victim.rightCard!) : 0
+    let leftSteal = getCardColor(leftOpponentCard) === cardColor ? getCardRules(leftOpponentCard).getSteal(getCardColor(victim.leftCard!))
+                                                                 + getCardRules(victim.leftCard!).getStealToOpponent(getCardColor(leftOpponentCard))   : 0
+    let rightSteal = getCardColor(rightOpponentCard) === cardColor ? getCardRules(rightOpponentCard).getSteal(getCardColor(victim.rightCard!))
+                                                                   + getCardRules(victim.rightCard!).getStealToOpponent(getCardColor(rightOpponentCard)) : 0
+    
     if (leftSteal > 0 && rightSteal > 0 && leftSteal+rightSteal > victim.stock) {     // si les 2 joueurs adverses volent une somme sup au stock!
       if (victim.stock % 2 == 1) {
         if (leftSteal > rightSteal) {
@@ -175,7 +176,8 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
     for (const side of sides) {
       const card = side===Side.LEFT ? player.leftCard : player.rightCard
       if (card && getCardColor(card) === cardColor) {
-        const cardBank = getCardBank(card, () => getOpposingCardColorBySide(side))
+        // const cardBank = getCardBank(card, () => getOpposingCardColorBySide(side))
+        const cardBank = getCardRules(card).getBank(getOpposingCardColorBySide(side))
         const toBank = Math.min(cardBank, bankable)
         if (toBank > 0) {
           moves.push(bankTurnipsMove(player.id, toBank))
@@ -187,7 +189,7 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
     return moves
   }
 
-  function getCardBank(card: Card, getOpposingCardColor: () => CardColor) : number {              // En passant cette fonction anonyme en paramètre, on ne contrôle pas la carte opposée pour TOUS les cas. On le fait que si nécessaire !
+/*  function getCardBank(card: Card, getOpposingCardColor: () => CardColor) : number {              // En passant cette fonction anonyme en paramètre, on ne contrôle pas la carte opposée pour TOUS les cas. On le fait que si nécessaire !
     switch (card) {
       case Card.Cathedral: return getOpposingCardColor() === CardColor.Red ? 1 : 0
       case Card.Dungeon: return getOpposingCardColor() === (CardColor.Red | CardColor.Blue) ? 1 : 2
@@ -210,7 +212,7 @@ function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: nu
       case Card.Wall: return 1
       default: return 0
     }
-  }
+  } */
 
 function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: number[]) : Move[] {
   return players.flatMap((player) => getPlayerBuyMoves(player, cardColor, relicsPrice))
