@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import CardDisplay from "./material/CardDisplay"
+import SelectableCardDisplay from "./material/CardDisplay"
 import { cardWidth } from './styles'
 
 
@@ -14,8 +14,8 @@ export default function Market({deck, market}: Props) {
   return(
     <>
     <div css={marketBorders}/>
-    {[...Array(Math.min (8, deck))].map( (_,index)=> <CardDisplay key={index} css={deckPosition(index)}/>)} 
-    {market.map((card, index) => <CardDisplay key={card} card={card} css={cardPosition(index)} />)}
+    {[...Array(Math.min (8, deck))].map( (_,index)=> <SelectableCardDisplay key={index} css={deckPosition(index)}/>)} 
+    {market.map((card, index) => <SelectableCardDisplay key={card} card={card} css={cardPosition(index)} />)}
     </>
   )
 }

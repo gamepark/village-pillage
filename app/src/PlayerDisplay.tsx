@@ -7,7 +7,7 @@ import PlayerHand from './PlayerHand'
 import PlayerStockTurnips from './PlayerStockTurnips'
 import PlayerPosition from './PlayerPosition'
 import PlayerBankDisplay from './PlayerBankDisplay'
-import CardDisplay from './material/CardDisplay'
+import SelectableCardDisplay from './material/CardDisplay'
 import { css } from '@emotion/react'
 import { screenRatio } from './styles'
 import Side from '@gamepark/village-pillage/Side'
@@ -27,10 +27,10 @@ export default function PlayerDisplay({player, position, players, onClickCard}: 
       <PlayerBankDisplay duel={players===2} inBank={player.bank} position={position}/>
       <PlayerStockTurnips stock={player.stock} position={position}/>
       {(player.rightCard || (isPlayerView(player) && player.rightCardPlayed)) && 
-              <CardDisplay card={player.rightCard} css={[playedCardCss(player),playedRightCardPositionCss(position, players, !player.rightCard)]} onClick={() => onClickCard && player.rightCard && onClickCard(player.rightCard)}/>
+              <SelectableCardDisplay card={player.rightCard} css={[playedCardCss(player),playedRightCardPositionCss(position, players, !player.rightCard)]} onClick={() => onClickCard && player.rightCard && onClickCard(player.rightCard)}/>
       }
       {(player.leftCard || (isPlayerView(player) && player.leftCardPlayed)) && 
-              <CardDisplay card={player.leftCard} css={[playedCardCss(player),playedLeftCardPositionCss(position, players, !player.leftCard)]} onClick={() => onClickCard && player.leftCard && onClickCard(player.leftCard)}/>
+              <SelectableCardDisplay card={player.leftCard} css={[playedCardCss(player),playedLeftCardPositionCss(position, players, !player.leftCard)]} onClick={() => onClickCard && player.leftCard && onClickCard(player.leftCard)}/>
       }
       {isPlayerView(player)? <OtherPlayerHand hand={player.hand} position={position}/> : <PlayerHand hand={player.hand}/>}
     </>

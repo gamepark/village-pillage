@@ -19,9 +19,9 @@ export const changeResolveStepMove : ChangeResolveStep = {type: MoveType.ChangeR
 
 export function changeResolveStep(state: GameState | GameView) {
   state.resolveStep = getNextResolveStep(state.resolveStep)
-  if (!state.resolveStep) {state.phase = Phase.REFRESH}
+  if (!state.resolveStep) {state.phase = Phase.REFRESH}                                     // On a finit le cycle de getNextResolveStep()
   else if (state.resolveStep.effectType === EffectType.Buy && state.resolveStep.cardColor === CardColor.Yellow) {
-    for (const player of state.players) {
+    for (const player of state.players) {                                                   // Controle du double cas que dans le cas de JAUNE et BUY a priori
       if (getCardColor(player.leftCard!) === CardColor.Yellow && getCardColor(player.rightCard!) === CardColor.Yellow) {
         player.pendingActions.push({type: MoveType.ChooseCard})
       }
