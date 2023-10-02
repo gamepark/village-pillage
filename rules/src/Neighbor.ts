@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "./material/Card";
 import PlayerState from "./PlayerState";
 import Side from "./Side";
 import { CardColor, getCardColor } from "./CardColor";

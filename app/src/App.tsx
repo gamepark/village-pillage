@@ -1,13 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/village-pillage/GameView'
-import {FailuresDialog, FullscreenDialog, Menu, useGame} from '@gamepark/react-client'
-import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
-import {useEffect, useState} from 'react'
-import {DndProvider} from 'react-dnd-multi-backend'
-import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
-import GameDisplay from './GameDisplay'
-import HeaderText from './HeaderText'
-import Images from './images/Images'
+import { FailuresDialog, FullscreenDialog, Menu, useGame, LoadingScreen } from '@gamepark/react-game'
+import { FC, useEffect, useState } from 'react'
+import { RuleId } from '@gamepark/village-pillage/rules/RuleId'
+import { MaterialHeader, MaterialImageLoader } from '@gamepark/react-game'
+import { GameDisplay } from './GameDisplay'
 
 export default function App() {
   const game = useGame<GameView>()
@@ -18,14 +15,18 @@ export default function App() {
   }, [])
   const loading = !game || imagesLoading || isJustDisplayed
   return (
-    <DndProvider options={HTML5ToTouch}>
-      {!loading && <GameDisplay game={game}/>}
+    <>
+      <GameDisplay/>
       <LoadingScreen display={loading} author="Someone" artist="Somebody" publisher="Nobody" developer="You"/>
-      <Header><HeaderText loading={loading} game={game}/></Header>
+      <MaterialHeader GameOver={() => <p>GameOver</p>} rulesStepsHeaders={RulesHeaders} loading={loading}/>
+      <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>
       <FullscreenDialog/>
-      <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)}/>
-    </DndProvider>
+    </>
   )
+}
+
+const RulesHeaders: Record<RuleId, FC> = {
+  [RuleId.Plan]: () => <>Start</>
 }

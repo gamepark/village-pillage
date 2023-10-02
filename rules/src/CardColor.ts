@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "./material/Card";
 import getCardRules from "./cards/getCardRules";
 import EffectType from "./EffectType";
 import GameState from "./GameState";

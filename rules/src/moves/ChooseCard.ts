@@ -1,4 +1,4 @@
-import Card from '../Card'
+import Card from '../material/Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
 import MoveType from './MoveType'

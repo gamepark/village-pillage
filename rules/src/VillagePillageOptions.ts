@@ -5,6 +5,7 @@ import GameState from './GameState'
  * This is the options for each players in the game.
  */
 type VillagePillagePlayerOptions = {}
+export type PlayerId = number
 
 /**
  * This is the type of object that the game receives when a new game is started.

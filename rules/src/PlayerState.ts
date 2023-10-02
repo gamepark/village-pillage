@@ -1,4 +1,4 @@
-import Card from "./Card"
+import Card from "./material/Card"
 import Move from "./moves/Move"
 import { spendBankTurnipsMove } from "./moves/SpendBankTurnips"
 import { spendStockTurnipsMove } from "./moves/SpendStockTurnips"

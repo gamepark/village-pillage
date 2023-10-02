@@ -1,4 +1,4 @@
-import Card from "../Card";
+import Card from "../material/Card";
 import Cathedral from "./blue-cards/Cathedral";
 import Dungeon from "./blue-cards/Dungeon";
 import Labyrinth from "./blue-cards/Labyrinth";

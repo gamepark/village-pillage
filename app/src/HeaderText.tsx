@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {usePlayerId} from '@gamepark/react-client'
+import { usePlayerId } from '@gamepark/react-game'
 import GameView from '@gamepark/village-pillage/GameView'
 import {useTranslation} from 'react-i18next'
 
