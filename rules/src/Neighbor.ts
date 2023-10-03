@@ -1,6 +1,6 @@
 import Card from "./material/Card";
 import PlayerState from "./PlayerState";
-import Side from "./Side";
+import Side from "./rules/Side";
 import { CardColor, getCardColor } from "./CardColor";
 
 export function getOpponent(players: PlayerState[], activePlayerIndex: number, side: Side): PlayerState {

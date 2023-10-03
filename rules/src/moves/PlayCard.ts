@@ -3,7 +3,7 @@ import GameState, {getPlayerState} from '../GameState'
 import GameView from '../GameView'
 import PlayerState from '../PlayerState'
 import {isPlayerView} from '../PlayerView'
-import Side from '../Side'
+import Side from '../rules/Side'
 import MoveType from './MoveType'
 
 /**

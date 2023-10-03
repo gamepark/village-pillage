@@ -8,7 +8,7 @@ export class BankLocator extends ItemLocator {
     const playerHand = getPlayerPosition(item.location.player!, players, player)
     switch (index) {
       case 0:
-        playerHand.x += 25
+        playerHand.x += 24
         playerHand.y -= 2
         break
       case 1:

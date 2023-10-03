@@ -2,17 +2,17 @@ import { PlayerId } from '@gamepark/village-pillage/VillagePillageOptions'
 
 // TODO: player the current player at the bottom,
 // and keep the real order for placement since the whole game is based on placement
-export const getPlayerPosition = (itemPlayer: PlayerId, players: PlayerId[], player?: PlayerId) => {
+export const  getPlayerPosition = (itemPlayer: PlayerId, players: PlayerId[], player?: PlayerId) => {
   const index = getBoardIndex(itemPlayer, players, player)
   switch (index) {
     case 0:
-      return { x: -5, y: 23, z: 0 }
+      return { x: -7, y: 23, z: 0 }
     case 1:
       return { x: -43, y: -6, z: 0 }
     case 2:
-      return { x: 10, y: -23, z: 0 }
+      return { x: 7, y: -23, z: 0 }
     case 3:
-      return { x: 43, y: 4, z: 0 }
+      return { x: 43, y: 6, z: 0 }
   }
 
   return { x: 0, y: 0, z: 0}

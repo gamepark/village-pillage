@@ -11,7 +11,7 @@ import { getCardBuyMoves, getRelicsPrice } from "./moves/TakeRelic";
 import { getOpponentCard, getOpponentCardColor } from "./Neighbor";
 import PlayerState from "./PlayerState";
 import ResolveStep from "./ResolveStep";
-import Side, { sides } from "./Side";
+import Side, { sides } from "./rules/Side";
 
 export enum CardColor {
   Green = 1, Blue, Red, Yellow
