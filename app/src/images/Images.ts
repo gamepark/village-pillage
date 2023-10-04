@@ -30,7 +30,7 @@ import Turncoat from './turncoat.jpg'
 import Veteran from './veteran.jpg'
 import Wall from './wall.jpg'
 import Crown from './couronne.jpg'
-import Sceptre from './septre.jpg'
+import Scepter from './septer.jpg'
 import Throne from './trone.jpg'
 import Turnip from './turnip.png'
 import Chicken from './oeuf-poule.png'
@@ -69,7 +69,7 @@ const Images = {
   Veteran,
   Wall,
   Crown,
-  Sceptre,
+  Scepter,
   Throne,
   Turnip,
   Chicken

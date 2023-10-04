@@ -1,17 +1,15 @@
-import CardRules from "../CardRules";
-import PlayerState from "../../PlayerState";
-import PlayerView from "../../PlayerView";
-import Move from "../../moves/Move";
-import { bankTurnipsMove } from "../../moves/BankTurnips";
+import CardRules from '../CardRules'
+import { PlayerId } from '../../VillagePillageOptions'
+import { MaterialMove } from '@gamepark/rules-api'
 
-export default class Bard extends CardRules{
+export default class Bard extends CardRules {
     canBuyRelic = true
     offsetRelicPrice = -2
 
-    getAlternativeMoves(player: PlayerState | PlayerView) : Move[] {
-        const moves: Move[] = []
-        if (player.bank > 0) moves.push(bankTurnipsMove(player.id, -player.bank))
-        
-        return moves
+  getAlternativeMoves(_player: PlayerId) : MaterialMove[] {
+        // const moves: Move[] = []
+        // if (_player.bank > 0) moves.push(bankTurnipsMove(_player.id, -_player.bank))
+        //
+        return []
     }
 }

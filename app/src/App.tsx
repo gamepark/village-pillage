@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/village-pillage/GameView'
-import { FailuresDialog, FullscreenDialog, Menu, useGame, LoadingScreen } from '@gamepark/react-game'
+import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
 import { FC, useEffect, useState } from 'react'
 import { RuleId } from '@gamepark/village-pillage/rules/RuleId'
-import { MaterialHeader, MaterialImageLoader } from '@gamepark/react-game'
 import { GameDisplay } from './GameDisplay'
 
 export default function App() {
@@ -28,5 +27,10 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, FC> = {
-  [RuleId.Plan]: () => <>Start</>
+  [RuleId.Plan]: () => <>Plan</>,
+  [RuleId.Gain]: () => <>Farm</>,
+  [RuleId.Steal]: () => <>Wall</>,
+  [RuleId.Bank]: () => <>Raider</>,
+  [RuleId.Buy]: () => <>Merchant</>,
+  [RuleId.Refresh]: () => <>Refresh</>
 }

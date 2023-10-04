@@ -1,4 +1,4 @@
-import CardColor, { getCardColor } from '../CardColor'
+import CardType, { getCardType } from '../CardType'
 import EffectType from '../EffectType'
 import GameState from '../GameState'
 import GameView from '../GameView'
@@ -20,9 +20,9 @@ export const changeResolveStepMove : ChangeResolveStep = {type: MoveType.ChangeR
 export function changeResolveStep(state: GameState | GameView) {
   state.resolveStep = getNextResolveStep(state.resolveStep)
   if (!state.resolveStep) {state.phase = Phase.REFRESH}                                     // On a finit le cycle de getNextResolveStep()
-  else if (state.resolveStep.effectType === EffectType.Buy && state.resolveStep.cardColor === CardColor.Yellow) {
+  else if (state.resolveStep.effectType === EffectType.Buy && state.resolveStep.cardColor === CardType.Merchant) {
     for (const player of state.players) {                                                   // Controle du double cas que dans le cas de JAUNE et BUY a priori
-      if (getCardColor(player.leftCard!) === CardColor.Yellow && getCardColor(player.rightCard!) === CardColor.Yellow) {
+      if (getCardType(player.leftCard!) === CardType.Merchant && getCardType(player.rightCard!) === CardType.Merchant) {
         player.pendingActions.push({type: MoveType.ChooseCard})
       }
     }
@@ -31,10 +31,10 @@ export function changeResolveStep(state: GameState | GameView) {
 
 export function getNextResolveStep(resolveStep?: ResolveStep) : ResolveStep | undefined {
   if (resolveStep===undefined) {
-    return {cardColor: CardColor.Green, effectType: EffectType.Gain}                        // Init à Green et Gain
+    return {cardColor: CardType.Farm, effectType: EffectType.Gain}                        // Init à Green et Gain
   } else if(resolveStep.effectType !== EffectType.Buy) {                                    // EffectType suivant avant d'aller à ..
     return {cardColor: resolveStep.cardColor, effectType: resolveStep.effectType +1}        // ..CardColor suivante
-  } else if(resolveStep.cardColor !== CardColor.Yellow) {
+  } else if(resolveStep.cardColor !== CardType.Merchant) {
     return {cardColor: resolveStep.cardColor +1, effectType: EffectType.Gain}
   } else {
     return undefined

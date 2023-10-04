@@ -6,5 +6,7 @@ export enum LocationType {
   PlayerBankTurnips,
   MarketDeck,
   Market,
-  PlanedCard
+  PlanedCard,
+  PlayerRelics,
+  RelicStock
 }

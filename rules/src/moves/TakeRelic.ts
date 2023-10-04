@@ -1,10 +1,5 @@
-import Card from '../material/Card'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
-import PlayerState, { getSpendTurnipsMoves } from '../PlayerState'
-import PlayerView from '../PlayerView'
-import getCardRules from '../cards/getCardRules'
-import Move from './Move'
 import MoveType from './MoveType'
 
 /**
@@ -25,20 +20,20 @@ export function getRelicsPrice(game: GameState | GameView) : number[] {
   return game.players.length === 2 ? [6,7,8] : [8,9,10]
 }
 
-export function getCardBuyMoves(player: PlayerState | PlayerView, card: Card, relicsPrice: number[]) : Move[] {
-  const moves : Move[] = []
-  // if (cardCanBuyRelic(card))
-  if (getCardRules(card).canBuyRelic === true) {
-    const cost = relicsPrice[player.relics] + getCardRules(card).offsetRelicPrice // ..ics] + getCardOffsetRelicPrice(card)
-    if ((cost <= (player.bank + player.stock))) {
-      moves.push(...getSpendTurnipsMoves(player,cost))
-      moves.push(takeRelicMove(player.id))
-    } else {
-      // moves.push(...getAlternativeMoves(player, card))
-      moves.push(...getCardRules(card).getAlternativeMoves(player))
-    }
-  } return moves
-}
+// export function getCardBuyMoves(player: PlayerState | PlayerView, card: Card, relicsPrice: number[]) : Move[] {
+//   const moves : Move[] = []
+//   // if (cardCanBuyRelic(card))
+//   if (getCardRules(card).canBuyRelic === true) {
+//     const cost = relicsPrice[player.relics] + getCardRules(card).offsetRelicPrice // ..ics] + getCardOffsetRelicPrice(card)
+//     if ((cost <= (player.bank + player.stock))) {
+//       moves.push(...getSpendTurnipsMoves(player,cost))
+//       moves.push(takeRelicMove(player.id))
+//     } else {
+//       // moves.push(...getAlternativeMoves(player, card))
+//       moves.push(...getCardRules(card).getAlternativeMoves(player))
+//     }
+//   } return moves
+// }
 
 export function takeRelic(state: GameState | GameView, move: TakeRelic) {
   const player = getPlayerState(state, move.playerId)

@@ -1,10 +1,12 @@
-import CardColor from "../../CardColor";
-import CardRules from "../CardRules";
+import CardType, { getCardType } from '../../CardType'
+import CardRules from '../CardRules'
+import { MaterialItem } from '@gamepark/rules-api'
 
 export default class Florist extends CardRules {
-    gain = 5
-    
-    getStealToOpponent(opposingCardColor: CardColor) : number {
-        return opposingCardColor === CardColor.Red ? 2 : 0
-    }
+  gain = 5
+
+  getStealToOpponent(opponentCard: MaterialItem): number {
+    const type = getCardType(opponentCard.id)
+    return type === CardType.Raider ? 2 : 0
+  }
 }

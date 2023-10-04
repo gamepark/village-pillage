@@ -1,9 +1,6 @@
 import Card from '../material/Card'
-import getCardRules from '../cards/getCardRules'
 import GameState, { getPlayerState } from '../GameState'
 import GameView from '../GameView'
-import { getSpendTurnipsMoves } from '../PlayerState'
-import { isPlayerView } from '../PlayerView'
 import MoveType from './MoveType'
 
 
@@ -19,20 +16,20 @@ export function takeMarketCardMove(playerId: number, card: Card) : TakeMarketCar
   return {type: MoveType.TakeMarketCard, playerId, card}
 }
 
-export function takeMarketCard(state: GameState | GameView, move: TakeMarketCard) {
-  const player = getPlayerState(state, move.playerId)
-  if (isPlayerView(player)) {
-    player.hand++
-  } else {
-    player.hand.push(move.card)
-  }
-  state.market.splice(state.market.indexOf(move.card), 1)
-  const actionIndex = player.pendingActions.findIndex(action => action.type === MoveType.TakeMarketCard && !action.wait)
-  const action = player.pendingActions[actionIndex]
-  player.pendingActions.splice(actionIndex, 1)
-  state.nextMoves.push(...getSpendTurnipsMoves(player, getCardRules(action.card!).priceToBuyCard))
-  // TODO : Draw first card from Deck to emptyMarketPlace
-}
+    // export function takeMarketCard(state: GameState | GameView, move: TakeMarketCard) {
+    //   const player = getPlayerState(state, move.playerId)
+    //   if (isPlayerView(player)) {
+    //     player.hand++
+    //   } else {
+    //     player.hand.push(move.card)
+    //   }
+    //   state.market.splice(state.market.indexOf(move.card), 1)
+    //   const actionIndex = player.pendingActions.findIndex(action => action.type === MoveType.TakeMarketCard && !action.wait)
+    //   const action = player.pendingActions[actionIndex]
+    //   player.pendingActions.splice(actionIndex, 1)
+    //   state.nextMoves.push(...getSpendTurnipsMoves(player, getCardRules(action.card!).priceToBuyCard))
+    //   // TODO : Draw first card from Deck to emptyMarketPlace
+    // }
 
 export function canTakeMarketCard(state: GameState | GameView, playerId: number) : boolean {
   const player = getPlayerState(state,playerId)

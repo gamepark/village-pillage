@@ -1,6 +1,6 @@
 import { TokenDescription } from '@gamepark/react-game'
-import { turnipStockLocation } from '../locator/TurnipStockDescription'
 import Turnip from '../images/turnip.png'
+import { turnipStockLocation } from '../locator/TurnipStockLocator'
 
 export class TurnipDescription extends TokenDescription {
   width = 3

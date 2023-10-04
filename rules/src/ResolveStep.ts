@@ -1,8 +1,8 @@
-import CardColor from "./CardColor"
+import CardType from "./CardType"
 import EffectType from "./EffectType"
 
 type ResolveStep = {
-    cardColor: CardColor
+    cardColor: CardType
     effectType: EffectType
 }
 

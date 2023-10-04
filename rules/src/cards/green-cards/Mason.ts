@@ -1,13 +1,17 @@
-import CardColor from "../../CardColor";
-import CardRules from "../CardRules";
+import CardType, { getCardType } from '../../CardType'
+import CardRules from '../CardRules'
+import { MaterialItem } from '@gamepark/rules-api'
 
 export default class Mason extends CardRules {
-    gain = 4
+  gain = 4
 
-    getSteal(opposingCardColor: CardColor) : number {
-        return opposingCardColor === CardColor.Blue ? 1 : 0
-    }
-    getBank(opposingCardColor: CardColor): number {
-        return opposingCardColor === CardColor.Blue ? 2 : 0
-    }
+  getSteal(opponentCard: MaterialItem): number {
+    const type = getCardType(opponentCard.id)
+    return type === CardType.Wall ? 1 : 0
+  }
+
+  getBank(opponentCard: MaterialItem): number {
+    const type = getCardType(opponentCard.id)
+    return type === CardType.Wall ? 2 : 0
+  }
 }

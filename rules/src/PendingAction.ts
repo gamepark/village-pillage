@@ -1,5 +1,4 @@
 import Card from "./material/Card"
-import getCardRules from "./cards/getCardRules"
 import MoveType from "./moves/MoveType"
 
 export default interface PendingAction {
@@ -10,7 +9,7 @@ export default interface PendingAction {
 
 export function getPendingActionCost(action: PendingAction) : number {
   switch(action.type) {
-    case MoveType.TakeMarketCard: return getCardRules(action.card!).priceToBuyCard
+    //case MoveType.TakeMarketCard: return getCardRules(action.card!).priceToBuyCard
   }
   return 0
 }

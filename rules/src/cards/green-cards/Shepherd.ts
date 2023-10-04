@@ -1,5 +1,5 @@
-import CardRules from "../CardRules";
+import CardRules from '../CardRules'
 
-export default class Shepherd extends CardRules{
-    gainInRefresh = 4
+export default class Shepherd extends CardRules {
+  gainInRefresh = 4
 }

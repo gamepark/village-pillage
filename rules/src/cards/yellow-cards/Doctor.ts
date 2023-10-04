@@ -1,15 +1,13 @@
-import PlayerState from "../../PlayerState";
-import PlayerView from "../../PlayerView";
-import CardRules from "../CardRules";
-import Move from "../../moves/Move";
-import { gainTurnipsMove } from "../../moves/GainTurnips";
+import CardRules from '../CardRules'
+import { PlayerId } from '../../VillagePillageOptions'
+import { MaterialMove } from '@gamepark/rules-api'
 
-export default class Doctor extends CardRules{
+export default class Doctor extends CardRules {
     canBuyRelic = true
 
-    getAlternativeMoves(player: PlayerState | PlayerView) : Move[] {
-        const moves: Move[] = []
-        moves.push(gainTurnipsMove(player.id, 2))
+  getAlternativeMoves(_player: PlayerId) : MaterialMove[] {
+        const moves: MaterialMove[] = []
+        //moves.push(gainTurnipsMove(_player.id, 2))
         // TODO exhaust opponent card
 
         return moves

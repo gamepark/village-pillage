@@ -24,7 +24,6 @@ export const getBoardIndex = (itemPlayer: PlayerId, players: PlayerId[], player?
 
   const playerIndex = players.indexOf(player)
   for (let i = playerIndex; i < (playerIndex + players.length); i++) {
-    console.log("Loop", itemPlayer, i, playerIndex, (playerIndex + players.length), players.length)
     if (i === playerIndex) continue
     const index = i >= players.length? i % players.length: i
     if (players[index] !== itemPlayer) continue

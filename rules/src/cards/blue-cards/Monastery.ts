@@ -1,5 +1,5 @@
-import CardRules from "../CardRules";
+import CardRules from '../CardRules'
 
-export default class Monastery extends CardRules{
-    gain = 2
+export default class Monastery extends CardRules {
+  gain = 2
 }

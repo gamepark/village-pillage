@@ -1,10 +1,10 @@
-import CardColor from "../CardColor";
-import Move from "../moves/Move";
-import Phase from "../Phase";
-import PlayerState from "../PlayerState";
-import PlayerView from "../PlayerView";
+import Phase from '../Phase'
+import { MaterialGame, MaterialItem, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { PlayerId } from '../VillagePillageOptions'
+import { MaterialType } from '../material/MaterialType'
+import { LocationType } from '../material/LocationType'
 
-export default abstract class CardRules {
+export default abstract class CardRules extends MaterialRulesPart<PlayerId, MaterialType, LocationType> {
     gain = 0
     gainInRefresh = 0
     opponentGain = 0
@@ -14,31 +14,39 @@ export default abstract class CardRules {
     canBuyRelic = false
     priceToBuyCard = Infinity
     offsetRelicPrice = 0
-    moves = []
+    moves: MaterialMove[] = []
 
-    getGain(_opposingCardColor: CardColor) : number {
+    constructor(game: MaterialGame) {
+        super(game)
+    }
+
+    getGain(_opponentCard: MaterialItem) : number {
         if (Phase.RESOLVE) return this.gain
         else if (Phase.REFRESH) return this.gainInRefresh
         else return 0
     }
-    getOpponentGain(_opposingCardColor: CardColor) : number {
+
+    getOpponentGain(_opponentCard: MaterialItem) : number {
         if (Phase.RESOLVE) return this.opponentGain
         else return 0
     }
-    getSteal(_opposingCardColor: CardColor) : number {
+
+    getSteal(_opponentCard: MaterialItem) : number {
         if (Phase.RESOLVE) return this.stealValue
         else return 0
     }
-    getStealToOpponent(_opposingCardColor: CardColor) : number {
+
+    getStealToOpponent(_opponentCard: MaterialItem) : number {
         if (Phase.RESOLVE) return this.stealValueFromOpponentCard
         else return 0
     }
-    getBank(_opposingCardColor: CardColor) : number {
+
+    getBank(_opponentCard: MaterialItem) : number {
         if (Phase.RESOLVE) return this.bank
         else return 0
     }
 
-    getAlternativeMoves(_player: PlayerState | PlayerView) : Move[] {
+    getAlternativeMoves(_player: PlayerId) : MaterialMove[] {
         if (Phase.RESOLVE) return this.moves
         else return []
     }

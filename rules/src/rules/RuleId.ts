@@ -1,3 +1,8 @@
 export enum RuleId {
-  Plan = 1
+  Plan = 1,
+  Gain,
+  Steal,
+  Bank,
+  Buy,
+  Refresh
 }

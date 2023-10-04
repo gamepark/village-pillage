@@ -3,6 +3,9 @@ import { PlayerId } from '../VillagePillageOptions'
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import Side from './Side'
+import { RuleId } from './RuleId'
+import { Memory } from './Memory'
+import CardType from '../CardType'
 
 export class PlanRule extends SimultaneousRule {
 
@@ -46,6 +49,7 @@ export class PlanRule extends SimultaneousRule {
   }
 
   getMovesAfterPlayersDone(): MaterialMove<number, number, number>[] {
-    return [/**this.rules().startPlayerTurn(RuleId.Farmer, this.game.players[0])*/]
+    this.memorize(Memory.CardType, CardType.Farm)
+    return [this.rules().startPlayerTurn(RuleId.Gain, this.game.players[0])]
   }
 }

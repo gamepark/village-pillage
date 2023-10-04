@@ -1,7 +1,7 @@
 import Card from "./material/Card";
 import PlayerState from "./PlayerState";
 import Side from "./rules/Side";
-import { CardColor, getCardColor } from "./CardColor";
+import { CardType, getCardType } from "./CardType";
 
 export function getOpponent(players: PlayerState[], activePlayerIndex: number, side: Side): PlayerState {
     if (side === Side.LEFT) {
@@ -19,6 +19,6 @@ export function getOpponentCard(players: PlayerState[], activePlayerIndex: numbe
     return neighbor.leftCard!;
   }
 }
-export function getOpponentCardColor(players: PlayerState[], index: number, side: Side): CardColor {
-  return getCardColor(getOpponentCard(players, index, side));
+export function getOpponentCardColor(players: PlayerState[], index: number, side: Side): CardType {
+  return getCardType(getOpponentCard(players, index, side));
 }

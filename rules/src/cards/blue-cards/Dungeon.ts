@@ -1,14 +1,20 @@
-import CardColor from "../../CardColor";
-import CardRules from "../CardRules";
+import CardType, { getCardType } from '../../CardType'
+import CardRules from '../CardRules'
+import { MaterialItem } from '@gamepark/rules-api'
 
 export default class Dungeon extends CardRules{
-    getGain(opposingCardColor: CardColor): number {
-        return opposingCardColor === CardColor.Red ? 0 : 1
+  getGain(opponentCard: MaterialItem): number {
+        const type = getCardType(opponentCard.id)
+        return type === CardType.Raider ? 0 : 1
     }
-    getSteal(opposingCardColor: CardColor): number {
-        return (opposingCardColor === CardColor.Red || opposingCardColor === CardColor.Blue) ? 1 : 0
+
+  getSteal(opponentCard: MaterialItem): number {
+        const type = getCardType(opponentCard.id)
+        return (type === CardType.Raider || type === CardType.Wall) ? 1 : 0
     }
-    getBank(opposingCardColor: CardColor): number {
-        return (opposingCardColor === CardColor.Red || opposingCardColor === CardColor.Blue) ? 1 : 2
+
+  getBank(opponentCard: MaterialItem): number {
+        const type = getCardType(opponentCard.id)
+        return (type === CardType.Raider || type === CardType.Wall) ? 1 : 2
     }
 }
