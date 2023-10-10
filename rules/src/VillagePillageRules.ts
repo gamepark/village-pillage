@@ -25,12 +25,6 @@ export class VillagePillageRules extends SecretMaterialRules<PlayerId, MaterialT
     }
   }
 
-  play(move: MaterialMoveRandomized<PlayerId, MaterialType, LocationType> | MaterialMoveView<PlayerId, MaterialType, LocationType>): MaterialMove<PlayerId, MaterialType, LocationType>[] {
-    const consequences = super.play(move)
-    console.log(this.game.rule, JSON.parse(JSON.stringify(consequences)), JSON.parse(JSON.stringify(move)))
-    return consequences
-  }
-
   protected moveBlocksUndo(move: MaterialMove): boolean {
     return isCustomMoveType(CustomMoveType.Chicken)(move) || super.moveBlocksUndo(move)
   }
