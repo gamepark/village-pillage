@@ -4,7 +4,7 @@ import Images from '../images/Images'
 import { relicStockLocation } from '../locator/RelicStockLocator'
 
 export class RelicDescription extends RoundTokenDescription {
-  diameter = 2.5
+  diameter = 2.7
 
   images = {
     [Relic.Scepter]: Images.Scepter,

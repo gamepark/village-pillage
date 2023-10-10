@@ -38,19 +38,19 @@ export class PlayerTurnipStockLocator extends LineLocator<PlayerId, MaterialType
 
     switch (index) {
       case 0:
-        bank.y -= 6
+        bank.y -= 7
         bank.x += 7
         break
       case 1:
-        bank.x += 6
+        bank.x += 7
         bank.y += 7
         break
       case 2:
-        bank.y += 6
+        bank.y += 7
         bank.x -= 7
         break
       case 3:
-        bank.x -= 6
+        bank.x -= 7
         bank.y -= 7
         break
     }
@@ -74,6 +74,23 @@ export class PlayerTurnipStockLocator extends LineLocator<PlayerId, MaterialType
     }
 
     return 0
+  }
+
+  getDeltaMax(item: MaterialItem, context: ItemContext) {
+    const { rules: { players }, player } = context
+    const index = getBoardIndex(item.location.player!, players, player)
+    switch (index) {
+      case 0:
+        return { y: 15 }
+      case 1:
+        return { x: -15 }
+      case 2:
+        return { y: -15 }
+      case 3:
+        return { x: 15 }
+    }
+
+    return {}
   }
 }
 

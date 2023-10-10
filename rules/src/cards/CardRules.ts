@@ -45,7 +45,7 @@ export default abstract class CardRules extends MaterialRulesPart<PlayerId, Mate
     }
 
     canBuyCard(_opponentCard: MaterialItem): boolean {
-        return this.isRefresh? false: (this.priceToBuyCard !== Infinity)
+        return false
     }
 
     get isRefresh() {

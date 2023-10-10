@@ -10,4 +10,10 @@ export default class Innkeeper extends CardRules {
     const type = getCardColor(opponentCard.id)
     return type === CardColor.Yellow ? 5 : 4
   }
+
+  canBuyCard(opponentCard: MaterialItem): boolean {
+    if (this.isRefresh) return false
+    const type = getCardColor(opponentCard.id)
+    return type === CardColor.Yellow
+  }
 }

@@ -18,9 +18,9 @@ export class BuyMarketCard extends PlayerTurnRule {
         ...this.material(MaterialType.Card).location(LocationType.Market).moveItems({
           location: {
             type: LocationType.Hand,
-            player: this.player
-          }
-        })
+            player: this.player,
+          },
+        }),
       )
     }
     return moves
@@ -39,7 +39,26 @@ export class BuyMarketCard extends PlayerTurnRule {
 
   afterItemMove(move: ItemMove) {
     if (!isMoveItemType(MaterialType.Card)(move) || move.position.location?.type !== LocationType.Hand) return []
-    return [this.rules().startRule(RuleId.Buy)]
+
+    const marketDeck = this
+      .material(MaterialType.Card)
+      .location(LocationType.MarketDeck)
+
+    const moves: MaterialMove[] = []
+    if (marketDeck.length) {
+      moves.push(
+        marketDeck
+          .sort((item) => -item.location.x!)
+          .moveItem({
+            location: {
+              type: LocationType.Market,
+            },
+          })
+      )
+    }
+
+    moves.push(this.rules().startRule(RuleId.Buy))
+    return moves
   }
 
   get playerState() {
@@ -54,7 +73,7 @@ export class BuyMarketCard extends PlayerTurnRule {
   get card() {
     const index = this.remind(Memory.CurrentCard)
     if (!index) {
-      throw new Error("There is no active card for player")
+      throw new Error('There is no active card for player')
     }
 
     return this.material(MaterialType.Card).index(index)

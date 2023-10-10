@@ -3,6 +3,7 @@ import { PlayerId } from '../../VillagePillageOptions'
 import { MaterialType } from '../../material/MaterialType'
 import { LocationType } from '../../material/LocationType'
 import { BuyEffectFinder } from './BuyEffectFinder'
+import { Relic } from '../../material/Relic'
 
 export class PlayerState extends MaterialRulesPart {
   constructor(game: MaterialGame, readonly player: PlayerId) {
@@ -82,6 +83,19 @@ export class PlayerState extends MaterialRulesPart {
     }
 
     return moves
+  }
+
+  canBuyRelic(offsetRelicPrice: number = 0) {
+    const cost = this.nextRelicPrice + offsetRelicPrice
+    return this.turnips >= cost
+  }
+
+  buyRelic() {
+    const relic = this.relics.maxBy((item) => item.id).getItem()
+    const id = !relic ? Relic.Scepter : (relic.id + 1)
+    return [this
+      .material(MaterialType.Relic)
+      .createItem({ id, location: { type: LocationType.PlayerRelics, player: this.player }})]
   }
 
 }

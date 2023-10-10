@@ -1,10 +1,8 @@
 import { CustomMove, isCustomMoveType, isMoveItemType, isStartRule, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
-import { LocationType } from '../material/LocationType'
 import { getCardRules } from '../cards/getCardRules'
 import { Memory } from './Memory'
 import { CustomMoveType } from './CustomMoveType'
-import { Relic } from '../material/Relic'
 import { RuleId } from './RuleId'
 import { Resolution } from './helper/Resolution'
 import { PlayerState } from './helper/PlayerState'
@@ -70,13 +68,8 @@ export class BuyRule extends PlayerTurnRule {
     const cardMaterial = this.material(MaterialType.Card).index(index)
     const rule = getCardRules(this.game, cardMaterial.getItem()!.id)
     const playerState = this.playerState
-    const cost = playerState.nextRelicPrice + rule.offsetRelicPrice
-    if (playerState.turnips >= cost) {
-      const relic = playerState.relics.maxBy((item) => item.id).getItem()
-      const id = !relic ? Relic.Scepter : (relic.id + 1)
-      return [this
-        .material(MaterialType.Relic)
-        .createItem({ id, location: { type: LocationType.PlayerRelics, player: this.player } })]
+    if (playerState.canBuyRelic(rule.offsetRelicPrice)) {
+      return playerState.buyRelic()
     }
 
     return []
@@ -133,9 +126,5 @@ export class BuyRule extends PlayerTurnRule {
 
   get playerState() {
     return new PlayerState(this.game, this.player)
-  }
-
-  onRuleEnd() {
-    return []
   }
 }

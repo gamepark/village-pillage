@@ -1,19 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { ItemContext, ItemLocator } from '@gamepark/react-game'
+import { LineLocator } from '@gamepark/react-game'
 import { PlayerId } from '@gamepark/village-pillage/VillagePillageOptions'
 import { MaterialType } from '@gamepark/village-pillage/material/MaterialType'
 import { LocationType } from '@gamepark/village-pillage/material/LocationType'
-import { Coordinates, Location, MaterialItem } from '@gamepark/rules-api'
+import { Location, MaterialItem } from '@gamepark/rules-api'
 
-export class PlayerRelicLocator extends ItemLocator<PlayerId, MaterialType, LocationType> {
+export class PlayerRelicLocator extends LineLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.Bank
 
+  delta = { y: 3}
 
-  getPosition(item: MaterialItem<PlayerId, LocationType>, _context: ItemContext<PlayerId, MaterialType, LocationType>): Coordinates {
-    const x = 2
-    const y= (item.location.x!) * 1.6
+  getCoordinates(_item: MaterialItem<PlayerId, LocationType>) {
     return {
-      x, y, z: 0
+      x: 1.85,
+      y: 3.3,
+      z: 0
     }
   }
 

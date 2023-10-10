@@ -8,6 +8,7 @@ import { getCardRules } from '../cards/getCardRules'
 import { PlayerId } from '../VillagePillageOptions'
 import Side from './Side'
 import { RuleId } from './RuleId'
+import { PlayerState } from './helper/PlayerState'
 
 export class StealRule extends MaterialRulesPart {
 
@@ -22,63 +23,40 @@ export class StealRule extends MaterialRulesPart {
     const moves: MaterialMove[] = []
     for (let victimIndex = 0; victimIndex < players.length; victimIndex++) {
       const victim = players[victimIndex]
-      const stockSize = this.getStockCount(victim)
-      const bankSize = this.getBankCount(victim)
-      if (!bankSize && !stockSize) continue
+      const victimState = new PlayerState(this.game, victim)
+      if (!victimState.turnips) continue
+      const stockCount = victimState.stockCount
 
       const leftResolution = this.getResolution(victim, Side.Left)
       const rightResolution = this.getResolution(victim, Side.Right)
 
-      const { left, right } = this.computeSteals(leftResolution, rightResolution, stockSize)
+      const { left, right } = this.computeSteals(leftResolution, rightResolution, stockCount)
 
       // TODO: moves.push(this.material(MaterialType.Chicken).moveItem(chicken = 1? { rotation: { y: 1 } }: {}
-      moves.push(...this.getTurnipMoves(stockSize, left, leftResolution))
-      moves.push(...this.getTurnipMoves(stockSize, right, rightResolution))
+      moves.push(...this.getTurnipMoves(victimState, left, leftResolution))
+      moves.push(...this.getTurnipMoves(victimState, right, rightResolution))
     }
 
     return moves
   }
 
-  getTurnipMoves(stockSize: number, count: number, resolution: Resolution) {
+  getTurnipMoves(victimState: PlayerState, count: number, resolution: Resolution) {
     if (!count) return []
-    return this.getStock(resolution.player).moveItems({
+    return victimState.stock.moveItems({
       location: {
         type: LocationType.PlayerTurnipStock,
         player: resolution.opponent,
       },
-    }, Math.min(count, stockSize))
+    }, Math.min(count, victimState.stockCount))
   }
 
   getStealsCount(resolution: Resolution) {
     const item = resolution.opponentCard.getItem()!
+    console.log("Colors", resolution.player, resolution.opponent, resolution.opponentCardColor, this.cardColor)
     if (resolution.opponentCardColor !== this.cardColor) return 0
 
     return getCardRules(this.game, item.id).getSteal(resolution.card)
       + getCardRules(this.game, resolution.card.id).getStealToOpponent(item)
-  }
-
-  getStock(playerId: PlayerId) {
-    return this
-      .material(MaterialType.Turnip)
-      .location(LocationType.PlayerTurnipStock)
-      .player(playerId)
-  }
-
-  getStockCount(playerId: PlayerId) {
-    const stock = this.getStock(playerId)
-    return stock.getItem()?.quantity ?? 0
-  }
-
-  getBank(playerId: PlayerId) {
-    return this
-      .material(MaterialType.Turnip)
-      .location(LocationType.PlayerBankTurnips)
-      .player(playerId)
-  }
-
-  getBankCount(playerId: PlayerId) {
-    const bank = this.getBank(playerId)
-    return bank.getItem()!.quantity ?? 0
   }
 
   getResolution(player: PlayerId, side: Side) {
@@ -98,6 +76,8 @@ export class StealRule extends MaterialRulesPart {
   computeSteals(leftResolution: Resolution, rightResolution: Resolution, stockSize: number) {
     let left = this.getStealsCount(leftResolution)
     let right = this.getStealsCount(rightResolution)
+
+    console.log("B", left, right)
     let chicken: PlayerId | undefined = undefined
     if (left === 0 || right === 0 || left+right <= stockSize) return { left, right }
     if (stockSize % 2 !== 1) return { left: stockSize / 2, right: stockSize / 2 }

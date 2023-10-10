@@ -10,4 +10,10 @@ export default class Outlaw extends CardRules {
     const type = getCardColor(opponentCard.id)
     return type === CardColor.Green ? 5 : (type === CardColor.Yellow ? 4 : 0)
   }
+
+  canBuyCard(opponentCard: MaterialItem): boolean {
+    if (this.isRefresh) return false
+    const type = getCardColor(opponentCard.id)
+    return type === CardColor.Yellow
+  }
 }
