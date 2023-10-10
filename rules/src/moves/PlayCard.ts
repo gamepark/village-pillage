@@ -31,7 +31,7 @@ export function playCard(state: GameState, move: PlayCard) : void {
 
 function playerPlayCard(player: PlayerState, move: PlayCard) {
   player.hand = player.hand.filter(card => card !== move.card)
-  if (move.side === Side.LEFT) {
+  if (move.side === Side.Left) {
     player.leftCard = move.card
   } else {
     player.rightCard = move.card
@@ -42,7 +42,7 @@ export function playCardInView(state: GameState | GameView, move: PlayCard | Pla
   const player = getPlayerState(state, move.playerId)
   if (isPlayerView(player)) {
     player.hand--
-    if (move.side === Side.LEFT) {
+    if (move.side === Side.Left) {
       player.leftCardPlayed = true
     } else {
       player.rightCardPlayed = true

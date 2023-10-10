@@ -1,8 +1,11 @@
 export enum RuleId {
   Plan = 1,
+  Reveal,
   Gain,
   Steal,
   Bank,
   Buy,
-  Refresh
+  Refresh,
+  SelectNextBuyPlayer,
+  BuyMarketCard
 }

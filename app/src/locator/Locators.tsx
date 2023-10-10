@@ -12,6 +12,7 @@ import { marketLocator } from './MarketLocator'
 import { planedCardLocator } from './PlanedCardLocator'
 import { playerRelicLocator } from './PlayerRelicLocator'
 import { relicStockLocator } from './RelicStockLocator'
+import { exhaustCardLocator } from './ExhaustCardLocator'
 
 export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, LocationType>> = {
   [LocationType.Hand]: playerHandLocator,
@@ -24,4 +25,5 @@ export const Locators: Record<LocationType, ItemLocator<PlayerId, MaterialType, 
   [LocationType.MarketDeck]: marketDeckLocator,
   [LocationType.Market]: marketLocator,
   [LocationType.PlanedCard]: planedCardLocator,
+  [LocationType.ExhaustCard]: exhaustCardLocator,
 }

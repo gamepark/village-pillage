@@ -1,5 +1,7 @@
 export enum Memory {
-  CardType = 1,
+  CardColor = 1,
   CurrentCard,
-  OtherCardPlayed
+  OtherCardPlayed,
+  DonePlayers,
+  ExhaustedSides
 }

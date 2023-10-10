@@ -1,22 +1,23 @@
-import { HandLocator, ItemContext } from '@gamepark/react-game'
+  import { HandLocator, ItemContext } from '@gamepark/react-game'
 import { Coordinates, Location, MaterialItem } from '@gamepark/rules-api'
-import { getPlayerPosition } from './PlayerLocation'
+import { getBoardIndex, getPlayerPosition } from './PlayerLocation'
 
 export class PlayerHandLocator extends HandLocator {
   getCoordinates(location: Location<number, number>, { rules: { players }, player }: ItemContext<number, number, number>): Coordinates {
     return getPlayerPosition(location.player!, players, player)
   }
 
-  getBaseAngle(item: MaterialItem, _context: ItemContext) {
-    switch (item.location.player) {
-      case 1:
+  getBaseAngle(item: MaterialItem, { rules: { players }, player }: ItemContext) {
+    const index = getBoardIndex(item.location.player!, players, player)
+    switch (index) {
+      case 0:
         return 0
-      case 2:
+      case 1:
         return 90
-      case 3:
+      case 2:
         return 180
-      case 4:
-        return -90
+      case 3:
+        return 270
     }
 
     return 0

@@ -8,5 +8,6 @@ export enum LocationType {
   Market,
   PlanedCard,
   PlayerRelics,
-  RelicStock
+  RelicStock,
+  ExhaustCard
 }

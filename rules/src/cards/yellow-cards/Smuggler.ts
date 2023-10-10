@@ -1,15 +1,23 @@
 import CardRules from '../CardRules'
 import { PlayerId } from '../../VillagePillageOptions'
 import { MaterialMove } from '@gamepark/rules-api'
+import { MaterialType } from '../../material/MaterialType'
+import { LocationType } from '../../material/LocationType'
 
-export default class Bard extends CardRules {
-    canBuyRelic = true
-    offsetRelicPrice = -2
+export default class Smuggler extends CardRules {
+  canBuyRelic = true
+  offsetRelicPrice = -2
 
-  getAlternativeMoves(_player: PlayerId) : MaterialMove[] {
-        // const moves: Move[] = []
-        // if (_player.bank > 0) moves.push(bankTurnipsMove(_player.id, -_player.bank))
-        //
-        return []
-    }
+  getAlternativeMoves(player: PlayerId): MaterialMove[] {
+    return this
+      .material(MaterialType.Turnip)
+      .location(LocationType.PlayerBankTurnips)
+      .player(player)
+      .moveItems({
+        location: {
+          type: LocationType.PlayerTurnipStock,
+          player,
+        },
+      })
+  }
 }

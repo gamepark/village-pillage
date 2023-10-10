@@ -11,7 +11,8 @@ import { gameCardDescription } from '../material/GameCardDescription'
 export class PlanedCardDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
   width = gameCardDescription.width
   height = gameCardDescription.width / gameCardDescription.ratio
-  alwaysVisible = true
+  alwaysVisible = false
+  borderRadius = gameCardDescription.borderRadius
 
 
   getLocations({ player }: MaterialContext) {
@@ -20,7 +21,7 @@ export class PlanedCardDescription extends LocationDescription<PlayerId, Materia
   }
 
   getCoordinates(location: Location, context: MaterialContext) {
-    if (location.id === Side.LEFT) {
+    if (location.id === Side.Left) {
       return this.getLeftPosition(location, context)
     }
 
@@ -32,8 +33,8 @@ export class PlanedCardDescription extends LocationDescription<PlayerId, Materia
     const { rules: { players }, player } = context
     const playerHand = getPlayerPosition(location.player!, players, player)
     return {
-      x: playerHand.x - 21,
-      y: playerHand.y - 2,
+      x: playerHand.x - 23,
+      y: playerHand.y - 1,
       z: playerHand.z
     }
   }
@@ -42,8 +43,8 @@ export class PlanedCardDescription extends LocationDescription<PlayerId, Materia
     const { rules: { players }, player } = context
     const playerHand = getPlayerPosition(location.player!, players, player)
     return {
-      x: playerHand.x + 35,
-      y: playerHand.y - 2,
+      x: playerHand.x + 37,
+      y: playerHand.y - 1,
       z: playerHand.z
     }
   }

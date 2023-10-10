@@ -1,3 +1,4 @@
 export enum CustomMoveType {
-  ChooseCard = 1
+  ChooseCard = 1,
+  Chicken
 }

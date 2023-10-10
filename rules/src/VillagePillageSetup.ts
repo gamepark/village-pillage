@@ -23,8 +23,8 @@ export class VillagePillageSetup extends MaterialGameSetup<PlayerId, MaterialTyp
 
   setupPlayer(player: PlayerId) {
     this.material(MaterialType.Card).createItems(startingCards.map((id) => ({ id, location: { type: LocationType.Hand, player } })))
-    this.material(MaterialType.Turnip).createItem({ id: player, location: { type: LocationType.PlayerTurnipStock, player }})
-    this.material(MaterialType.Turnip).createItem({ id: player, location: { type: LocationType.PlayerBankTurnips, player }})
+    this.material(MaterialType.Turnip).createItem({ quantity: 1, location: { type: LocationType.PlayerTurnipStock, player }})
+    this.material(MaterialType.Turnip).createItem({ quantity: 1, location: { type: LocationType.PlayerBankTurnips, player }})
   }
 
   setupMarket(_options: VillagePillageOptions) {

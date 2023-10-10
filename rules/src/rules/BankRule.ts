@@ -1,61 +1,58 @@
 import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { RuleId } from './RuleId'
 import { getCardRules } from '../cards/getCardRules'
 import { Resolution } from './helper/Resolution'
 import { Memory } from './Memory'
-import CardType, { getCardType } from '../CardType'
+import CardColor from '../CardColor'
 import { PlayerId } from '../VillagePillageOptions'
 import Side from './Side'
+import { RuleId } from './RuleId'
+import { PlayerState } from './helper/PlayerState'
 
 export class BankRule extends MaterialRulesPart {
   onRuleStart(): MaterialMove<number, number, number>[] {
     const moves: MaterialMove[] = this.game.players.flatMap((item) => this.getPlayerTurnipsToBankMoves(item))
-    moves.push(this.rules().startRule(RuleId.Buy))
+    moves.push(this.rules().startRule(RuleId.SelectNextBuyPlayer))
     return moves
   }
 
   getPlayerTurnipsToBankMoves(player: PlayerId): MaterialMove[] {
+    const playerState = new PlayerState(this.game, player)
     const bankSize = this.bankSize
-    const bank = this.getBank(player)
-    const stock = this.getStock(player)
-    const stockSize = !stock.length ? 0 : (stock.getItem()!.quantity ?? 0)
-    if (bank.length >= bankSize || !stockSize) return []
+    if (playerState.bankCount >= bankSize || !playerState.stockCount) return []
 
+    let maxTurnipsToBank = Math.min(this.bankSize - playerState.bankCount, playerState.stockCount)
+    if (!maxTurnipsToBank) return []
     const moves: MaterialMove[] = []
-    let bankable = Math.min(this.bankSize - bank.length, stockSize)
-    const leftResolution = this.getResolution(player, Side.LEFT)
-    const rightResolution= this.getResolution(player, Side.RIGHT)
+    const leftResolution = this.getResolution(player, Side.Left)
+    const rightResolution= this.getResolution(player, Side.Right)
 
-    if (getCardType(leftResolution.opponentCard.id) === this.cardType) {
-      const leftBank = Math.min(
-        getCardRules(this.game, leftResolution.card.id).getBank(leftResolution.opponentCard),
-        bankable
-      )
-
-      if (!leftBank) return moves
-      moves.push(
-        ...stock.moveItems({ location: { type: LocationType.PlayerBankTurnips, player }}, leftBank)
-      )
-      bankable -= leftBank
-      if (!bankable) return moves;
+    if (leftResolution.cardColor === this.cardColor) {
+      maxTurnipsToBank = this.getBankMovesForResolution(leftResolution, playerState, maxTurnipsToBank, moves)
     }
-
-    if (getCardType(rightResolution.opponentCard.id) === this.cardType) {
-
-      const rightBank = Math.min(
-        getCardRules(this.game, rightResolution.card.id).getBank(rightResolution.opponentCard),
-        bankable
-      )
-
-      if (!rightBank) return moves
-      moves.push(
-        ...stock.moveItems({ location: { type: LocationType.PlayerBankTurnips, player }}, rightBank)
-      )
+    if (maxTurnipsToBank && rightResolution.cardColor === this.cardColor) {
+      this.getBankMovesForResolution(rightResolution, playerState, maxTurnipsToBank, moves)
     }
 
     return moves
+  }
+
+  getBankMovesForResolution(resolution: Resolution, playerState: PlayerState, maxTurnipsToBank: number, moves: MaterialMove[]) {
+
+
+    const item = resolution.opponentCard.getItem()!
+    const stock = playerState.stock
+    const bankedTurnips = Math.min(
+      getCardRules(this.game, resolution.card.id).getBank(item),
+      maxTurnipsToBank
+    )
+
+    if (!bankedTurnips) return maxTurnipsToBank
+    moves.push(
+      ...stock.moveItems({ location: { type: LocationType.PlayerBankTurnips, player: resolution.player }}, bankedTurnips)
+    )
+    return maxTurnipsToBank - bankedTurnips
   }
 
   getResolution(player: PlayerId, side: Side) {
@@ -65,15 +62,15 @@ export class BankRule extends MaterialRulesPart {
       .locationId(side)
       .player(player)
       .getItem()!
-    return new Resolution(this.game, item.location.id)
+    return new Resolution(this.game, item.location.id, player)
   }
 
   get bankSize() {
     return this.game.players.length === 2 ? 4 : 5
   }
 
-  get cardType() {
-    return this.remind<CardType>(Memory.CardType)
+  get cardColor() {
+    return this.remind<CardColor>(Memory.CardColor)
   }
 
   getStock(player: PlayerId) {

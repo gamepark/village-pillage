@@ -1,15 +1,17 @@
-import CardType, { getCardType } from '../../CardType'
+import CardColor, { getCardColor } from '../../CardColor'
 import CardRules from '../CardRules'
 import { MaterialItem } from '@gamepark/rules-api'
 
 export default class Cutpurse extends CardRules {
   getSteal(opponentCard: MaterialItem): number {
-    const type = getCardType(opponentCard.id)
-    return (type === CardType.Farm || type === CardType.Merchant) ? 6 : 0
+    if (this.isRefresh) return 0
+    const type = getCardColor(opponentCard.id)
+    return (type === CardColor.Green || type === CardColor.Yellow) ? 6 : 0
   }
 
   getOpponentGain(opponentCard: MaterialItem): number {
-    const type = getCardType(opponentCard.id)
-    return type === CardType.Raider ? 1 : 0
+    if (this.isRefresh) return 0
+    const type = getCardColor(opponentCard.id)
+    return type === CardColor.Red ? 1 : 0
   }
 }

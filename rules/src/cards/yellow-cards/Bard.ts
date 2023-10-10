@@ -1,16 +1,38 @@
 import CardRules from '../CardRules'
 import { PlayerId } from '../../VillagePillageOptions'
 import { MaterialMove } from '@gamepark/rules-api'
+import { MaterialType } from '../../material/MaterialType'
+import { LocationType } from '../../material/LocationType'
 
 export default class Bard extends CardRules {
-    canBuyRelic = true
+  canBuyRelic = true
 
 
-  getAlternativeMoves(_player: PlayerId) : MaterialMove[] {
-        const moves: MaterialMove[] = []
-        //moves.push(gainTurnipsMove(player, 1))
-        // TODO Draw first card
+  getAlternativeMoves(player: PlayerId): MaterialMove[] {
+    const moves: MaterialMove[] = []
 
-        return moves
-    }
+    moves.push(
+      this.material(MaterialType.Turnip)
+        .location(LocationType.TurnipStock)
+        .createItem({
+          location: {
+            type: LocationType.PlayerTurnipStock,
+            player,
+          },
+        }),
+    )
+
+    moves.push(
+      this.material(MaterialType.Card)
+        .location(LocationType.MarketDeck)
+        .moveItem({
+          location: {
+            type: LocationType.Hand,
+            player
+          }
+        })
+    )
+
+    return moves
+  }
 }

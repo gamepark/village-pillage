@@ -7,16 +7,18 @@ import { getOpponentCard, getOpponentCardColor } from './Neighbor'
 import PlayerState from './PlayerState'
 import ResolveStep from './ResolveStep'
 import Side from './rules/Side'
-import { MaterialMove } from '@gamepark/rules-api'
+import { isEnumValue, MaterialMove } from '@gamepark/rules-api'
 
-export enum CardType {
-  Farm = 1, Wall, Raider, Merchant
+export enum CardColor {
+  Green = 1, Blue, Red, Yellow
 }
 
-export default CardType
+export const cardColors = Object.values(CardColor).filter(isEnumValue)
+
+export default CardColor
 
 // Fonctions utilitaires sur Cartes et Couleurs
-export function getCardType(card : Card) : CardType {
+export function getCardColor(card : Card) : CardColor {
   return Math.floor(card/100)
 }
 // Fonction Principale
@@ -30,10 +32,10 @@ export function getCardsResolveAutomaticMoves(state : GameState, resolveStep : R
 }
 
 //  Fonctions Secondaires
-function getGainMoves(players: PlayerState[], cardColor: CardType) : MaterialMove[] {
+function getGainMoves(players: PlayerState[], cardColor: CardColor) : MaterialMove[] {
   return players.flatMap((player, index) => getPlayerGainMoves(player, cardColor, side => getOpponentCard(players, index, side)))
 }
-  function getPlayerGainMoves(_player: PlayerState, _cardColor: CardType, _getOpposingCardBySide : (side: Side) => Card): MaterialMove[] {
+  function getPlayerGainMoves(_player: PlayerState, _cardColor: CardColor, _getOpposingCardBySide : (side: Side) => Card): MaterialMove[] {
     // const moves: GainTurnips[] = []
     // for (const side of sides) {
     //   const card = side===Side.LEFT ? player.leftCard : player.rightCard
@@ -80,7 +82,7 @@ function getGainMoves(players: PlayerState[], cardColor: CardType) : MaterialMov
       else return 0
     } */
 
-function getStealMoves(_players: PlayerState[], _cardColor: CardType) : MaterialMove[] {     // Dans cette fonction on regarde les ColorCard des adversaires
+function getStealMoves(_players: PlayerState[], _cardColor: CardColor) : MaterialMove[] {     // Dans cette fonction on regarde les ColorCard des adversaires
    // const moves: Move[] = []
   // for (let victimIndex= 0; victimIndex < players.length; victimIndex++) {
   //   const victim = players[victimIndex]
@@ -162,10 +164,10 @@ function getStealMoves(_players: PlayerState[], _cardColor: CardType) : Material
       }
     } */
 
-function getBankMoves(players: PlayerState[], cardColor: CardType, bankSize: number) : MaterialMove[] {
+function getBankMoves(players: PlayerState[], cardColor: CardColor, bankSize: number) : MaterialMove[] {
   return players.flatMap((player, index) => getPlayerBankMoves(player, cardColor, side => getOpponentCardColor(players, index, side), bankSize))
 }
-  function getPlayerBankMoves(_player: PlayerState, _cardColor: CardType, _getOpposingCardColorBySide : (side: Side) => CardType , _bankSize: number): MaterialMove[] {
+  function getPlayerBankMoves(_player: PlayerState, _cardColor: CardColor, _getOpposingCardColorBySide : (side: Side) => CardColor , _bankSize: number): MaterialMove[] {
     // if (player.bank >= bankSize || player.stock == 0) return []
     // const moves: BankTurnips[] = []
     // let bankable = Math.min(bankSize - player.bank, player.stock)
@@ -211,7 +213,7 @@ function getBankMoves(players: PlayerState[], cardColor: CardType, bankSize: num
     }
   } */
 
-function getBuyMoves(players: PlayerState[], cardColor: CardType, relicsPrice: number[]) : MaterialMove[] {
+function getBuyMoves(players: PlayerState[], cardColor: CardColor, relicsPrice: number[]) : MaterialMove[] {
   return players.flatMap((player) => getPlayerBuyMoves(player, cardColor, relicsPrice))
 }
   /**     ALGO   de GET_BUY_MOVES() *
@@ -226,7 +228,7 @@ function getBuyMoves(players: PlayerState[], cardColor: CardType, relicsPrice: n
 
   // Achat de relique
   
-  function getPlayerBuyMoves(_player: PlayerState, _cardColor: CardType, _relicsPrice: number[]): MaterialMove[] {
+  function getPlayerBuyMoves(_player: PlayerState, _cardColor: CardColor, _relicsPrice: number[]): MaterialMove[] {
     // // Postulat : On considère que toutes les cartes qui ont un achat de relique l'ont en première action.
     // if (player.rightCard && getCardType(player.rightCard) === CardType.Merchant
     //     && player.leftCard && getCardType(player.leftCard) === CardType.Merchant) return [] // on doit choisir une carte avec ChooseCard

@@ -1,6 +1,8 @@
-import { CardDescription } from '@gamepark/react-game'
+import { CardDescription, ItemContext } from '@gamepark/react-game'
 import Card from '@gamepark/village-pillage/material/Card'
 import Images from '../images/Images'
+import { isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
+import { CustomMoveType } from '@gamepark/village-pillage/rules/CustomMoveType'
 
 export class GameCardDescription extends CardDescription {
   ratio = 326 / 499
@@ -36,6 +38,13 @@ export class GameCardDescription extends CardDescription {
     [Card.Bard]: Images.Bard,
     [Card.Doctor]: Images.Doctor,
     [Card.Smuggler]: Images.Smuggler,
+  }
+
+  canLongClick(move: MaterialMove, context: ItemContext): boolean {
+    const { index } = context
+    if (isCustomMoveType(CustomMoveType.ChooseCard)(move)) return move.data === index
+
+    return super.canLongClick(move, context)
   }
 
   rules = () => <p />

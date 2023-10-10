@@ -4,6 +4,7 @@ import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialHeader, Materi
 import { FC, useEffect, useState } from 'react'
 import { RuleId } from '@gamepark/village-pillage/rules/RuleId'
 import { GameDisplay } from './GameDisplay'
+import { PlanHeader } from './PlanHeader'
 
 export default function App() {
   const game = useGame<GameView>()
@@ -27,10 +28,13 @@ export default function App() {
 }
 
 const RulesHeaders: Record<RuleId, FC> = {
-  [RuleId.Plan]: () => <>Plan</>,
-  [RuleId.Gain]: () => <>Farm</>,
-  [RuleId.Steal]: () => <>Wall</>,
-  [RuleId.Bank]: () => <>Raider</>,
-  [RuleId.Buy]: () => <>Merchant</>,
-  [RuleId.Refresh]: () => <>Refresh</>
+  [RuleId.Plan]: PlanHeader,
+  [RuleId.Reveal]: () => <>Reveal</>,
+  [RuleId.Gain]: () => <>Gain</>,
+  [RuleId.Steal]: () => <>Steal</>,
+  [RuleId.Bank]: () => <>Bank</>,
+  [RuleId.Buy]: () => <>Buy</>,
+  [RuleId.Refresh]: () => <>Refresh</>,
+  [RuleId.SelectNextBuyPlayer]: () => <>SelectNextBuyPlayer</>,
+  [RuleId.BuyMarketCard]: () => <>BuyMarketCard</>
 }

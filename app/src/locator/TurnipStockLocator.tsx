@@ -5,8 +5,7 @@ import { MaterialType } from '@gamepark/village-pillage/material/MaterialType'
 import { LocationType } from '@gamepark/village-pillage/material/LocationType'
 
 export class TurnipStockLocator extends PileLocator<PlayerId, MaterialType, LocationType> {
-  rotate = true
-  coordinates = { x: -14, y: 0, z: 0 }
+  coordinates = { x: -15, y: 0, z: 0 }
   radius = 2
 }
 

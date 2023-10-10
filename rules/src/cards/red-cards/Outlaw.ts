@@ -1,4 +1,4 @@
-import CardType, { getCardType } from '../../CardType'
+import CardColor, { getCardColor } from '../../CardColor'
 import CardRules from '../CardRules'
 import { MaterialItem } from '@gamepark/rules-api'
 
@@ -6,7 +6,8 @@ export default class Outlaw extends CardRules {
   priceToBuyCard = 0
 
   getSteal(opponentCard: MaterialItem): number {
-    const type = getCardType(opponentCard.id)
-    return type === CardType.Farm ? 5 : (type === CardType.Merchant ? 4 : 0)
+    if (this.isRefresh) return 0
+    const type = getCardColor(opponentCard.id)
+    return type === CardColor.Green ? 5 : (type === CardColor.Yellow ? 4 : 0)
   }
 }

@@ -4,8 +4,6 @@ import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import Side from './Side'
 import { RuleId } from './RuleId'
-import { Memory } from './Memory'
-import CardType from '../CardType'
 
 export class PlanRule extends SimultaneousRule {
 
@@ -24,20 +22,20 @@ export class PlanRule extends SimultaneousRule {
       return [this.rules().endPlayerTurn(playerId)]
     }
 
-    const left = planedCards.locationId(Side.LEFT)
+    const left = planedCards.locationId(Side.Left)
     const moves = []
     if (!left.length) {
       moves.push(
         ...this.getPlayerHand(playerId)
-          .moveItems({ location: { id: Side.LEFT, type: LocationType.PlanedCard, player: playerId }})
+          .moveItems({ location: { id: Side.Left, type: LocationType.PlanedCard, player: playerId }})
       )
     }
 
-    const right = planedCards.locationId(Side.RIGHT)
+    const right = planedCards.locationId(Side.Right)
     if (!right.length) {
       moves.push(
         ...this.getPlayerHand(playerId)
-          .moveItems({ location: { id: Side.RIGHT, type: LocationType.PlanedCard, player: playerId }})
+          .moveItems({ location: { id: Side.Right, type: LocationType.PlanedCard, player: playerId }})
       )
     }
 
@@ -49,7 +47,6 @@ export class PlanRule extends SimultaneousRule {
   }
 
   getMovesAfterPlayersDone(): MaterialMove<number, number, number>[] {
-    this.memorize(Memory.CardType, CardType.Farm)
-    return [this.rules().startPlayerTurn(RuleId.Gain, this.game.players[0])]
+    return [this.rules().startRule(RuleId.Reveal)]
   }
 }

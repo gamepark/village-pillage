@@ -9,7 +9,4 @@ export const locationsStrategies:  Partial<Record<MaterialType, Partial<Record<L
     [LocationType.MarketDeck]: new PositiveSequenceStrategy(),
     [LocationType.Market]: new PositiveSequenceStrategy()
   },
-  [MaterialType.Turnip]: {
-    [LocationType.PlayerBankTurnips]: new PositiveSequenceStrategy()
-  }
 }

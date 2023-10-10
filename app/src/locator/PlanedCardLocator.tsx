@@ -12,7 +12,7 @@ export class PlanedCardLocator extends ItemLocator<PlayerId, MaterialType, Locat
   locationDescription = new PlanedCardDescription()
 
   getPosition(item: MaterialItem, context: MaterialContext) {
-    if (item.location.id === Side.LEFT) {
+    if (item.location.id === Side.Left) {
       return this.getLeftPosition(item, context)
     }
 
@@ -26,23 +26,24 @@ export class PlanedCardLocator extends ItemLocator<PlayerId, MaterialType, Locat
     const playerHand = getPlayerPosition(location.player!, players, player)
     switch (index) {
       case 0:
-        playerHand.y -= 2
-        playerHand.x -= 21
+        playerHand.y -= 1
+        playerHand.x -= 23
         break
       case 1:
-        playerHand.y -= 13
-        playerHand.x += 2.5
+        playerHand.y -= 15
+        playerHand.x += 1
         break
       case 2:
-        playerHand.x += 21
-        playerHand.y += 2.5
+        playerHand.x += 23
+        playerHand.y += 1
         break
       case 3:
-        playerHand.y += 13
-        playerHand.x -= 2.5
+        playerHand.y += 15
+        playerHand.x -= 1
         break
     }
 
+    playerHand.z = 0.05
     return playerHand
   }
 
@@ -52,23 +53,24 @@ export class PlanedCardLocator extends ItemLocator<PlayerId, MaterialType, Locat
     const playerHand = getPlayerPosition(location.player!, players, player)
     switch (index) {
       case 0:
-        playerHand.y -= 2
-        playerHand.x += 35
+        playerHand.y -= 1
+        playerHand.x += 37
         break
       case 1:
-        playerHand.y += 25
-        playerHand.x += 2.5
+        playerHand.y += 27
+        playerHand.x += 1
         break
       case 2:
-        playerHand.x -= 35
-        playerHand.y += 2.5
+        playerHand.x -= 37
+        playerHand.y += 1
         break
       case 3:
-        playerHand.y -= 25
-        playerHand.x -= 2.5
+        playerHand.y -= 27
+        playerHand.x -= 1
         break
     }
 
+    playerHand.z = 0.05
     return playerHand
   }
 
@@ -76,8 +78,12 @@ export class PlanedCardLocator extends ItemLocator<PlayerId, MaterialType, Locat
     const index = getBoardIndex(item.location.player!, players, player)
     if (index === 1) return 90
     if (index === 2) return 180
-    if (index === 3) return -90
+    if (index === 3) return 270
     return 0
+  }
+
+  isHidden(item: MaterialItem): boolean {
+    return !item.rotation?.y
   }
 }
 
