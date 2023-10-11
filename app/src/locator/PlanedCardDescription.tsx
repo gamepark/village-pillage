@@ -11,7 +11,6 @@ import { gameCardDescription } from '../material/GameCardDescription'
 export class PlanedCardDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
   width = gameCardDescription.width
   height = gameCardDescription.width / gameCardDescription.ratio
-  alwaysVisible = true
   borderRadius = gameCardDescription.borderRadius
 
 

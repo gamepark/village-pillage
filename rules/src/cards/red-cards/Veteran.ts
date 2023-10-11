@@ -1,6 +1,6 @@
-import CardColor, { getCardColor } from '../../CardColor'
 import CardRules from '../CardRules'
 import { MaterialItem } from '@gamepark/rules-api'
+import { CardColor, getCardColor } from '../../material/Card'
 
 export default class Veteran extends CardRules {
   getSteal(opponentCard: MaterialItem): number {

@@ -6,7 +6,7 @@ import { Memory } from './Memory'
 import { getCardRules } from '../cards/getCardRules'
 import { RuleId } from './RuleId'
 
-export class BuyMarketCardRule extends PlayerTurnRule {
+export class BuyMarketCard extends PlayerTurnRule {
 
   getPlayerMoves(): MaterialMove<number, number, number>[] {
     const playerState = this.playerState

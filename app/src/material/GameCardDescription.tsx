@@ -3,6 +3,7 @@ import Card from '@gamepark/village-pillage/material/Card'
 import Images from '../images/Images'
 import { isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/village-pillage/rules/CustomMoveType'
+import { GameCardRules } from './rules/GameCardRules'
 
 export class GameCardDescription extends CardDescription {
   ratio = 326 / 499
@@ -47,7 +48,7 @@ export class GameCardDescription extends CardDescription {
     return super.canLongClick(move, context)
   }
 
-  rules = () => <p />
+  rules = GameCardRules
 }
 
 export const gameCardDescription = new GameCardDescription()

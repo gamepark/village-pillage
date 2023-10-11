@@ -4,11 +4,11 @@ import { LocationType } from '../material/LocationType'
 import { getCardRules } from '../cards/getCardRules'
 import { Resolution } from './helper/Resolution'
 import { Memory } from './Memory'
-import CardColor from '../CardColor'
 import { PlayerId } from '../VillagePillageOptions'
 import Side from './Side'
 import { RuleId } from './RuleId'
 import { PlayerState } from './helper/PlayerState'
+import { CardColor } from '../material/Card'
 
 export class BankRule extends MaterialRulesPart {
   onRuleStart(): MaterialMove<number, number, number>[] {

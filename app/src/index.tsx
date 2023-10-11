@@ -25,7 +25,6 @@ ReactDOM.render(
       theme={{
         root: {
           background: {
-            //image: process.env.PUBLIC_URL + '/cover-1920.jpg',
             overlay: 'rgba(0, 0, 0, 0.8)'
           }
         },

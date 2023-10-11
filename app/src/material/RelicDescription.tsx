@@ -2,6 +2,7 @@ import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { Relic } from '@gamepark/village-pillage/material/Relic'
 import Images from '../images/Images'
 import { relicStockLocation } from '../locator/RelicStockLocator'
+import { RelicRules } from './rules/RelicRules'
 
 export class RelicDescription extends RoundTokenDescription {
   diameter = 2.7
@@ -12,7 +13,7 @@ export class RelicDescription extends RoundTokenDescription {
     [Relic.Crown]: Images.Crown,
   }
 
-  rules = () => <p></p>
+  rules = RelicRules
   getStaticItems({ rules: { players } }: MaterialContext) {
     return [
       { id: Relic.Scepter, quantity: players.length, location: relicStockLocation },

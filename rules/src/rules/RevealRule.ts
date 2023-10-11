@@ -3,8 +3,8 @@ import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import { RuleId } from './RuleId'
 import { Memory } from './Memory'
-import CardColor from '../CardColor'
 import Side from './Side'
+import { CardColor } from '../material/Card'
 
 export class RevealRule extends MaterialRulesPart {
   onRuleStart() {

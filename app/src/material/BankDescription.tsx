@@ -1,6 +1,7 @@
 import { BoardDescription, MaterialContext } from '@gamepark/react-game'
 import Images from '../images/Images'
 import { LocationType } from '@gamepark/village-pillage/material/LocationType'
+import { BankRules } from './rules/BankRules'
 
 enum BankType {
   Duel = 1,
@@ -24,7 +25,7 @@ export class BankDescription extends BoardDescription {
     return players.map((player) => ({ id: player, location: { type: LocationType.Bank, player }}))
   }
 
-  rules = () => <p></p>
+  rules = BankRules
 
 }
 

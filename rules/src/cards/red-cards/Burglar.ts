@@ -1,4 +1,4 @@
-import CardColor, { getCardColor } from '../../CardColor'
+import { CardColor, getCardColor } from '../../material/Card'
 import CardRules from '../CardRules'
 import { MaterialItem } from '@gamepark/rules-api'
 

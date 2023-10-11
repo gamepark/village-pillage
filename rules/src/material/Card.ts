@@ -1,5 +1,4 @@
 import { isEnumValue } from '@gamepark/rules-api'
-import CardColor from '../CardColor'
 
 enum Card {
   Farmer = 100,
@@ -46,6 +45,12 @@ enum Card {
 
 export default Card
 
+
+export enum CardColor {
+  Green = 1, Blue, Red, Yellow
+}
+
+export const cardColors = Object.values(CardColor).filter(isEnumValue)
 
 export const cards = Object.values(Card).filter(isEnumValue)
 export const marketCardsExpansion = cards.filter(card => card % 100 !== 0)

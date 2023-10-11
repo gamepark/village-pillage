@@ -1,5 +1,4 @@
 import {OptionsSpec} from '@gamepark/rules-api'
-import GameState from './GameState'
 
 /**
  * This is the options for each players in the game.
@@ -14,15 +13,6 @@ export type PlayerId = number
 export type VillagePillageOptions = {
   players: VillagePillagePlayerOptions[]
   //expansion: boolean
-}
-
-/**
- * Typeguard to help Typescript distinguish between a GameState and new game's options, for you main class constructor.
- * @param arg GameState or Game options
- * @return true if arg is a Game options
- */
-export function isGameState(arg: GameState | VillagePillageOptions): arg is GameState {
-  return Array.isArray((arg as GameState).deck)
 }
 
 /**

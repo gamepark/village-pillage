@@ -1,11 +1,10 @@
 import { MaterialItem, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
-import { getCardColor } from '../material/Card'
+import { CardColor, getCardColor } from '../material/Card'
 import { getCardRules } from '../cards/getCardRules'
 import { Resolution } from './helper/Resolution'
 import { Memory } from './Memory'
-import CardColor from '../CardColor'
 import { RuleId } from './RuleId'
 import Side from './Side'
 

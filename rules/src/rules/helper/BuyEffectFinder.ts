@@ -5,8 +5,8 @@ import { LocationType } from '../../material/LocationType'
 import { getCardRules } from '../../cards/getCardRules'
 import { Resolution } from './Resolution'
 import { Memory } from '../Memory'
-import { getCardColor } from '../../CardColor'
 import Side from '../Side'
+import { getCardColor } from '../../material/Card'
 
 export class BuyEffectFinder extends MaterialRulesPart {
 

@@ -8,7 +8,7 @@ import { CustomMoveType } from './CustomMoveType'
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import { BuyEffectFinder } from './helper/BuyEffectFinder'
-import { cardColors } from '../CardColor'
+import { cardColors } from '../material/Card'
 
 export class SelectNextBuyPlayerRule extends MaterialRulesPart {
   onRuleStart() {
@@ -55,7 +55,6 @@ export class SelectNextBuyPlayerRule extends MaterialRulesPart {
   goToNextPlayer() {
     this.forget(Memory.DonePlayers)
     const nextType = cardColors[cardColors.indexOf(this.currentType) + 1]
-    console.log(nextType)
     if (!nextType) {
       if (this.game.players.some((p) => this.getRelics(p).length === 2)) return [this.rules().endGame()]
       return [this.rules().startRule(RuleId.Refresh)]

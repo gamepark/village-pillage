@@ -2,13 +2,13 @@ import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import { Resolution } from './helper/Resolution'
-import CardColor from '../CardColor'
 import { Memory } from './Memory'
 import { getCardRules } from '../cards/getCardRules'
 import { PlayerId } from '../VillagePillageOptions'
 import Side from './Side'
 import { RuleId } from './RuleId'
 import { PlayerState } from './helper/PlayerState'
+import { CardColor } from '../material/Card'
 
 export class StealRule extends MaterialRulesPart {
 

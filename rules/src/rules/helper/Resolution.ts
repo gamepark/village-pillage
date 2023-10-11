@@ -3,7 +3,7 @@ import { PlayerId } from '../../VillagePillageOptions'
 import Side from '../Side'
 import { MaterialType } from '../../material/MaterialType'
 import { LocationType } from '../../material/LocationType'
-import CardColor, { getCardColor } from '../../CardColor'
+import { CardColor, getCardColor } from '../../material/Card'
 
 export class Resolution extends MaterialRulesPart {
   public opponent: PlayerId

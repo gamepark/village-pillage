@@ -5,8 +5,7 @@ import { Resolution } from './helper/Resolution'
 import { RuleId } from './RuleId'
 import { ExhaustEffect } from './helper/ExhaustEffect'
 import { LocationType } from '../material/LocationType'
-import { getCardColor } from '../material/Card'
-import CardColor from '../CardColor'
+import { CardColor, getCardColor } from '../material/Card'
 import { getCardRules } from '../cards/getCardRules'
 
 export class ExhaustRule extends MaterialRulesPart {
