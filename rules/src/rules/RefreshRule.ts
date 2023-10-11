@@ -1,4 +1,4 @@
-import { MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { MaterialItem, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { LocationType } from '../material/LocationType'
 import { RuleId } from './RuleId'
@@ -41,14 +41,12 @@ export class RefreshRule extends MaterialRulesPart {
 
   get gains() {
     return this.plannedCards
-      .filter((item) => !this.isTwoPlayerGame || item.location.id === Side.Left)
       .getItems()
       .flatMap((item) => new Gain(this.game, item).turnipsMoves)
   }
 
   get refreshCards() {
     return this.plannedCards
-      .filter((item) => !this.isTwoPlayerGame || item.location.id === Side.Left)
       .moveItems((item) => {
         const player = item.location.player!
         return ({
@@ -73,22 +71,20 @@ export class RefreshRule extends MaterialRulesPart {
   }
 
   get exchanges() {
-    return this
-      .material(MaterialType.Card)
-      .location(LocationType.PlanedCard)
+    return this.plannedCards
       .getItems()
-      .flatMap((item) => {
+      .flatMap((item) => this.getExchange(item))
+  }
 
-        const resolution = new Resolution(this.game, item.location.id, item.location.player!)
-        const opponentItem = resolution.opponentCard.getItem()!
-        if (!getCardRules(this.game, item.id).isExchangeCards(opponentItem)) return []
-        const opponentLocation = opponentItem.location
-        return [
-          resolution.cardMaterial.moveItem({ location: opponentLocation }),
-          resolution.opponentCard.moveItem({ location: item.location }),
-        ]
-
-      })
+  getExchange(item: MaterialItem) {
+    const resolution = new Resolution(this.game, item.location.id, item.location.player!)
+    const opponentItem = resolution.opponentCard.getItem()!
+    if (!getCardRules(this.game, item.id).isExchangeCards(opponentItem)) return []
+    const opponentLocation = opponentItem.location
+    return [
+      resolution.cardMaterial.moveItem({ location: opponentLocation }),
+      resolution.opponentCard.moveItem({ location: item.location }),
+    ]
   }
 
   get isTwoPlayerGame() {
@@ -102,5 +98,6 @@ export class RefreshRule extends MaterialRulesPart {
   get plannedCards() {
     return this.material(MaterialType.Card)
       .location(LocationType.PlanedCard)
+      .filter((item) => !this.isTwoPlayerGame || item.location.id === Side.Left)
   }
 }
