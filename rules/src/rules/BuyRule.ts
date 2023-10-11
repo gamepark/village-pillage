@@ -6,6 +6,7 @@ import { CustomMoveType } from './CustomMoveType'
 import { RuleId } from './RuleId'
 import { Resolution } from './helper/Resolution'
 import { PlayerState } from './helper/PlayerState'
+import { LocationType } from '../material/LocationType'
 
 export class BuyRule extends PlayerTurnRule {
 
@@ -45,7 +46,7 @@ export class BuyRule extends PlayerTurnRule {
     const card = cardMaterial.getItem()!
     const rule = getCardRules(this.game, card.id)
     const resolution = new Resolution(this.game, card.location.id, this.player)
-    if (rule.canBuyCard(resolution.opponentCard.getItem()!)) {
+    if (rule.canBuyCard(resolution.opponentCard.getItem()!) && this.marketDeck.length) {
       return [this.rules().startRule(RuleId.BuyMarketCard)]
     }
 
@@ -129,5 +130,9 @@ export class BuyRule extends PlayerTurnRule {
 
   get playerState() {
     return new PlayerState(this.game, this.player)
+  }
+
+  get marketDeck() {
+    return this.material(MaterialType.Card).location(LocationType.MarketDeck)
   }
 }

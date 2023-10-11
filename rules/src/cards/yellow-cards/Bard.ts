@@ -22,16 +22,22 @@ export default class Bard extends CardRules {
         }),
     )
 
-    moves.push(
-      this.material(MaterialType.Card)
-        .location(LocationType.MarketDeck)
-        .moveItem({
-          location: {
-            type: LocationType.Hand,
-            player
-          }
-        })
-    )
+    const deck = this
+      .material(MaterialType.Card)
+      .location(LocationType.MarketDeck)
+
+    if (deck.length) {
+      moves.push(
+        this.material(MaterialType.Card)
+          .location(LocationType.MarketDeck)
+          .moveItem({
+            location: {
+              type: LocationType.Hand,
+              player
+            }
+          })
+      )
+    }
 
     return moves
   }
