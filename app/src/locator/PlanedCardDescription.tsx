@@ -41,8 +41,8 @@ export class PlanedCardDescription extends LocationDescription<PlayerId, Materia
       return { x: (cardDescriptionEnglish.width / 2) + 0.25, y: 0, z: 0 }
     }
 
-    if (index === 0) return { x: -((cardDescriptionEnglish.width / 2) + 0.25), y: cardDescriptionEnglish.getSize(undefined, context).height + 0.5, z: 0 }
-    return { x: (cardDescriptionEnglish.width / 2) + 0.25, y: -(cardDescriptionEnglish.getSize(undefined, context).height + 0.5), z: 0 }
+    if (index === 0) return { x: -((cardDescriptionEnglish.width / 2) + 0.25), y: cardDescriptionEnglish.height + 0.5, z: 0 }
+    return { x: (cardDescriptionEnglish.width / 2) + 0.25, y: -(cardDescriptionEnglish.height + 0.5), z: 0 }
   }
 
 

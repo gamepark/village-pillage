@@ -34,7 +34,8 @@ import Wall from '../images/en/wall.jpg'
 import Bard from '../images/en/bard.jpg'
 
 export class CardDescriptionEnglish extends CardDescription {
-  ratio = 326 / 499
+  width = 6.35
+  height = 9.72
 
   backImage = CardBack
 

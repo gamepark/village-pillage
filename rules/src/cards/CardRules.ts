@@ -10,6 +10,7 @@ export default abstract class CardRules extends MaterialRulesPart<PlayerId, Mate
     opponentGain = 0
     stealValue = 0
     stealValueFromOpponentCard = 0
+    stealInBank = false
     bank = 0
     canBuyRelic = false
     priceToBuyCard = Infinity
@@ -58,5 +59,9 @@ export default abstract class CardRules extends MaterialRulesPart<PlayerId, Mate
 
     isExhaustItself(_opponentCard: MaterialItem) {
         return false
+    }
+
+    isExchangeCards(_opponentCard: MaterialItem) {
+        return false;
     }
 }
