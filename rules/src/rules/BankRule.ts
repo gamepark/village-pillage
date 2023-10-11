@@ -13,7 +13,7 @@ import { PlayerState } from './helper/PlayerState'
 export class BankRule extends MaterialRulesPart {
   onRuleStart(): MaterialMove<number, number, number>[] {
     const moves: MaterialMove[] = this.game.players.flatMap((item) => this.getPlayerTurnipsToBankMoves(item))
-    moves.push(this.rules().startRule(RuleId.SelectNextBuyPlayer))
+    moves.push(this.rules().startRule(RuleId.Exhaust))
     return moves
   }
 

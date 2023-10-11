@@ -19,12 +19,11 @@ export class BuyEffectFinder extends MaterialRulesPart {
       .location(LocationType.PlanedCard)
       .player(this.player)
       .filter((item) => getCardColor(item.id) === cardColor)
-
     return cards
-      .filter((item) => this.canBuyCard(item))
+      .filter((item) => this.canActivateCard(item))
   }
 
-  canBuyCard(item: MaterialItem) {
+  canActivateCard(item: MaterialItem) {
     const rule = getCardRules(this.game, item.id)
     if (rule.canBuyRelic && this.canBuyRelic) {
       return true
@@ -34,10 +33,9 @@ export class BuyEffectFinder extends MaterialRulesPart {
     if (rule.canBuyCard(resolution.opponentCard.getItem()!)) {
       return this.turnips >= rule.priceToBuyCard;
     }
-
-    return rule
+    return !!rule
       .getAlternativeMoves(this.player, resolution.opponentCard, this.turnips)
-      .some((move) => this.isBuyCardMove(move))
+      .length
   }
 
   isBuyCardMove(move: MaterialMove) {
@@ -45,7 +43,7 @@ export class BuyEffectFinder extends MaterialRulesPart {
   }
 
   get canBuyRelic() {
-    return this.turnips <= this.nextRelicPrice
+    return this.turnips >= this.nextRelicPrice
   }
 
   get turnips() {

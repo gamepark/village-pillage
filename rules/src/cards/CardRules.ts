@@ -55,4 +55,8 @@ export default abstract class CardRules extends MaterialRulesPart<PlayerId, Mate
     isExhaustCard(_opponentCard: MaterialItem) {
         return false
     }
+
+    isExhaustItself(_opponentCard: MaterialItem) {
+        return false
+    }
 }

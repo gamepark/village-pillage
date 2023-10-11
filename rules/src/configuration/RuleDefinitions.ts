@@ -9,6 +9,7 @@ import { RefreshRule } from '../rules/RefreshRule'
 import { SelectNextBuyPlayerRule } from '../rules/SelectNextBuyPlayerRule'
 import { RevealRule } from '../rules/RevealRule'
 import { BuyMarketCard } from '../rules/BuyMarketCard'
+import { ExhaustRule } from '../rules/ExhaustRule'
 
 export const rules: Record<RuleId, MaterialRulesPartCreator> = {
   [RuleId.Plan]: PlanRule,
@@ -19,5 +20,6 @@ export const rules: Record<RuleId, MaterialRulesPartCreator> = {
   [RuleId.Buy]: BuyRule,
   [RuleId.Refresh]: RefreshRule,
   [RuleId.SelectNextBuyPlayer]: SelectNextBuyPlayerRule,
-  [RuleId.BuyMarketCard]: BuyMarketCard
+  [RuleId.BuyMarketCard]: BuyMarketCard,
+  [RuleId.Exhaust]: ExhaustRule
 }

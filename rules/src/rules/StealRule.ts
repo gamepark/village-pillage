@@ -52,7 +52,6 @@ export class StealRule extends MaterialRulesPart {
 
   getStealsCount(resolution: Resolution) {
     const item = resolution.opponentCard.getItem()!
-    console.log("Colors", resolution.player, resolution.opponent, resolution.opponentCardColor, this.cardColor)
     if (resolution.opponentCardColor !== this.cardColor) return 0
 
     return getCardRules(this.game, item.id).getSteal(resolution.card)
@@ -77,7 +76,6 @@ export class StealRule extends MaterialRulesPart {
     let left = this.getStealsCount(leftResolution)
     let right = this.getStealsCount(rightResolution)
 
-    console.log("B", left, right)
     let chicken: PlayerId | undefined = undefined
     if (left === 0 || right === 0 || left+right <= stockSize) return { left, right }
     if (stockSize % 2 !== 1) return { left: stockSize / 2, right: stockSize / 2 }

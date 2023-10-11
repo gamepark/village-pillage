@@ -1,5 +1,5 @@
 export enum Relic {
   Scepter = 1,
-  Throne,
-  Crown
+  Crown,
+  Throne
 }

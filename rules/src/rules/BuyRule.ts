@@ -1,4 +1,4 @@
-import { CustomMove, isCustomMoveType, isMoveItemType, isStartRule, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { CustomMove, isCreateItemType, isCustomMoveType, isStartRule, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { MaterialType } from '../material/MaterialType'
 import { getCardRules } from '../cards/getCardRules'
 import { Memory } from './Memory'
@@ -77,9 +77,12 @@ export class BuyRule extends PlayerTurnRule {
 
   beforeItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
-    if (isMoveItemType(MaterialType.Relic)(move)) {
+    if (isCreateItemType(MaterialType.Relic)(move)) {
+      const cardMaterial = this.currentCard!
+      const rule = getCardRules(this.game, cardMaterial.getItem()!.id)
       const playerState = this.playerState
-      moves.push(...playerState.getSpendTurnipsMoves(playerState.nextRelicPrice))
+      const price = playerState.nextRelicPrice + rule.offsetRelicPrice
+      moves.push(...playerState.getSpendTurnipsMoves(price))
     }
 
     return moves
@@ -87,7 +90,7 @@ export class BuyRule extends PlayerTurnRule {
 
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
-    if (isMoveItemType(MaterialType.Relic)(move)) {
+    if (isCreateItemType(MaterialType.Relic)(move)) {
       moves.push(...this.afterCardPlayed())
     }
 

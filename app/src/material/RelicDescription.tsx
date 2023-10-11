@@ -16,8 +16,8 @@ export class RelicDescription extends RoundTokenDescription {
   getStaticItems({ rules: { players } }: MaterialContext) {
     return [
       { id: Relic.Scepter, quantity: players.length, location: relicStockLocation },
-      { id: Relic.Throne, quantity: players.length, location: relicStockLocation },
       { id: Relic.Crown, quantity: players.length, location: relicStockLocation },
+      { id: Relic.Throne, quantity: players.length, location: relicStockLocation },
     ]
   }
 

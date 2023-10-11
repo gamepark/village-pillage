@@ -52,11 +52,12 @@ export class SelectNextBuyPlayerRule extends MaterialRulesPart {
     return bank.getItem()?.quantity ?? 0
   }
 
-  goToNextPlayer(player?: PlayerId) {
+  goToNextPlayer() {
     this.forget(Memory.DonePlayers)
     const nextType = cardColors[cardColors.indexOf(this.currentType) + 1]
+    console.log(nextType)
     if (!nextType) {
-      if (player && this.getRelics(player).length === 3) return [this.rules().endGame()]
+      if (this.game.players.some((p) => this.getRelics(p).length === 2)) return [this.rules().endGame()]
       return [this.rules().startRule(RuleId.Refresh)]
     }
 

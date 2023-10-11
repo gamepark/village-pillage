@@ -8,12 +8,10 @@ import { Location, MaterialItem } from '@gamepark/rules-api'
 export class PlayerRelicLocator extends LineLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.Bank
 
-  delta = { y: 3}
-
-  getCoordinates(_item: MaterialItem<PlayerId, LocationType>) {
+  getCoordinates(item: MaterialItem) {
     return {
       x: 1.85,
-      y: 3.3,
+      y: 3.3 + ((item.id - 1) * 3.75),
       z: 0
     }
   }

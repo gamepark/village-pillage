@@ -8,4 +8,10 @@ export default class Veteran extends CardRules {
     const type = getCardColor(opponentCard.id)
     return (type === CardColor.Green || type === CardColor.Yellow) ? 6 : 0
   }
+
+  isExhaustItself(opponentCard: MaterialItem) {
+    if (this.isRefresh) return false
+    const type = getCardColor(opponentCard.id)
+    return (type === CardColor.Green || type === CardColor.Yellow)
+  }
 }

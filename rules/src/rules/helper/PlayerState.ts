@@ -69,6 +69,7 @@ export class PlayerState extends MaterialRulesPart {
   getSpendTurnipsMoves(price: number) {
     const moves : MaterialMove[] = []
     const stockCost = Math.min(price, this.stockCount)
+    //console.log("Relic", this.player, price, stockCost)
     if (stockCost) {
       moves.push(
         ...this.stock.deleteItems(stockCost)

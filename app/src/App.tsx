@@ -36,5 +36,6 @@ const RulesHeaders: Record<RuleId, FC> = {
   [RuleId.Buy]: () => <>Buy</>,
   [RuleId.Refresh]: () => <>Refresh</>,
   [RuleId.SelectNextBuyPlayer]: () => <>SelectNextBuyPlayer</>,
-  [RuleId.BuyMarketCard]: () => <>BuyMarketCard</>
+  [RuleId.BuyMarketCard]: () => <>BuyMarketCard</>,
+  [RuleId.Exhaust]: () => <>ExhaustCardRule</>
 }

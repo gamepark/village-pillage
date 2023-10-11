@@ -7,5 +7,6 @@ export enum RuleId {
   Buy,
   Refresh,
   SelectNextBuyPlayer,
-  BuyMarketCard
+  BuyMarketCard,
+  Exhaust
 }
