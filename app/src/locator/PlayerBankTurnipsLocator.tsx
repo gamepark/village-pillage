@@ -8,13 +8,20 @@ import { Location, MaterialItem } from '@gamepark/rules-api'
 export class PlayerBankTurnipsLocator extends LineLocator<PlayerId, MaterialType, LocationType> {
   parentItemType = MaterialType.Bank
 
-  getDelta(_item: MaterialItem<PlayerId, LocationType>) {
+  getDelta(_item: MaterialItem<PlayerId, LocationType>, { rules: { players } }: ItemContext) {
     return {
-      y: 1.6
+      y: players.length === 2? 1.9: 1.6
     }
   }
 
-  getCoordinates(_item: MaterialItem<PlayerId, LocationType>, { displayIndex }: ItemContext) {
+  getCoordinates(_item: MaterialItem<PlayerId, LocationType>, { displayIndex, rules: { players} }: ItemContext) {
+    if (players.length === 2) {
+      return {
+        x: 8.1 + (displayIndex! % 2 === 0? -2.5: 0),
+        y: 4.9,
+        z: 0
+      }
+    }
     return {
       x: 8.1 + (displayIndex! % 2 === 0? 0: -2.5),
       y: 4.5,

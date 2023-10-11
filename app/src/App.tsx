@@ -18,7 +18,7 @@ export default function App() {
     <>
       <GameDisplay/>
       <LoadingScreen display={loading} author="Someone" artist="Somebody" publisher="Nobody" developer="You"/>
-      <MaterialHeader GameOver={() => <p>GameOver</p>} rulesStepsHeaders={RulesHeaders} loading={loading}/>
+      <MaterialHeader rulesStepsHeaders={RulesHeaders} loading={loading}/>
       <MaterialImageLoader onImagesLoad={() => setImagesLoading(false)}/>
       <Menu/>
       <FailuresDialog/>

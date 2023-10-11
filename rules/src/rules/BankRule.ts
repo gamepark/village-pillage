@@ -26,11 +26,14 @@ export class BankRule extends MaterialRulesPart {
     if (!maxTurnipsToBank) return []
     const moves: MaterialMove[] = []
     const leftResolution = this.getResolution(player, Side.Left)
-    const rightResolution= this.getResolution(player, Side.Right)
 
     if (leftResolution.cardColor === this.cardColor) {
       maxTurnipsToBank = this.getBankMovesForResolution(leftResolution, playerState, maxTurnipsToBank, moves)
     }
+
+    if (this.isTwoPlayerGame) return moves
+
+    const rightResolution= this.getResolution(player, Side.Right)
     if (maxTurnipsToBank && rightResolution.cardColor === this.cardColor) {
       this.getBankMovesForResolution(rightResolution, playerState, maxTurnipsToBank, moves)
     }
@@ -73,17 +76,7 @@ export class BankRule extends MaterialRulesPart {
     return this.remind<CardColor>(Memory.CardColor)
   }
 
-  getStock(player: PlayerId) {
-    return this
-      .material(MaterialType.Turnip)
-      .location(LocationType.PlayerTurnipStock)
-      .player(player)
-  }
-
-  getBank(player: PlayerId) {
-    return this
-      .material(MaterialType.Turnip)
-      .location(LocationType.PlayerBankTurnips)
-      .player(player)
+  get isTwoPlayerGame() {
+    return this.game.players.length === 2
   }
 }

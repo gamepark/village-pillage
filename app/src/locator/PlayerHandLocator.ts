@@ -1,6 +1,6 @@
-  import { HandLocator, ItemContext } from '@gamepark/react-game'
+import { HandLocator, ItemContext } from '@gamepark/react-game'
 import { Coordinates, Location, MaterialItem } from '@gamepark/rules-api'
-import { getBoardIndex, getPlayerPosition } from './PlayerLocation'
+import { getPlayerPosition, getPlayerRotation } from './PlayerLocation'
 
 export class PlayerHandLocator extends HandLocator {
   getCoordinates(location: Location<number, number>, { rules: { players }, player }: ItemContext<number, number, number>): Coordinates {
@@ -8,19 +8,7 @@ export class PlayerHandLocator extends HandLocator {
   }
 
   getBaseAngle(item: MaterialItem, { rules: { players }, player }: ItemContext) {
-    const index = getBoardIndex(item.location.player!, players, player)
-    switch (index) {
-      case 0:
-        return 0
-      case 1:
-        return 90
-      case 2:
-        return 180
-      case 3:
-        return 270
-    }
-
-    return 0
+    return getPlayerRotation(item.location.player!, players, player)
   }
 
   isHidden(item: MaterialItem, context: ItemContext) {
@@ -29,8 +17,9 @@ export class PlayerHandLocator extends HandLocator {
     return false
   }
 
-  getMaxAngle(item: MaterialItem, { rules, player }: ItemContext) {
-    return item.location.player === (player ?? rules.players[0]) ? 15 : 5
+  getMaxAngle(item: MaterialItem, { rules: { players }, player }: ItemContext) {
+    if (players.length === 2) return 17
+      return item.location.player === (player ?? players) ? 15 : 5
   }
 }
 

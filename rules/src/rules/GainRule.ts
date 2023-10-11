@@ -7,6 +7,7 @@ import { Resolution } from './helper/Resolution'
 import { Memory } from './Memory'
 import CardColor from '../CardColor'
 import { RuleId } from './RuleId'
+import Side from './Side'
 
 export class GainRule extends MaterialRulesPart {
   onRuleStart(): MaterialMove<number, number, number>[] {
@@ -14,6 +15,7 @@ export class GainRule extends MaterialRulesPart {
     const planedCards = this
       .material(MaterialType.Card)
       .location(LocationType.PlanedCard)
+      .filter((item) => !this.isTwoPlayerGame || item.location.id === Side.Left)
       .filter((item) => getCardColor(item.id) === cardColor)
       .getItems()
 
@@ -47,5 +49,9 @@ export class GainRule extends MaterialRulesPart {
 
   get cardColor() {
     return this.remind<CardColor>(Memory.CardColor)
+  }
+
+  get isTwoPlayerGame() {
+    return this.game.players.length === 2
   }
 }

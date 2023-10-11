@@ -1,4 +1,4 @@
-import { MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
+import { MaterialItem, MaterialRulesPart, RuleMove, RuleStep } from '@gamepark/rules-api'
 import { Memory } from './Memory'
 import { MaterialType } from '../material/MaterialType'
 import { Resolution } from './helper/Resolution'
@@ -10,7 +10,8 @@ import CardColor from '../CardColor'
 import { getCardRules } from '../cards/getCardRules'
 
 export class ExhaustRule extends MaterialRulesPart {
-  onRuleStart() {
+  onRuleStart(_move: RuleMove, previousRule?: RuleStep) {
+
     const planedCards = this
       .material(MaterialType.Card)
       .location(LocationType.PlanedCard)
@@ -26,6 +27,11 @@ export class ExhaustRule extends MaterialRulesPart {
     }
 
     new ExhaustEffect(this.game).exhaust(exhaustedItems)
+
+    if (this.currentCard && previousRule) {
+      return [this.rules().startRule(previousRule.id)]
+    }
+
     return [this.rules().startRule(RuleId.SelectNextBuyPlayer)]
   }
 
@@ -35,5 +41,11 @@ export class ExhaustRule extends MaterialRulesPart {
 
   get cardColor() {
     return this.remind<CardColor>(Memory.CardColor)
+  }
+
+  get currentCard() {
+    const current = this.remind(Memory.CurrentCard)
+    if (current === undefined) return undefined
+    return this.material(MaterialType.Card).index(current)
   }
 }

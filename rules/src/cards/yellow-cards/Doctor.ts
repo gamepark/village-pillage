@@ -3,12 +3,12 @@ import { PlayerId } from '../../VillagePillageOptions'
 import { Material, MaterialMove } from '@gamepark/rules-api'
 import { MaterialType } from '../../material/MaterialType'
 import { LocationType } from '../../material/LocationType'
-import { ExhaustEffect } from '../../rules/helper/ExhaustEffect'
+import { RuleId } from '../../rules/RuleId'
 
 export default class Doctor extends CardRules {
   canBuyRelic = true
 
-  getAlternativeMoves(player: PlayerId, opponentCard: Material): MaterialMove[] {
+  getAlternativeMoves(player: PlayerId, _opponentCard: Material): MaterialMove[] {
     const moves: MaterialMove[] = []
 
     // Gain 2 turnips
@@ -19,7 +19,7 @@ export default class Doctor extends CardRules {
         .createItem({ quantity: 2, location: { type: LocationType.PlayerTurnipStock, player } }),
     )
 
-    new ExhaustEffect(this.game).exhaust(opponentCard.getItems())
+    moves.push(this.rules().startRule(RuleId.Exhaust))
     return moves
   }
 }

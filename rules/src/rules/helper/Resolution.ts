@@ -24,14 +24,23 @@ export class Resolution extends MaterialRulesPart {
     this.card = this.cardMaterial.getItem()!
     this.cardColor = getCardColor(this.card.id)
 
-    this.opponent = side == Side.Left? this.nextPlayer: this.previousPlayer
+    if (this.isTwoPlayerGame) {
+      this.opponent = this.nextPlayer
+    } else {
+      this.opponent = side == Side.Left? this.nextPlayer: this.previousPlayer
+    }
+
+    const opponentSide = this.isTwoPlayerGame? side: (side === Side.Left? Side.Right: Side.Left)
     this.opponentCard = this
       .material(MaterialType.Card)
       .location(LocationType.PlanedCard)
-      .locationId(side === Side.Left? Side.Right: Side.Left)
+      .locationId(opponentSide)
       .player(this.opponent)
     this.opponentCardColor = getCardColor(this.opponentCard.getItem()!.id)
+  }
 
+  get isTwoPlayerGame() {
+    return this.game.players.length === 2
   }
 
   get previousPlayer(): PlayerId {

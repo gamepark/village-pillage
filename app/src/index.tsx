@@ -14,10 +14,25 @@ addStylesheetUrl('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&displ
 
 ReactDOM.render(
   <StrictMode>
-    <GameProvider game="village-pillage" GameSetup={VillagePillageSetup} Rules={VillagePillageRules} optionsSpec={VillagePillageOptionsSpec}
-                  material={material} locators={Locators} animations={new MaterialGameAnimations()}>
-      <App/>
-    </GameProvider>
-  </StrictMode>,
-  document.getElementById('root')
+    <GameProvider
+      game="village-pillage"
+      GameSetup={VillagePillageSetup}
+      Rules={VillagePillageRules}
+      optionsSpec={VillagePillageOptionsSpec}
+      material={material}
+      locators={Locators}
+      animations={new MaterialGameAnimations()}
+      theme={{
+        root: {
+          background: {
+            //image: process.env.PUBLIC_URL + '/cover-1920.jpg',
+            overlay: 'rgba(0, 0, 0, 0.8)'
+          }
+        },
+      }}
+    >
+    <App/>
+  </GameProvider>
+</StrictMode>,
+document.getElementById('root')
 )

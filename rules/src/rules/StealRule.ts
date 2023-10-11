@@ -74,6 +74,14 @@ export class StealRule extends MaterialRulesPart {
 
   computeSteals(leftResolution: Resolution, rightResolution: Resolution, stockSize: number) {
     let left = this.getStealsCount(leftResolution)
+
+    if (this.isTwoPlayerGame) {
+      return {
+        left,
+        right: 0
+      }
+    }
+
     let right = this.getStealsCount(rightResolution)
 
     let chicken: PlayerId | undefined = undefined
@@ -95,6 +103,7 @@ export class StealRule extends MaterialRulesPart {
       }
     }
 
+    // TODO : Random move
     if (Math.random() < 0.5) {
       left = Math.ceil(stockSize / 2)
       right = Math.floor(stockSize / 2)
@@ -110,5 +119,9 @@ export class StealRule extends MaterialRulesPart {
       right,
       chicken,
     }
+  }
+
+  get isTwoPlayerGame() {
+    return this.game.players.length === 2
   }
 }

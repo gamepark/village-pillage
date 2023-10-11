@@ -1,4 +1,4 @@
-import { isMoveItemType, MaterialGame, MaterialItem, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
 import { PlayerId } from '../../VillagePillageOptions'
 import { MaterialType } from '../../material/MaterialType'
 import { LocationType } from '../../material/LocationType'
@@ -6,6 +6,7 @@ import { getCardRules } from '../../cards/getCardRules'
 import { Resolution } from './Resolution'
 import { Memory } from '../Memory'
 import { getCardColor } from '../../CardColor'
+import Side from '../Side'
 
 export class BuyEffectFinder extends MaterialRulesPart {
 
@@ -18,7 +19,9 @@ export class BuyEffectFinder extends MaterialRulesPart {
     const cards = this.material(MaterialType.Card)
       .location(LocationType.PlanedCard)
       .player(this.player)
+      .filter((item) => !this.isTwoPlayerGame || item.location.id === Side.Left)
       .filter((item) => getCardColor(item.id) === cardColor)
+
     return cards
       .filter((item) => this.canActivateCard(item))
   }
@@ -36,10 +39,6 @@ export class BuyEffectFinder extends MaterialRulesPart {
     return !!rule
       .getAlternativeMoves(this.player, resolution.opponentCard, this.turnips)
       .length
-  }
-
-  isBuyCardMove(move: MaterialMove) {
-    return isMoveItemType(MaterialType.Card)(move) && move.position.location?.type === LocationType.Hand
   }
 
   get canBuyRelic() {
@@ -84,5 +83,9 @@ export class BuyEffectFinder extends MaterialRulesPart {
 
   get cardColor() {
     return this.remind(Memory.CardColor)
+  }
+
+  get isTwoPlayerGame() {
+    return this.game.players.length === 2
   }
 }
