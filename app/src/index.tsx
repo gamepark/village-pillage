@@ -6,7 +6,7 @@ import { StrictMode } from 'react'
 import { VillagePillageRules } from '@gamepark/village-pillage/VillagePillageRules'
 import { VillagePillageOptionsSpec } from '@gamepark/village-pillage/VillagePillageOptions'
 import { VillagePillageSetup } from '@gamepark/village-pillage/VillagePillageSetup'
-import { material } from './material/Material'
+import { material, materialI18n } from './material/Material'
 import { Locators } from './locator/Locators'
 
 setupTranslation(translations, { debug: false })
@@ -20,6 +20,7 @@ ReactDOM.render(
       Rules={VillagePillageRules}
       optionsSpec={VillagePillageOptionsSpec}
       material={material}
+      materialI18n={materialI18n}
       locators={Locators}
       animations={new MaterialGameAnimations()}
       theme={{

@@ -1,16 +1,18 @@
 import { MaterialContext, RoundTokenDescription } from '@gamepark/react-game'
 import { Relic } from '@gamepark/village-pillage/material/Relic'
-import Images from '../images/Images'
 import { relicStockLocation } from '../locator/RelicStockLocator'
 import { RelicRules } from './rules/RelicRules'
+import Scepter from '../images/septer.jpg'
+import Throne from '../images/trone.jpg'
+import Crown from '../images/couronne.jpg'
 
 export class RelicDescription extends RoundTokenDescription {
   diameter = 2.7
 
   images = {
-    [Relic.Scepter]: Images.Scepter,
-    [Relic.Throne]: Images.Throne,
-    [Relic.Crown]: Images.Crown,
+    [Relic.Scepter]: Scepter,
+    [Relic.Throne]: Throne,
+    [Relic.Crown]: Crown,
   }
 
   rules = RelicRules

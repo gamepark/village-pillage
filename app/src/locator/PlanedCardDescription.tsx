@@ -6,12 +6,12 @@ import { MaterialType } from '@gamepark/village-pillage/material/MaterialType'
 import { Location } from '@gamepark/rules-api'
 import { getBoardIndex, getPlayerPosition } from './PlayerLocation'
 import Side, { sides } from '@gamepark/village-pillage/rules/Side'
-import { gameCardDescription } from '../material/GameCardDescription'
+import { cardDescriptionEnglish } from '../material/CardDescriptionEnglish'
 
 export class PlanedCardDescription extends LocationDescription<PlayerId, MaterialType, LocationType> {
-  width = gameCardDescription.width
-  height = gameCardDescription.width / gameCardDescription.ratio
-  borderRadius = gameCardDescription.borderRadius
+  width = cardDescriptionEnglish.width
+  height = cardDescriptionEnglish.width / cardDescriptionEnglish.ratio
+  borderRadius = cardDescriptionEnglish.borderRadius
 
 
   getLocations({ player }: MaterialContext) {
@@ -37,12 +37,12 @@ export class PlanedCardDescription extends LocationDescription<PlayerId, Materia
     const { rules: { players }, player } = context
     const index = getBoardIndex(location.player!, players, player)
     if (location.id === Side.Left) {
-      if (index === 0) return { x: -((gameCardDescription.width / 2) + 0.25), y: 0, z: 0 }
-      return { x: (gameCardDescription.width / 2) + 0.25, y: 0, z: 0 }
+      if (index === 0) return { x: -((cardDescriptionEnglish.width / 2) + 0.25), y: 0, z: 0 }
+      return { x: (cardDescriptionEnglish.width / 2) + 0.25, y: 0, z: 0 }
     }
 
-    if (index === 0) return { x: -((gameCardDescription.width / 2) + 0.25), y: gameCardDescription.getSize(undefined, context).height + 0.5, z: 0 }
-    return { x: (gameCardDescription.width / 2) + 0.25, y: -(gameCardDescription.getSize(undefined, context).height + 0.5), z: 0 }
+    if (index === 0) return { x: -((cardDescriptionEnglish.width / 2) + 0.25), y: cardDescriptionEnglish.getSize(undefined, context).height + 0.5, z: 0 }
+    return { x: (cardDescriptionEnglish.width / 2) + 0.25, y: -(cardDescriptionEnglish.getSize(undefined, context).height + 0.5), z: 0 }
   }
 
 
